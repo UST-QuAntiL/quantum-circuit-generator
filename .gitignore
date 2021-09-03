@@ -1,0 +1,13 @@
+#pycache folder
+__pycache__/*
+
+#folder with old scripts
+old_scripts/*
+
+#python env
+/venv/*
+
+
+#Intellij
+/.idea/*
+
