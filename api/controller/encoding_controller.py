@@ -1,6 +1,6 @@
 from . import api
 from ..services import encoding_service
-from flask import request, jsonify
+from flask import request
 
 
 
@@ -11,10 +11,9 @@ def index():
 
 @api.route('/encoding/<name>', methods=['POST'])
 def encoding(name):
+    # TODO splitting in service - check if name exists/functional , check if request is not empty
     if(name == 'basis'):
-        input = request.json
-        print(input)
-        response = encoding_service.generate_basis_encoding(input)
+        response = encoding_service.generate_basis_encoding(request.json)
         return response.to_json()
     elif(name == 'angle'):
         return '<h4>angle encoding rocks!!!</h4>'
