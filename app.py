@@ -2,7 +2,7 @@ import os
 from api import create_app
 import sys
 import click
-import coverage
+from pathlib import Path
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
@@ -13,21 +13,15 @@ if os.environ.get('FLASK_COVERAGE'):
     COV.start()
 
 @app.cli.command()
-def test():
-    """Run the unit tests"""
-    import unittest
-    tests = unittest.TestLoader().discover('tests')
-    unittest.TextTestRunner(verbosity=2).run(tests)
-
-
-@app.cli.command()
 @click.option('--coverage/--no-coverage', default=False,
               help='Run tests under code coverage.')
 def test(coverage):
+    print(coverage)
     """Run the unit tests."""
     if coverage and not os.environ.get('FLASK_COVERAGE'):
+        import subprocess
         os.environ['FLASK_COVERAGE'] = '1'
-        os.execvp(sys.executable, [sys.executable] + sys.argv)
+        sys.exit(subprocess.call(sys.argv))
     import unittest
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)

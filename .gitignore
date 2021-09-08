@@ -2,7 +2,7 @@
 __pycache__/*
 
 #temp folder
-/temp/*
+/tmp/*
 
 #python env
 /venv/*
