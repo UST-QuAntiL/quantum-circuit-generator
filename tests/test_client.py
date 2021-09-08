@@ -31,7 +31,6 @@ class FlaskClientTestCase(unittest.TestCase):
                                     data=json.dumps({'vector': [3.14, 2.25], 'integral_bits': 3, 'fractional_bits': 3}),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 200)
-        print(response.get_json())
         self.assertEqual(14, response.get_json().get('n_qubits'))
         self.assertTrue(
             'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[14];\nx q[2];\nx q[3];\nx q[6];\nx q[9];\nx q[12];\n' in response.get_json().values())

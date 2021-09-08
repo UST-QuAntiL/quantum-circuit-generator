@@ -27,7 +27,6 @@ def generate_basis_encoding(input):
     n_integralbits = input.get('integral_bits')
     n_fractional_part = input.get('fractional_bits')
     if isinstance(vector, list):
-        print("here")
         circuit = BasisEncoding.basis_encode_list_subcircuit(vector, n_integralbits, n_fractional_part)
     else:
         circuit = BasisEncoding.basis_encode_number_subcircuit(vector, n_integralbits, n_fractional_part)

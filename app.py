@@ -16,7 +16,6 @@ if os.environ.get('FLASK_COVERAGE'):
 @click.option('--coverage/--no-coverage', default=False,
               help='Run tests under code coverage.')
 def test(coverage):
-    print(coverage)
     """Run the unit tests."""
     if coverage and not os.environ.get('FLASK_COVERAGE'):
         import subprocess
