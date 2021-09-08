@@ -25,7 +25,6 @@ multitasking==0.0.9
 ntlm-auth==1.5.0
 numpy==1.21.2
 pandas==1.3.2
-pkg_resources==0.0.0
 ply==3.11
 psutil==5.8.0
 pybind11==2.7.1
