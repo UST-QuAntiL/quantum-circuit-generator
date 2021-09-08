@@ -1,7 +1,8 @@
 from datetime import datetime
 
+
 class CircuitResponse:
-    def __init__(self, circuit, circuit_type, n_qubits, depth, input ):
+    def __init__(self, circuit, circuit_type, n_qubits, depth, input):
         self.circuit = circuit
         self.circuit_type = circuit_type
         self.n_qubits = n_qubits
@@ -11,11 +12,11 @@ class CircuitResponse:
 
     def to_json(self):
         json_circuit_response = {
-            'circuit': self.circuit,
-            'circuit_type': self.circuit_type,
-            'n_qubits': self.n_qubits,
-            'depth': self.depth,
-            'timestamp': self.timestamp,
-            'input': self.input
+            "circuit": self.circuit,
+            "circuit_type": self.circuit_type,
+            "n_qubits": self.n_qubits,
+            "depth": self.depth,
+            "timestamp": self.timestamp,
+            "input": self.input,
         }
         return json_circuit_response
