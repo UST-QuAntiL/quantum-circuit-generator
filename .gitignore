@@ -1,8 +1,8 @@
 #pycache folder
 __pycache__/*
 
-#folder with old scripts
-old_scripts/*
+#temp folder
+/temp/*
 
 #python env
 /venv/*
