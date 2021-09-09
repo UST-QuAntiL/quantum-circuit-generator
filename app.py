@@ -9,6 +9,7 @@ app = create_app(os.getenv("FLASK_CONFIG") or "default")
 COV = None
 if os.environ.get("FLASK_COVERAGE"):
     import coverage
+
     COV = coverage.coverage(branch=True, include="api/*")
     COV.start()
 
@@ -27,16 +28,19 @@ def test(coverage):
     import unittest
 
     tests = unittest.TestLoader().discover("tests")
-    unittest.TextTestRunner(verbosity=2).run(tests)
+    testresult = unittest.TextTestRunner(verbosity=2).run(tests)
     if COV:
         COV.stop()
         COV.save()
         print("Coverage Summary:")
         COV.report()
-
         basedir = os.path.abspath(os.path.dirname(__file__))
         covdir = os.path.join(basedir, "tmp/coverage")
         COV.xml_report()
         COV.html_report(directory=covdir)
         print("HTML version: file://%s/index.html" % covdir)
         COV.erase()
+    if testresult.wasSuccessful():
+        exit(0)
+    else:
+        exit(1)
