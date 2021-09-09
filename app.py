@@ -33,9 +33,10 @@ def test(coverage):
         COV.save()
         print("Coverage Summary:")
         COV.report()
-        COV.xml_report()
+
         basedir = os.path.abspath(os.path.dirname(__file__))
         covdir = os.path.join(basedir, "tmp/coverage")
+        COV.xml_report(directory=covdir)
         COV.html_report(directory=covdir)
         print("HTML version: file://%s/index.html" % covdir)
         COV.erase()
