@@ -28,5 +28,4 @@ jobs:
         token: "9c14be86-4bc7-4f29-93e5-3e56297e6325"
         fail_ci_if_error: true
         files: ./coverage.xml
-        directory: ./tmp/coverage
         flags: unittests
