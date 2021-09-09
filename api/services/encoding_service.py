@@ -15,19 +15,19 @@ from api.model.models import CircuitResponse
 def handle_encoding(name, request):
     if name == "basis":
         response = generate_basis_encoding(request)
-        return response.to_json()
+        return response.to_json() if isinstance(response, CircuitResponse) else response
     elif name == "angle":
         response = generate_angle_encoding(request)
-        return response.to_json()
+        return response.to_json() if isinstance(response, CircuitResponse) else response
     elif name == "amplitude":
         response = generate_amplitude_encoding(request)
-        return response.to_json()
+        return response.to_json() if isinstance(response, CircuitResponse) else response
     elif name == "quam":
         response = generate_quam_encoding(request)
-        return response.to_json()
+        return response.to_json() if isinstance(response, CircuitResponse) else response
     elif name == "schmidt_decomposition":
         response = generate_schmidt_decomposition(request)
-        return response.to_json()
+        return response.to_json() if isinstance(response, CircuitResponse) else response
     else:
         return "Encoding does not exist"
 
