@@ -9,7 +9,6 @@ app = create_app(os.getenv("FLASK_CONFIG") or "default")
 COV = None
 if os.environ.get("FLASK_COVERAGE"):
     import coverage
-
     COV = coverage.coverage(branch=True, include="api/*")
     COV.start()
 
@@ -34,6 +33,7 @@ def test(coverage):
         COV.save()
         print("Coverage Summary:")
         COV.report()
+        COV.xml_report()
         basedir = os.path.abspath(os.path.dirname(__file__))
         covdir = os.path.join(basedir, "tmp/coverage")
         COV.html_report(directory=covdir)
