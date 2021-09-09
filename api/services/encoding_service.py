@@ -1,4 +1,14 @@
+import numpy as np
+from flask import jsonify
+
 from api.services.Encodings.basis_encoding import BasisEncoding
+from api.services.Encodings.angle_encoding import AngleEncoding
+from api.services.Encodings.amplitude_encoding import AmplitudeEncoding
+from api.services.Encodings.schmidt_decomposition import (
+    generate_schmidt_decomposition_from_array,
+    Measurement,
+)
+from api.services.helper_service import getCircuitCharacteristics
 from api.model.models import CircuitResponse
 
 
@@ -34,18 +44,28 @@ def generate_basis_encoding(input):
         circuit = BasisEncoding.basis_encode_number_subcircuit(
             vector, n_integralbits, n_fractional_part
         )
-    n_qubits = circuit.num_qubits
-    depth = circuit.depth()
-
-    return CircuitResponse(circuit.qasm(), "encoding/basis", n_qubits, depth, input)
+    return CircuitResponse(
+        circuit.qasm(), "encoding/basis", circuit.num_qubits, circuit.depth(), input
+    )
 
 
 def generate_angle_encoding(input):
-    return CircuitResponse(None, "encoding/angle", None, None, None)
+    vector = input.get("vector")
+    rotation_axis = input.get("rotationaxis")
+    circuit = AngleEncoding.angle_encode_vector(vector, rotation_axis)
+
+    return CircuitResponse(
+        circuit.qasm(), "encoding/angle", circuit.num_qubits, circuit.depth(), input
+    )
 
 
 def generate_amplitude_encoding(input):
-    return CircuitResponse(None, "encoding/amplitude", None, None, None)
+    vector = input.get("vector")
+    circuit = AmplitudeEncoding.amplitude_encode_vector(vector)
+    # width,depth = getCircuitCharacteristics(circuit) TODO dicuss if this makes more sense
+    return CircuitResponse(
+        circuit.qasm(), "encoding/amplitude", circuit.num_qubits, circuit.depth(), input
+    )
 
 
 def generate_quam_encoding(input):
@@ -53,4 +73,19 @@ def generate_quam_encoding(input):
 
 
 def generate_schmidt_decomposition(input):
-    return CircuitResponse(None, "encoding/schmidt", None, None, None)
+    vector = input.get("vector")
+    if np.log2(len(vector)) % 1 != 0:
+        response = jsonify(
+            {
+                "error": "bad request",
+                "message": "Invalid vector input! Vector must be of length 2^n",
+            }
+        )
+        response.status_code = 400
+        return response
+    circuit = generate_schmidt_decomposition_from_array(
+        vector, Measurement.noMeasurement
+    )
+    return CircuitResponse(
+        circuit.qasm(), "encoding/schmidt", circuit.num_qubits, circuit.depth(), input
+    )

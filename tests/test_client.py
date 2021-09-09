@@ -36,14 +36,34 @@ class FlaskClientTestCase(unittest.TestCase):
             'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[14];\nx q[2];\nx q[3];\nx q[6];\nx q[9];\nx q[12];\n' in response.get_json().values())
 
     def test_angle_encoding(self):
-        response = self.client.post('/encoding/angle', data=json.dumps({'vector': 3.14, 'rotationaxis': "x"}),
+        # Test x axis
+        response = self.client.post('/encoding/angle', data=json.dumps({'vector': [3.14, 2.25], 'rotationaxis': "x"}),
                                     content_type='application/json')
+        self.assertEqual(2, response.get_json().get('n_qubits'))
+        self.assertTrue('rx(6.28)' in response.get_json().get('circuit'))
         self.assertEqual(response.status_code, 200)
+
+        # Test y axis
+        response = self.client.post('/encoding/angle', data=json.dumps({'vector': [3.14, 2.25], 'rotationaxis': "y"}),
+                                    content_type='application/json')
+        self.assertEqual(2, response.get_json().get('n_qubits'))
+        self.assertTrue('ry(6.28)' in response.get_json().get('circuit'))
+        self.assertEqual(response.status_code, 200)
+
+        # Test z axis
+        response = self.client.post('/encoding/angle', data=json.dumps({'vector': [3.14, 2.25], 'rotationaxis': "z"}),
+                                    content_type='application/json')
+        self.assertEqual(2, response.get_json().get('n_qubits'))
+        self.assertTrue('rz(6.28)' in response.get_json().get('circuit'))
+        self.assertEqual(response.status_code, 200)
+
 
     def test_amplitude_encoding(self):
         response = self.client.post('/encoding/amplitude',
-                                    data=json.dumps({'vector': 3.14}),
+                                    data=json.dumps({'vector': [3.14, 2.75, 2.25, 0.1]}),
                                     content_type='application/json')
+        self.assertTrue('initialize(0.66204957,0.57982049,0.47439858,0.021084381)' in response.get_json().get('circuit'))
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.status_code, 200)
 
     def quam_encoding(self):
