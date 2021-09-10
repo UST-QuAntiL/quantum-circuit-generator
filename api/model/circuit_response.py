@@ -1,8 +1,11 @@
 from datetime import datetime
+import marshmallow as ma
+from .encoding_request import BasisEncodingRequestSchema
 
 
 class CircuitResponse:
     def __init__(self, circuit, circuit_type, n_qubits, depth, input):
+        super().__init__()
         self.circuit = circuit
         self.circuit_type = circuit_type
         self.n_qubits = n_qubits
@@ -20,3 +23,12 @@ class CircuitResponse:
             "input": self.input,
         }
         return json_circuit_response
+
+
+class CircuitResponseSchema(ma.Schema):
+    circuit = ma.fields.String()
+    circuit_type = ma.fields.String()
+    n_qubits = ma.fields.Int()
+    depth = ma.fields.Int()
+    timestamp = ma.fields.String()
+    input = ma.fields.Nested(BasisEncodingRequestSchema)

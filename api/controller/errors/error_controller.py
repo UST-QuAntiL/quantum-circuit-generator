@@ -1,8 +1,17 @@
 from flask import request, jsonify
-from . import api
+from flask_smorest import Blueprint
+
+blp = Blueprint(
+    "errors",
+    __name__,
+)
+
+# TODO Hide errors as soon as Feature is released - waiting for pull request to be accepated
+# https://github.com/marshmallow-code/flask-smorest/pull/277
+#  hidden_from_api_spec=True
 
 
-@api.app_errorhandler(404)
+@blp.app_errorhandler(404)
 def page_not_found(e):
     if (
         request.accept_mimetypes.accept_json
@@ -14,7 +23,7 @@ def page_not_found(e):
     return "<h1>page not found</h1>", 404
 
 
-@api.app_errorhandler(500)
+@blp.app_errorhandler(500)
 def internal_sever_error(e):
     if (
         request.accept_mimetypes.accept_json
@@ -24,6 +33,11 @@ def internal_sever_error(e):
         response.statuscode = 500
         return response
     return "<h1>internal server error</h1>", 500
+
+
+@blp.route("/", methods=["GET", "POST"])
+def index():
+    return "<h1>Quantum Circuit Generator is Running!!!</h1>"
 
 
 def bad_request(message):

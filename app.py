@@ -2,7 +2,6 @@ import os
 from api import create_app
 import sys
 import click
-from pathlib import Path
 
 app = create_app(os.getenv("FLASK_CONFIG") or "default")
 

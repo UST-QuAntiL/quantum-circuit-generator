@@ -20,7 +20,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
     def test_basis_encoding(self):
         # Test for single number
-        response = self.client.post('/encoding/basis', data=json.dumps({'vector': 3.14, 'integral_bits': 3, 'fractional_bits': 3}),
+        response = self.client.post('/encoding/basis', data=json.dumps({'vector': [3.14], 'integral_bits': 3, 'fractional_bits': 3}),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(7, response.get_json().get('n_qubits'))
@@ -73,7 +73,7 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_schmidt_decomposition(self):
-        response = self.client.post('/encoding/schmidt_decomposition',
+        response = self.client.post('/encoding/schmidt',
                                     data=json.dumps({'vector': [3.14, 0, 2.25, 1, 4, 0.5,2 ,2]}),
                                     content_type='application/json')
         self.assertEqual(3, response.get_json().get('n_qubits'))
