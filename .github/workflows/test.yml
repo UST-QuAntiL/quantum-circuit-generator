@@ -29,3 +29,5 @@ jobs:
         fail_ci_if_error: true
         files: ./coverage.xml
         flags: unittests
+    - name: Check code style
+      run: black --check .
