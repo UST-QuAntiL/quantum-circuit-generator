@@ -1,14 +1,5 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-This script contains functions to perform the Schmidt Decomposition
-of an arbitrary n-qubit state and to create a circuit to initialize
-a quantum register to the desired state.
-
-Also there are functions to check the correctness of the stated method
-via comparism of the explicit calculated state vector with the stated coefficient vector.
-
-@author: mariusstach
+based on: https://github.com/UST-QuAntiL/schmidt-decomposition by Marius Stach
 """
 
 import numpy as np
@@ -59,39 +50,6 @@ def getSchmidtCircuit(u, a, v, measure=Measurement.measure):
     elif measure == Measurement.measure:
         qc.measure(qc.qregs[0], qc.cregs[0])
     return qc
-
-
-# method to get a measurement vector by executing
-# the given quantum circuit on the respecting backend with n_shots shots
-def getMeasurement(
-    quantum_circuit, backend=qiskit.Aer.get_backend("qasm_simulator"), n_shots=1000
-):
-    results = qiskit.execute(quantum_circuit, backend=backend, shots=n_shots).result()
-
-    # Get measurements counts in vector form
-    counts = results.get_counts()
-    n_qubits = quantum_circuit.num_qubits
-    formatstring = "0" + str(n_qubits) + "b"
-    y = np.zeros(2 ** n_qubits, dtype=int)
-    for i in range(2 ** n_qubits):
-        if counts.__contains__(format(i, formatstring)):
-            y[i] = counts[format(i, formatstring)]
-    return y
-
-
-# method to compute the exact state vector after the computation of the given quantum circuit
-# when used with the schmidt decomposition the stateVector parameter of schmidtCircuit must be set True
-def getStatevector(
-    quantum_circuit, backend=qiskit.Aer.get_backend("aer_simulator_statevector")
-):
-    results = qiskit.execute(quantum_circuit, backend=backend).result()
-    return results.get_statevector()
-
-
-# method tio check the unitary of a given matrix u
-def isUnitary(u):
-    test = np.matmul(u.conj().T, u)
-    return np.allclose(np.eye(len(test)), test)
 
 
 # method to compute the matrix beta defining the state with the tensor product

@@ -1,9 +1,11 @@
 #pycache folder
 __pycache__/*
 
-#temp folder & files
+#temp + coverage folder & files
 /tmp/*
 /coverage.xml
+/htmlcov/*
+/.coverage
 
 #python env
 /venv/*
@@ -11,5 +13,6 @@ __pycache__/*
 
 #Intellij
 /.idea/*
+
 
 

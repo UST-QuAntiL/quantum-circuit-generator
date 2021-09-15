@@ -1,6 +1,10 @@
 import unittest
-from app import create_app
+import os, sys
 import json
+
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(parent_dir)
+from app import create_app
 
 
 class FlaskClientTestCase(unittest.TestCase):
@@ -12,11 +16,6 @@ class FlaskClientTestCase(unittest.TestCase):
 
     def tearDown(self):
         self.app_context.pop()
-
-    def test_home_page(self):
-        response = self.client.get("/")
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue("Running" in response.get_data(as_text=True))
 
     def test_basis_encoding(self):
         # Test for single number
@@ -114,3 +113,14 @@ class FlaskClientTestCase(unittest.TestCase):
             in response.get_json().get("circuit")
         )
         self.assertEqual(response.status_code, 200)
+
+        # Test request failure for len(vector) != 2^n
+        response = self.client.post(
+            "/encoding/schmidt",
+            data=json.dumps({"vector": [3.14, 0, 2.25, 1, 4, 0.5, 2, 2, 0]}),
+            content_type="application/json",
+        )
+        self.assertTrue(
+            "Invalid vector input! Vector must be of length 2^n"
+            in response.get_json().get("message")
+        )

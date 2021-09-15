@@ -7,6 +7,10 @@ from ...model.encoding_request import (
     AngleEncodingRequestSchema,
     AmplitudeEncodingRequestSchema,
     SchmidtDecompositionRequestSchema,
+    SchmidtDecompositionRequest,
+    AmplitudeEncodingRequest,
+    AngleEncodingRequest,
+    BasisEncodingRequest,
 )
 
 blp = Blueprint(
@@ -24,9 +28,9 @@ blp = Blueprint(
     example=dict(vector=[1.25, 3.14], integral_bits=3, fractional_bits=3),
 )
 @blp.response(200, CircuitResponseSchema)
-def encoding(name):
-    if name and request.json:
-        return encoding_service.generate_basis_encoding(request.json)
+def encoding(json: BasisEncodingRequest):
+    if json:
+        return encoding_service.generate_basis_encoding(json)
 
 
 @blp.route("/angle", methods=["POST"])
@@ -35,29 +39,28 @@ def encoding(name):
     AngleEncodingRequestSchema, example=dict(vector=[1.25, 3.14], rotationaxis="x")
 )
 @blp.response(200, CircuitResponseSchema)
-def encoding(name):
-    if name and request.json:
-        return encoding_service.generate_angle_encoding(request.json)
+def encoding(json: AngleEncodingRequest):
+    if json:
+        return encoding_service.generate_angle_encoding(json)
 
 
 @blp.route("/amplitude", methods=["POST"])
 @blp.etag
 @blp.arguments(AmplitudeEncodingRequestSchema, example=dict(vector=[1.25, 3.14]))
 @blp.response(200, CircuitResponseSchema)
-def encoding(name):
-    if name and request.json:
-        return encoding_service.generate_amplitude_encoding(request.json)
+def encoding(json: AmplitudeEncodingRequest):
+    if json:
+        return encoding_service.generate_amplitude_encoding(json)
 
 
 @blp.route("/schmidt", methods=["POST"])
-@blp.etag
 @blp.arguments(
     SchmidtDecompositionRequestSchema, example=dict(vector=[1.25, 3.14, 0, 1])
 )
 @blp.response(200, CircuitResponseSchema)
-def encoding(name):
-    if name and request.json:
-        return encoding_service.generate_schmidt_decomposition(request.json)
+def encoding(json: SchmidtDecompositionRequest):
+    if json:
+        return encoding_service.generate_schmidt_decomposition(json)
 
 
 # TODO

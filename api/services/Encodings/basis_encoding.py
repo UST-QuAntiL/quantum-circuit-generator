@@ -72,34 +72,6 @@ class BasisEncoding:
         return integralString
 
     @classmethod
-    def basis_encode_number_subcircuit(cls, number, n_integralbits, n_fractional_part):
-        """
-        Generates the circuit for the basis encoding of a certain number with given precision
-        :param number: Input decimal number as int or float
-        :param n_integralbits: Precision of the integral part of the number
-        :param n_fractional_part: Precision of the fractional part of the number
-        :return: QisQit QuantumCircuit that basisencodes the input at give precision
-        """
-        numberString = cls.basis_encode_number(
-            number, n_integralbits, n_fractional_part
-        )
-        numberArray = cls.convert_bitstring_to_intarray(numberString)
-
-        n_qubits = 1 + n_integralbits + n_fractional_part
-
-        encoding_subcircuit = QuantumCircuit(
-            n_qubits, name="basisencode {}".format(number)
-        )
-        [
-            (encoding_subcircuit.x(i) if numberArray[i] == 1 else 0)
-            for i in range(n_qubits)
-        ]
-        # encoding_subcircuit.draw(output='mpl')
-        # plt.show()
-
-        return encoding_subcircuit
-
-    @classmethod
     def basis_encode_list_subcircuit(cls, list, n_integralbits, n_fractional_part):
         """
         Generates the circuit for the basis encoding of a list of number with given precision
@@ -125,8 +97,6 @@ class BasisEncoding:
                 )
                 for i in range(len(numberArray[j]))
             ]
-        # encoding_subcircuit.draw(output='mpl')
-        # plt.show()
 
         return encoding_subcircuit
 

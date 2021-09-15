@@ -8,7 +8,7 @@ from api.services.Encodings.schmidt_decomposition import (
     generate_schmidt_decomposition_from_array,
     Measurement,
 )
-from api.services.helper_service import getCircuitCharacteristics
+from api.services.helper_service import getCircuitCharacteristics, bad_request
 from api.model.circuit_response import CircuitResponse
 
 
@@ -54,15 +54,10 @@ def generate_quam_encoding(input):
 
 def generate_schmidt_decomposition(input):
     vector = input.get("vector")
+
     if np.log2(len(vector)) % 1 != 0:
-        response = jsonify(
-            {
-                "error": "bad request",
-                "message": "Invalid vector input! Vector must be of length 2^n",
-            }
-        )
-        response.status_code = 400
-        return response
+        return bad_request("Invalid vector input! Vector must be of length 2^n")
+
     circuit = generate_schmidt_decomposition_from_array(
         vector, Measurement.noMeasurement
     )

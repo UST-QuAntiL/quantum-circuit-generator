@@ -1,9 +1,6 @@
-from api.controller import errors, encoding
+from api.controller import encoding, algorithms
 
-MODULES = (
-    encoding,
-    errors,
-)
+MODULES = (encoding, algorithms)
 
 
 def register_blueprints(api):

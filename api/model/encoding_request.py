@@ -1,4 +1,6 @@
 import marshmallow as ma
+from marshmallow import pre_load, ValidationError
+import numpy as np
 
 
 class BasisEncodingRequest:
@@ -35,7 +37,7 @@ class AmplitudeEncodingRequestSchema(ma.Schema):
 
 
 class SchmidtDecompositionRequest:
-    def __init__(self, vector, n_integral_bits, n_fractional_bits):
+    def __init__(self, vector):
         self.vector = vector
 
 
