@@ -3,7 +3,7 @@ from qiskit.circuit.quantumcircuit import QuantumCircuit
 from qiskit.algorithms.linear_solvers.hhl import HHL
 import numpy as np
 
-from api.services.Encodings.amplitude_encoding import AmplitudeEncoding
+from api.services.encodings.amplitude_encoding import AmplitudeEncoding
 
 class HHLAlgorithm:
     @classmethod
