@@ -4,7 +4,9 @@ from api.services import algorithm_service
 from ...model.circuit_response import CircuitResponseSchema
 from ...model.algorithm_request import (
         HHLAlgorithmRequestSchema,
-        HHLAlgorithmRequest
+        HHLAlgorithmRequest,
+        QAOAAlgorithmRequestSchema,
+        QAOAAlgorithmRequest
         )
 
 
@@ -26,3 +28,18 @@ blp = Blueprint(
 def encoding(json: HHLAlgorithmRequest):
     if json:
         return algorithm_service.generate_hhl_algorithm(json)
+
+
+@blp.route("/qaoa", methods=["POST"])
+@blp.etag
+@blp.arguments(
+    QAOAAlgorithmRequestSchema,
+    example=dict(matrix=[[0, 1, 1, 0],
+                         [1, 0, 1, 1],
+                         [1, 1, 0, 1],
+                         [0, 1, 1, 0]], beta=1.0, gamma=1.0),
+)
+@blp.response(200, CircuitResponseSchema)
+def encoding(json: QAOAAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_qaoa_circuit(json)

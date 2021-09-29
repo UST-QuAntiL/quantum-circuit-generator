@@ -14,3 +14,14 @@ class HHLAlgorithmRequestSchema(ma.Schema):
     vector = ma.fields.List(ma.fields.Float())
 
 
+class QAOAAlgorithmRequest:
+    def __init__(self, matrix, beta, gamma):
+        self.matrix = matrix
+        self.beta = beta
+        self.gamma = gamma
+
+
+class QAOAAlgorithmRequestSchema(ma.Schema):
+    matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
+    beta = ma.fields.Float()
+    gamma = ma.fields.Float()
