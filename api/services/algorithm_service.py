@@ -19,10 +19,10 @@ def generate_hhl_algorithm(input):
 
 # TODO
 def generate_qaoa_circuit(input):
-    matrix = input.get("matrix")
+    adj_matrix = input.get("adj_matrix")
     beta = input.get("beta")
     gamma = input.get("gamma")
-    circuit = QAOAAlgorithm.create_circuit(matrix, beta, gamma)
+    circuit = QAOAAlgorithm.create_circuit(adj_matrix, beta, gamma)
     return CircuitResponse(
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
     )

@@ -41,9 +41,9 @@ class QAOAAlgorithm:
 
 
     @classmethod
-    def create_circuit(cls, matrix, beta, gamma):
+    def create_circuit(cls, adj_matrix, beta, gamma):
         """
-        :param matrix: adjacency matrix describing the undirected graph
+        :param adj_matrix: adjacency matrix describing the undirected graph
         :param beta: beta parameter used in qaoa
         :param gamma: gamma parameter used in qaoa
         :return: OpenQASM Circuit
@@ -52,7 +52,7 @@ class QAOAAlgorithm:
         Custom AmplitudeEncoding is used for vector preparation.
         """
 
-        operator = cls.create_operator(matrix)
+        operator = cls.create_operator(adj_matrix)
         optimizer = COBYLA()
         qaoa = QAOA(optimizer)
         qaoa_qc = qaoa.construct_circuit([gamma, beta], operator)[0]

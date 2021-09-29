@@ -34,10 +34,10 @@ def encoding(json: HHLAlgorithmRequest):
 @blp.etag
 @blp.arguments(
     QAOAAlgorithmRequestSchema,
-    example=dict(matrix=[[0, 1, 1, 0],
-                         [1, 0, 1, 1],
-                         [1, 1, 0, 1],
-                         [0, 1, 1, 0]], beta=1.0, gamma=1.0),
+    example=dict(adj_matrix=[[0, 1, 1, 0],
+                             [1, 0, 1, 1],
+                             [1, 1, 0, 1],
+                             [0, 1, 1, 0]], beta=1.0, gamma=1.0),
 )
 @blp.response(200, CircuitResponseSchema)
 def encoding(json: QAOAAlgorithmRequest):

@@ -16,12 +16,12 @@ class HHLAlgorithmRequestSchema(ma.Schema):
 
 class QAOAAlgorithmRequest:
     def __init__(self, matrix, beta, gamma):
-        self.matrix = matrix
+        self.adj_matrix = adj_matrix
         self.beta = beta
         self.gamma = gamma
 
 
 class QAOAAlgorithmRequestSchema(ma.Schema):
-    matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
+    adj_matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
     beta = ma.fields.Float()
     gamma = ma.fields.Float()
