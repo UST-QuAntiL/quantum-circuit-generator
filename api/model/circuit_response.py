@@ -33,5 +33,5 @@ class CircuitResponseSchema(ma.Schema):
     depth = ma.fields.Int()
     timestamp = ma.fields.String()
     # TODO change BasisEncodingRequestSchema for algorithms
-    #input = ma.fields.Nested(HHLAlgorithmRequestSchema)
+    # input = ma.fields.Nested(HHLAlgorithmRequestSchema)
     input = ma.fields.Nested(BasisEncodingRequestSchema)

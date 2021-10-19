@@ -26,4 +26,3 @@ def generate_qaoa_circuit(input):
     return CircuitResponse(
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
     )
-

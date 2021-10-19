@@ -3,11 +3,11 @@ from flask import request
 from api.services import algorithm_service
 from ...model.circuit_response import CircuitResponseSchema
 from ...model.algorithm_request import (
-        HHLAlgorithmRequestSchema,
-        HHLAlgorithmRequest,
-        QAOAAlgorithmRequestSchema,
-        QAOAAlgorithmRequest
-        )
+    HHLAlgorithmRequestSchema,
+    HHLAlgorithmRequest,
+    QAOAAlgorithmRequestSchema,
+    QAOAAlgorithmRequest,
+)
 
 
 blp = Blueprint(
@@ -34,10 +34,11 @@ def encoding(json: HHLAlgorithmRequest):
 @blp.etag
 @blp.arguments(
     QAOAAlgorithmRequestSchema,
-    example=dict(adj_matrix=[[0, 1, 1, 0],
-                             [1, 0, 1, 1],
-                             [1, 1, 0, 1],
-                             [0, 1, 1, 0]], beta=1.0, gamma=1.0),
+    example=dict(
+        adj_matrix=[[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
+        beta=1.0,
+        gamma=1.0,
+    ),
 )
 @blp.response(200, CircuitResponseSchema)
 def encoding(json: QAOAAlgorithmRequest):
