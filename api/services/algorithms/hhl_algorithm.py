@@ -5,6 +5,7 @@ import numpy as np
 
 from api.services.encodings.amplitude_encoding import AmplitudeEncoding
 
+
 class HHLAlgorithm:
     @classmethod
     def preprocess(cls, matrix, vector):
@@ -22,9 +23,9 @@ class HHLAlgorithm:
             if isinstance(vector, QuantumCircuit):
                 vector_circuit = vector
             elif isinstance(vector, list):
-                 vector_circuit = AmplitudeEncoding.amplitude_encode_vector(vector)
-                 vector_circuit.name = 'amplitude-enc'
-        else: 
+                vector_circuit = AmplitudeEncoding.amplitude_encode_vector(vector)
+                vector_circuit.name = "amplitude-enc"
+        else:
             # TODO check different matrix sizes
             # dummy circuit that is poped later
             n_qubits = (
@@ -39,10 +40,10 @@ class HHLAlgorithm:
     @classmethod
     def create_circuit(cls, matrix, vector=None):
         """
-        :param matrix: input matrix to invert containing floats 
+        :param matrix: input matrix to invert containing floats
         :param vector: input vector containing floats
         :return: OpenQASM Circuit
-        
+
         Creates HHL circuit from np.array(matrix) and vector.
         Custom AmplitudeEncoding is used for vector preparation.
         """
