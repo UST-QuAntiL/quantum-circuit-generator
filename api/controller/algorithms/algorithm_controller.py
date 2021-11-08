@@ -19,7 +19,6 @@ blp = Blueprint(
 
 
 @blp.route("/hhl", methods=["POST"])
-@blp.etag
 @blp.arguments(
     HHLAlgorithmRequestSchema,
     example=dict(matrix=[[1.5, 0.5], [0.5, 1.5]], vector=[0, 1]),
