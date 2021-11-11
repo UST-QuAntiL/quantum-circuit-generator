@@ -14,14 +14,16 @@ def generate_hhl_algorithm(input):
     # Check types and dimensions
     matrix_array = np.array(matrix)
     vector_array = np.array(vector)
-    if(matrix_array.shape[0] != matrix_array.shape[1]):
+    if matrix_array.shape[0] != matrix_array.shape[1]:
         return bad_request("Invalid matrix input! Matrix must be square.")
     hermitian = np.allclose(matrix_array, matrix_array.T)
-    if(not hermitian):
+    if not hermitian:
         return bad_request("Invalid matrix input! Matrix must be hermitian.")
-    if(matrix_array.shape[0] != vector_array.shape[0]):
-        return bad_request("Invalid matrix, vector input! Matrix and vector must be of the same dimension.")
-    if(np.log2(matrix_array.shape[0]) % 1 != 0):
+    if matrix_array.shape[0] != vector_array.shape[0]:
+        return bad_request(
+            "Invalid matrix, vector input! Matrix and vector must be of the same dimension."
+        )
+    if np.log2(matrix_array.shape[0]) % 1 != 0:
         return bad_request("Invalid matrix input! Input matrix dimension must be 2^n.")
 
     circuit = HHLAlgorithm.create_circuit(matrix, vector)

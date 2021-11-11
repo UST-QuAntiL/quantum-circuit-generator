@@ -56,5 +56,5 @@ class HHLAlgorithm:
         if vector is None:
             hhl_qc.data.pop(0)
 
-        #print(hhl_qc)
+        # print(hhl_qc)
         return hhl_qc

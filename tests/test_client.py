@@ -130,7 +130,9 @@ class FlaskClientTestCase(unittest.TestCase):
         # Test errors
         response = self.client.post(
             "/algorithms/hhl",
-            data=json.dumps({"matrix": [[1.5, 0.5, 1], [0.5, 1.5, 1]],"vector": [0, 1]}),
+            data=json.dumps(
+                {"matrix": [[1.5, 0.5, 1], [0.5, 1.5, 1]], "vector": [0, 1]}
+            ),
             content_type="application/json",
         )
         self.assertTrue(
@@ -139,7 +141,7 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         response = self.client.post(
             "/algorithms/hhl",
-            data=json.dumps({"matrix": [[1.5, 0.8], [0.5, 1.5]],"vector": [0, 1]}),
+            data=json.dumps({"matrix": [[1.5, 0.8], [0.5, 1.5]], "vector": [0, 1]}),
             content_type="application/json",
         )
         self.assertTrue(
@@ -148,7 +150,7 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         response = self.client.post(
             "/algorithms/hhl",
-            data=json.dumps({"matrix": [[1.5, 0.5], [0.5, 1.5]],"vector": [0, 1, 2]}),
+            data=json.dumps({"matrix": [[1.5, 0.5], [0.5, 1.5]], "vector": [0, 1, 2]}),
             content_type="application/json",
         )
         self.assertTrue(
@@ -157,7 +159,12 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         response = self.client.post(
             "/algorithms/hhl",
-            data=json.dumps({"matrix": [[1.5, 0.5, 1.0], [0.5, 1.5, 1.0], [1.0, 1.0, 0.5]],"vector": [0, 1, 2]}),
+            data=json.dumps(
+                {
+                    "matrix": [[1.5, 0.5, 1.0], [0.5, 1.5, 1.0], [1.0, 1.0, 0.5]],
+                    "vector": [0, 1, 2],
+                }
+            ),
             content_type="application/json",
         )
         self.assertTrue(
@@ -168,28 +175,38 @@ class FlaskClientTestCase(unittest.TestCase):
         # Test different matrix sizes
         response = self.client.post(
             "/algorithms/hhl",
-            data=json.dumps({"matrix": [[1.5, 0.5], [0.5, 1.5]],
-                            "vector": [0, 1]}),
+            data=json.dumps({"matrix": [[1.5, 0.5], [0.5, 1.5]], "vector": [0, 1]}),
             content_type="application/json",
         )
         self.assertEqual(4, response.get_json().get("n_qubits"))
         self.assertEqual(4, response.get_json().get("depth"))
-        match = re.search("amplitude-enc q.*;\nQPE q.*,q.*,q.*;\n1/x q.*,q.*,q.*;\nQPE_dg q.*,q.*,q.*;\n",
-                          response.get_json().get("circuit")
-                )
+        match = re.search(
+            "amplitude-enc q.*;\nQPE q.*,q.*,q.*;\n1/x q.*,q.*,q.*;\nQPE_dg q.*,q.*,q.*;\n",
+            response.get_json().get("circuit"),
+        )
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
 
         response = self.client.post(
             "/algorithms/hhl",
-            data=json.dumps({"matrix": [[1.0, 0.0, 0.0, 0.0], [0.0, 1.0, 0.0, 0.0], [0.0, 0.0, 1.0, 0.0], [0.0, 0.0, 0.0, 1.0]],
-                            "vector": [0, 1, 0, 0]}),
+            data=json.dumps(
+                {
+                    "matrix": [
+                        [1.0, 0.0, 0.0, 0.0],
+                        [0.0, 1.0, 0.0, 0.0],
+                        [0.0, 0.0, 1.0, 0.0],
+                        [0.0, 0.0, 0.0, 1.0],
+                    ],
+                    "vector": [0, 1, 0, 0],
+                }
+            ),
             content_type="application/json",
         )
         self.assertEqual(6, response.get_json().get("n_qubits"))
         self.assertEqual(4, response.get_json().get("depth"))
-        match = re.search("amplitude-enc q.*,q.*;\nQPE q.*,q.*,q.*,q.*,q.*;\n1/x q.*,q.*,q.*,q.*;\nQPE_dg q.*,q.*,q.*,q.*,q.*;\n",
-                          response.get_json().get("circuit")
-                )
+        match = re.search(
+            "amplitude-enc q.*,q.*;\nQPE q.*,q.*,q.*,q.*,q.*;\n1/x q.*,q.*,q.*,q.*;\nQPE_dg q.*,q.*,q.*,q.*,q.*;\n",
+            response.get_json().get("circuit"),
+        )
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
