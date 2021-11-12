@@ -1,10 +1,10 @@
 import numpy as np
 from flask import jsonify
 
-from api.services.Encodings.basis_encoding import BasisEncoding
-from api.services.Encodings.angle_encoding import AngleEncoding
-from api.services.Encodings.amplitude_encoding import AmplitudeEncoding
-from api.services.Encodings.schmidt_decomposition import (
+from api.services.encodings.basis_encoding import BasisEncoding
+from api.services.encodings.angle_encoding import AngleEncoding
+from api.services.encodings.amplitude_encoding import AmplitudeEncoding
+from api.services.encodings.schmidt_decomposition import (
     generate_schmidt_decomposition_from_array,
     Measurement,
 )
