@@ -15,7 +15,7 @@ class HHLAlgorithm:
         Prepare amplitude encoding circuit
         If vector is None, a dummy circuit is prepared that is removed later.
         """
-        # TODO matrix check
+        # input check
         if isinstance(matrix, list):
             matrix = np.array(matrix)
 
@@ -26,7 +26,7 @@ class HHLAlgorithm:
                 vector_circuit = AmplitudeEncoding.amplitude_encode_vector(vector)
                 vector_circuit.name = "amplitude-enc"
         else:
-            # TODO check different matrix sizes
+            # only HHL and no vector encoding
             # dummy circuit that is poped later
             n_qubits = (
                 int(np.log2(matrix.shape[0]))

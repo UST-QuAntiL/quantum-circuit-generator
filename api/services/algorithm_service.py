@@ -3,10 +3,11 @@ from flask import jsonify
 
 from api.services.algorithms.hhl_algorithm import HHLAlgorithm
 from api.services.algorithms.qaoa_algorithm import QAOAAlgorithm
+from api.services.algorithms.pauliParser import PauliParser
 from api.services.helper_service import getCircuitCharacteristics, bad_request
 from api.model.circuit_response import CircuitResponse
 
-# TODO
+
 def generate_hhl_algorithm(input):
     matrix = input.get("matrix")
     vector = input.get("vector")
@@ -32,12 +33,24 @@ def generate_hhl_algorithm(input):
     )
 
 
-# TODO
 def generate_qaoa_circuit(input):
-    adj_matrix = input.get("adj_matrix")
-    beta = input.get("beta")
-    gamma = input.get("gamma")
-    circuit = QAOAAlgorithm.create_circuit(adj_matrix, beta, gamma)
+    pauli_op_string = input.get("pauli_op_string")
+    reps = input.get("reps")
+    gammas = input.get("gammas")
+    betas = input.get("betas")
+
+    # check angle input
+    if len(gammas) != reps or len(betas) != reps:
+        return bad_request(
+            f"Number of angles and repitions don't match. You specified {len(gammas)} gamma(s) and {len(betas)} beta(s) for {reps} repetition(s)."
+        )
+    # check Pauli string
+    try:
+        PauliParser.parse(pauli_op_string)
+    except ValueError as err:
+        return bad_request(str(err))
+
+    circuit = QAOAAlgorithm.create_circuit(pauli_op_string, reps, gammas, betas)
     return CircuitResponse(
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
     )

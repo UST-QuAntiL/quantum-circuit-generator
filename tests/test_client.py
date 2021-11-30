@@ -139,6 +139,8 @@ class FlaskClientTestCase(unittest.TestCase):
             "Invalid matrix input! Matrix must be square."
             in response.get_json().get("message")
         )
+        self.assertEqual(response.status_code, 400)
+
         response = self.client.post(
             "/algorithms/hhl",
             data=json.dumps({"matrix": [[1.5, 0.8], [0.5, 1.5]], "vector": [0, 1]}),
@@ -148,6 +150,8 @@ class FlaskClientTestCase(unittest.TestCase):
             "Invalid matrix input! Matrix must be hermitian."
             in response.get_json().get("message")
         )
+        self.assertEqual(response.status_code, 400)
+
         response = self.client.post(
             "/algorithms/hhl",
             data=json.dumps({"matrix": [[1.5, 0.5], [0.5, 1.5]], "vector": [0, 1, 2]}),
@@ -157,6 +161,8 @@ class FlaskClientTestCase(unittest.TestCase):
             "Invalid matrix, vector input! Matrix and vector must be of the same dimension."
             in response.get_json().get("message")
         )
+        self.assertEqual(response.status_code, 400)
+
         response = self.client.post(
             "/algorithms/hhl",
             data=json.dumps(
@@ -171,6 +177,7 @@ class FlaskClientTestCase(unittest.TestCase):
             "Invalid matrix input! Input matrix dimension must be 2^n."
             in response.get_json().get("message")
         )
+        self.assertEqual(response.status_code, 400)
 
         # Test different matrix sizes
         response = self.client.post(
@@ -206,6 +213,127 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(4, response.get_json().get("depth"))
         match = re.search(
             "amplitude-enc q.*,q.*;\nQPE q.*,q.*,q.*,q.*,q.*;\n1/x q.*,q.*,q.*,q.*;\nQPE_dg q.*,q.*,q.*,q.*,q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+    def test_qaoa_algorithm(self):
+        # Test errors
+        # invalid reps
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
+                    "reps": 3,
+                    "gammas": [1.0, 1.2],
+                    "betas": [0.4, 0.7],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertTrue(
+            "Number of angles and repitions don't match. You specified 2 gamma(s) and 2 beta(s) for 3 repetition(s)."
+            in response.get_json().get("message")
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # invalid gammas length
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
+                    "reps": 2,
+                    "gammas": [1.0, 1.2, 1.1],
+                    "betas": [0.4, 0.7],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertTrue(
+            "Number of angles and repitions don't match. You specified 3 gamma(s) and 2 beta(s) for 2 repetition(s)."
+            in response.get_json().get("message")
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # invalid betas length
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
+                    "reps": 2,
+                    "gammas": [1.0, 1.2],
+                    "betas": [0.4, 0.7, 0.8],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertTrue(
+            "Number of angles and repitions don't match. You specified 2 gamma(s) and 3 beta(s) for 2 repetition(s)."
+            in response.get_json().get("message")
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # invalid Pauli string
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z))",
+                    "reps": 2,
+                    "gammas": [1.0, 1.2],
+                    "betas": [0.4, 0.7],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertTrue(
+            "Sum of operators with different numbers of qubits, 3 and 2, is not well defined"
+            in response.get_json().get("message")
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # good response
+        # test 4 qbit QAOA
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "pauli_op_string": "0.5 * ((I^I^Z^Z) + (I^Z^I^Z) + (I^Z^Z^I) + (Z^I^Z^I) + (Z^Z^I^I))",
+                    "reps": 1,
+                    "gammas": [1.0],
+                    "betas": [1.0],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(4, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\nh q.*;\nh q.*;\nh q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\nrx\(2.0+\) q.*;\nrx\(2.0+\) q.*;\nrx\(2.0+\) q.*;\nrx\(2.0+\) q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # test 3 qbit QAOA
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
+                    "reps": 2,
+                    "gammas": [1.0, 1.2],
+                    "betas": [0.4, 0.7],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(3, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\nh q.*;\nh q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\nrx\(0.80+\) q.*;\nrx\(0.80+\) q.*;\nrx\(0.80+\) q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\nrx\(1.40+\) q.*;\nrx\(1.40+\) q.*;\nrx\(1.40+\) q.*;\n",
             response.get_json().get("circuit"),
         )
         self.assertTrue(match is not None)

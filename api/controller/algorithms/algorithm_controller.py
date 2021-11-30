@@ -30,13 +30,13 @@ def encoding(json: HHLAlgorithmRequest):
 
 
 @blp.route("/qaoa", methods=["POST"])
-@blp.etag
 @blp.arguments(
     QAOAAlgorithmRequestSchema,
     example=dict(
-        adj_matrix=[[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
-        beta=1.0,
-        gamma=1.0,
+        pauli_op_string="0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
+        reps=2,
+        gammas=[1.0, 1.2],
+        betas=[0.4, 0.7],
     ),
 )
 @blp.response(200, CircuitResponseSchema)

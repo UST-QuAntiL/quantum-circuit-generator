@@ -15,13 +15,15 @@ class HHLAlgorithmRequestSchema(ma.Schema):
 
 
 class QAOAAlgorithmRequest:
-    def __init__(self, matrix, beta, gamma):
-        self.adj_matrix = adj_matrix
-        self.beta = beta
-        self.gamma = gamma
+    def __init__(self, pauli_op_string, gammas, betas):
+        self.pauli_op_string = pauli_op_string
+        self.reps = reps
+        self.gammas = gammas
+        self.betas = betas
 
 
 class QAOAAlgorithmRequestSchema(ma.Schema):
-    adj_matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
-    beta = ma.fields.Float()
-    gamma = ma.fields.Float()
+    pauli_op_string = ma.fields.String()
+    reps = ma.fields.Int()
+    gammas = ma.fields.List(ma.fields.Float())
+    betas = ma.fields.List(ma.fields.Float())
