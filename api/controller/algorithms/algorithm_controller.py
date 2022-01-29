@@ -26,7 +26,7 @@ blp = Blueprint(
 @blp.response(200, CircuitResponseSchema)
 def encoding(json: HHLAlgorithmRequest):
     if json:
-        return algorithm_service.generate_hhl_algorithm(json)
+        return algorithm_service.generate_hhl_circuit(json)
 
 
 @blp.route("/qaoa", methods=["POST"])

@@ -8,7 +8,7 @@ from api.services.helper_service import getCircuitCharacteristics, bad_request
 from api.model.circuit_response import CircuitResponse
 
 
-def generate_hhl_algorithm(input):
+def generate_hhl_circuit(input):
     matrix = input.get("matrix")
     vector = input.get("vector")
 
@@ -29,7 +29,11 @@ def generate_hhl_algorithm(input):
 
     circuit = HHLAlgorithm.create_circuit(matrix, vector)
     return CircuitResponse(
-        circuit.qasm(), "algorithm/hhl", circuit.num_qubits, circuit.depth(), input
+        HHLAlgorithm.qasm_compatible(circuit.qasm()),
+        "algorithm/hhl",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
     )
 
 
