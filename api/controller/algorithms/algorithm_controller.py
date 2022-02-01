@@ -7,6 +7,8 @@ from ...model.algorithm_request import (
     HHLAlgorithmRequest,
     QAOAAlgorithmRequestSchema,
     QAOAAlgorithmRequest,
+    VQLSAlgorithmRequestSchema,
+    VQLSAlgorithmRequest,
 )
 
 
@@ -43,3 +45,21 @@ def encoding(json: HHLAlgorithmRequest):
 def encoding(json: QAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_qaoa_circuit(json)
+
+
+@blp.route("/vqls", methods=["POST"])
+@blp.arguments(
+    VQLSAlgorithmRequestSchema,
+    example=dict(
+        matrix=[[1.0, 0.0], [0.0, 1.0]],
+        vector=[0, 1],
+        alphas=[1] * 8,
+        l=0,
+        lp=0,
+        ansatz="EfficientSU2",
+    ),
+)
+@blp.response(200, CircuitResponseSchema)
+def encoding(json: VQLSAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_vqls_circuit(json)

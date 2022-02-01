@@ -15,5 +15,7 @@ __pycache__/
 #Intellij
 /.idea/*
 
-
+#Docker
+.dockerignore
+Dockerfile
 

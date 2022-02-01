@@ -27,3 +27,22 @@ class QAOAAlgorithmRequestSchema(ma.Schema):
     reps = ma.fields.Int()
     gammas = ma.fields.List(ma.fields.Float())
     betas = ma.fields.List(ma.fields.Float())
+
+
+class VQLSAlgorithmRequest:
+    def __init__(self, matrix, vector, alphas, l, lp, ansatz):
+        self.matrix = matrix
+        self.vector = vector
+        self.alphas = alphas
+        self.l = l
+        self.lp = lp
+        self.ansatz = ansatz
+
+
+class VQLSAlgorithmRequestSchema(ma.Schema):
+    matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
+    vector = ma.fields.List(ma.fields.Float())
+    alphas = ma.fields.List(ma.fields.Float())
+    l = ma.fields.Int()
+    lp = ma.fields.Int()
+    ansatz = ma.fields.String()

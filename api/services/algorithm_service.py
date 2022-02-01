@@ -3,6 +3,7 @@ from flask import jsonify
 
 from api.services.algorithms.hhl_algorithm import HHLAlgorithm
 from api.services.algorithms.qaoa_algorithm import QAOAAlgorithm
+from api.services.algorithms.vqls_algorithm import VQLSAlgorithm
 from api.services.algorithms.pauliParser import PauliParser
 from api.services.helper_service import getCircuitCharacteristics, bad_request
 from api.model.circuit_response import CircuitResponse
@@ -17,7 +18,7 @@ def generate_hhl_circuit(input):
     vector_array = np.array(vector)
     if matrix_array.shape[0] != matrix_array.shape[1]:
         return bad_request("Invalid matrix input! Matrix must be square.")
-    hermitian = np.allclose(matrix_array, matrix_array.T)
+    hermitian = np.allclose(matrix_array, matrix_array.conj().T)
     if not hermitian:
         return bad_request("Invalid matrix input! Matrix must be hermitian.")
     if matrix_array.shape[0] != vector_array.shape[0]:
@@ -57,4 +58,22 @@ def generate_qaoa_circuit(input):
     circuit = QAOAAlgorithm.create_circuit(pauli_op_string, reps, gammas, betas)
     return CircuitResponse(
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
+    )
+
+
+def generate_vqls_circuit(input):
+    matrix = input.get("matrix")
+    vector = input.get("vector")
+    alphas = input.get("alphas")
+    l = input.get("l")
+    lp = input.get("lp")
+    ansatz = input.get("ansatz")
+
+    circuit = VQLSAlgorithm.create_circuit(matrix, vector, alphas, l, lp, ansatz)
+    return CircuitResponse(
+        circuit.qasm(),
+        "algorithm/vqls",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
     )
