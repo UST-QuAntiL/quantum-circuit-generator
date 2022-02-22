@@ -1,7 +1,12 @@
 from flask_smorest import Blueprint
 from flask import request
 from api.services import algorithm_service
-from ...model.circuit_response import CircuitResponseSchema
+from ...model.circuit_response import (
+    CircuitResponseSchema,
+    HHLResponseSchema,
+    QAOAResponseSchema,
+    VQLSResponseSchema,
+)
 from ...model.algorithm_request import (
     HHLAlgorithmRequestSchema,
     HHLAlgorithmRequest,
@@ -25,7 +30,7 @@ blp = Blueprint(
     HHLAlgorithmRequestSchema,
     example=dict(matrix=[[1.5, 0.5], [0.5, 1.5]], vector=[0, 1]),
 )
-@blp.response(200, CircuitResponseSchema)
+@blp.response(200, HHLResponseSchema)
 def encoding(json: HHLAlgorithmRequest):
     if json:
         return algorithm_service.generate_hhl_circuit(json)
@@ -41,7 +46,7 @@ def encoding(json: HHLAlgorithmRequest):
         betas=[0.4, 0.7],
     ),
 )
-@blp.response(200, CircuitResponseSchema)
+@blp.response(200, QAOAResponseSchema)
 def encoding(json: QAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_qaoa_circuit(json)
@@ -59,7 +64,7 @@ def encoding(json: QAOAAlgorithmRequest):
         ansatz="EfficientSU2",
     ),
 )
-@blp.response(200, CircuitResponseSchema)
+@blp.response(200, VQLSResponseSchema)
 def encoding(json: VQLSAlgorithmRequest):
     if json:
         return algorithm_service.generate_vqls_circuit(json)
