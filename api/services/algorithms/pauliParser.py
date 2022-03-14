@@ -7,7 +7,6 @@ class PauliParser:
     @classmethod
     def parse(cls, pauli_string: str):
         tree = ast.parse(pauli_string)
-        #print(ast.dump(tree.body[0].value))
         return cls.instanciate(tree.body[0].value)
 
     @classmethod
