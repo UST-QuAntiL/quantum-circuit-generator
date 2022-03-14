@@ -49,4 +49,6 @@ class QAOAResponseSchema(CircuitResponseSchema):
 
 
 class VQLSResponseSchema(CircuitResponseSchema):
-    input = ma.fields.Nested(QAOAAlgorithmRequestSchema)
+    # TODO return list of circuits
+    # circuit = ma.fields.List(ma.fields.String())
+    input = ma.fields.Nested(VQLSAlgorithmRequestSchema)

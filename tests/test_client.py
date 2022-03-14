@@ -234,7 +234,7 @@ class FlaskClientTestCase(unittest.TestCase):
             content_type="application/json",
         )
         self.assertTrue(
-            "Number of angles and repitions don't match. You specified 2 gamma(s) and 2 beta(s) for 3 repetition(s)."
+            "Number of angles and repetitions don't match. You specified 2 gamma(s) and 2 beta(s) for 3 repetition(s)."
             in response.get_json().get("message")
         )
         self.assertEqual(response.status_code, 400)
@@ -253,7 +253,7 @@ class FlaskClientTestCase(unittest.TestCase):
             content_type="application/json",
         )
         self.assertTrue(
-            "Number of angles and repitions don't match. You specified 3 gamma(s) and 2 beta(s) for 2 repetition(s)."
+            "Number of angles and repetitions don't match. You specified 3 gamma(s) and 2 beta(s) for 2 repetition(s)."
             in response.get_json().get("message")
         )
         self.assertEqual(response.status_code, 400)
@@ -272,7 +272,7 @@ class FlaskClientTestCase(unittest.TestCase):
             content_type="application/json",
         )
         self.assertTrue(
-            "Number of angles and repitions don't match. You specified 2 gamma(s) and 3 beta(s) for 2 repetition(s)."
+            "Number of angles and repetitions don't match. You specified 2 gamma(s) and 3 beta(s) for 2 repetition(s)."
             in response.get_json().get("message")
         )
         self.assertEqual(response.status_code, 400)
@@ -291,7 +291,7 @@ class FlaskClientTestCase(unittest.TestCase):
             content_type="application/json",
         )
         self.assertTrue(
-            "Sum of operators with different numbers of qubits, 3 and 2, is not well defined"
+            "Invalid pauli_op_string: Sum of operators with different numbers of qubits, 3 and 2, is not well defined"
             in response.get_json().get("message")
         )
         self.assertEqual(response.status_code, 400)
@@ -334,6 +334,71 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(3, response.get_json().get("n_qubits"))
         match = re.search(
             "\nqreg q.*;\nh q.*;\nh q.*;\nh q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\nrx\(0.80+\) q.*;\nrx\(0.80+\) q.*;\nrx\(0.80+\) q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\nrx\(1.40+\) q.*;\nrx\(1.40+\) q.*;\nrx\(1.40+\) q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # test 3 qbit QAOA with initial_state
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "initial_state": 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\nx q[0];\nx q[1];\nx q[2];',
+                    "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
+                    "reps": 2,
+                    "gammas": [1.0, 1.2],
+                    "betas": [0.4, 0.7],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(3, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nx q.*;\nx q.*;\nx q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\nrx\(0.80+\) q.*;\nrx\(0.80+\) q.*;\nrx\(0.80+\) q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\nrx\(1.40+\) q.*;\nrx\(1.40+\) q.*;\nrx\(1.40+\) q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # test 3 qbit QAOA with custom mixer (pauli operator String)
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
+                    "mixer": "(Y^I^I) + (I^Y^I) + (I^I^Y)",
+                    "reps": 2,
+                    "gammas": [1.0, 1.2],
+                    "betas": [0.4, 0.7],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(3, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\nh q.*;\nh q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\nry\(0.80+\) q.*;\nry\(0.80+\) q.*;\nry\(0.80+\) q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\nry\(1.40+\) q.*;\nry\(1.40+\) q.*;\nry\(1.40+\) q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # test 3 qbit QAOA with custom mixer (qasm String)
+        response = self.client.post(
+            "/algorithms/qaoa",
+            data=json.dumps(
+                {
+                    "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
+                    "mixer": 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\nrx(pi/2) q[0];\nry(pi/2) q[1];\nrz(pi/2) q[2];',
+                    "reps": 2,
+                    "gammas": [1.0, 1.2],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(3, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\nh q.*;\nh q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.0+\) q.*;\ncx q.*,q.*;\nrx\(pi/2\) q.*;\nry\(pi/2\) q.*;\nrz\(pi/2\) q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\ncx q.*,q.*;\nrz\(1.20+\) q.*;\ncx q.*,q.*;\nrx\(pi/2\) q.*;\nry\(pi/2\) q.*;\nrz\(pi/2\) q.*;\n",
             response.get_json().get("circuit"),
         )
         self.assertTrue(match is not None)

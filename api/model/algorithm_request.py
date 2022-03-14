@@ -15,17 +15,21 @@ class HHLAlgorithmRequestSchema(ma.Schema):
 
 
 class QAOAAlgorithmRequest:
-    def __init__(self, pauli_op_string, gammas, betas):
+    def __init__(self, initial_state, pauli_op_string, mixer, gammas, betas):
+        self.initial_state = initial_state
         self.pauli_op_string = pauli_op_string
+        self.mixer = mixer
         self.reps = reps
         self.gammas = gammas
         self.betas = betas
 
 
 class QAOAAlgorithmRequestSchema(ma.Schema):
-    pauli_op_string = ma.fields.String()
+    initial_state = ma.fields.String()
+    pauli_op_string = ma.fields.String(required=True)
+    mixer = ma.fields.String()
     reps = ma.fields.Int()
-    gammas = ma.fields.List(ma.fields.Float())
+    gammas = ma.fields.List(ma.fields.Float(required=True))
     betas = ma.fields.List(ma.fields.Float())
 
 

@@ -7,6 +7,7 @@ class PauliParser:
     @classmethod
     def parse(cls, pauli_string: str):
         tree = ast.parse(pauli_string)
+        #print(ast.dump(tree.body[0].value))
         return cls.instanciate(tree.body[0].value)
 
     @classmethod
@@ -15,7 +16,9 @@ class PauliParser:
             return body.n
         if isinstance(body, ast.UnaryOp):
             if isinstance(body.op, ast.USub):
-                return -body.operand.n
+                return -cls.instanciate(body.operand)
+            if isinstance(body.op, ast.Invert):
+                return ~cls.instanciate(body.operand)
         if isinstance(body, ast.Name):
             if body.id == "X":
                 return X
@@ -36,6 +39,10 @@ class PauliParser:
                 return cls.instanciate(body.left) / cls.instanciate(body.right)
             if isinstance(body.op, ast.BitXor):
                 return cls.instanciate(body.left) ^ cls.instanciate(body.right)
+            if isinstance(body.op, ast.MatMult):
+                return cls.instanciate(body.left) @ cls.instanciate(body.right)
+            if isinstance(body.op, ast.Pow):
+                return cls.instanciate(body.left) ** cls.instanciate(body.right)
         raise Exception("Invalid Pauli string")
 
 

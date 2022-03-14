@@ -56,7 +56,7 @@ def encoding(json: QAOAAlgorithmRequest):
 @blp.arguments(
     VQLSAlgorithmRequestSchema,
     example=dict(
-        matrix=[[1.0, 0.0], [0.0, 1.0]],
+        matrix=[[1.0, 2.0], [2.0, -1.0]],
         vector=[0, 1],
         alphas=[1] * 8,
         l=0,

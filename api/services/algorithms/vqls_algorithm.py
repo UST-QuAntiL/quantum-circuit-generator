@@ -116,7 +116,6 @@ class VQLSAlgorithm:
         # circ.measure_all()
 
         # print(circ)
-
         qc = QuantumCircuit(num_qubits + 1, 1)
 
         # First Hadamard gate applied to the ancillary qubit.
@@ -136,7 +135,7 @@ class VQLSAlgorithm:
 
         qc.barrier()
         # Controlled application of the unitary component A_l of the problem matrix A.
-        cls.CA(qc, obs_list, l)
+        cls.CA(qc, obs_list, l)  # -----#
 
         vector_circuit = QuantumCircuit(num_qubits)
         vector_circuit.isometry(
@@ -161,17 +160,15 @@ class VQLSAlgorithm:
 
         # Controlled application of Adjoint(A_lp).
         # CA_dag(qc, obs_list, lp)
-        cls.CA(qc, obs_list, lp)
+        cls.CA(qc, obs_list, lp)  # -----#
 
         qc.barrier()
         # # Second Hadamard gate applied to the ancillary qubit.
         qc.h(ancilla_idx)
 
-        print(qc)
-        qc = transpile(qc, basis_gates=["id", "rz", "sx", "x", "cx"])
+        qc = transpile(qc, basis_gates=["u1", "u2", "u3", "cx"])
         qc.barrier()
         qc.measure(ancilla_idx, 0)
-
         print(qc)
 
         return qc
