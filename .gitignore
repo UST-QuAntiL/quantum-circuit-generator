@@ -17,5 +17,5 @@ __pycache__/
 
 #Docker
 .dockerignore
-Dockerfile
+#Dockerfile
 
