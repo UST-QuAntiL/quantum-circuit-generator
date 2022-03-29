@@ -3,6 +3,7 @@ from flask import jsonify
 
 from api.services.algorithms.hhl_algorithm import HHLAlgorithm
 from api.services.algorithms.qaoa_algorithm import QAOAAlgorithm
+from api.services.algorithms.qft_algorithm import QFTAlgorithm
 from api.services.helper_service import getCircuitCharacteristics, bad_request
 from api.model.circuit_response import CircuitResponse
 
@@ -40,4 +41,12 @@ def generate_qaoa_circuit(input):
     circuit = QAOAAlgorithm.create_circuit(adj_matrix, beta, gamma)
     return CircuitResponse(
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
+    )
+
+def generate_qft_circuit(input):
+    vector = input.get("vector")
+    is_inverse = input.get("inverse")
+    circuit = QFTAlgorithm.create_circuit(vector, is_inverse)
+    return CircuitResponse(
+        circuit.qasm(), "algorithm/qft", circuit.num_qubits, circuit.depth(), input
     )
