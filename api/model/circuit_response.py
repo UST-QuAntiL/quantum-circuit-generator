@@ -1,6 +1,7 @@
 from datetime import datetime
 import marshmallow as ma
 from .encoding_request import BasisEncodingRequestSchema
+from .algorithm_request import HHLAlgorithmRequestSchema
 
 
 class CircuitResponse:
@@ -31,4 +32,6 @@ class CircuitResponseSchema(ma.Schema):
     n_qubits = ma.fields.Int()
     depth = ma.fields.Int()
     timestamp = ma.fields.String()
+    # TODO change BasisEncodingRequestSchema for algorithms
+    # input = ma.fields.Nested(HHLAlgorithmRequestSchema)
     input = ma.fields.Nested(BasisEncodingRequestSchema)
