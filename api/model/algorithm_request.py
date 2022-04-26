@@ -50,3 +50,12 @@ class VQLSAlgorithmRequestSchema(ma.Schema):
     l = ma.fields.Int()
     lp = ma.fields.Int()
     ansatz = ma.fields.String()
+
+
+class QFTAlgorithmRequest:
+    def __init__(self, n_qubits):
+        self.n_qubits = n_qubits
+
+
+class QFTAlgorithmRequestSchema(ma.Schema):
+    n_qubits = ma.fields.Int()

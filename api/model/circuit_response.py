@@ -5,6 +5,7 @@ from .algorithm_request import (
     HHLAlgorithmRequestSchema,
     VQLSAlgorithmRequestSchema,
     QAOAAlgorithmRequestSchema,
+    QFTAlgorithmRequestSchema,
 )
 
 
@@ -52,3 +53,7 @@ class VQLSResponseSchema(CircuitResponseSchema):
     # TODO return list of circuits
     # circuit = ma.fields.List(ma.fields.String())
     input = ma.fields.Nested(VQLSAlgorithmRequestSchema)
+
+
+class QFTResponseSchema(CircuitResponseSchema):
+    input = ma.fields.Nested(QFTAlgorithmRequestSchema)

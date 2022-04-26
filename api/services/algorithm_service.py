@@ -5,6 +5,7 @@ from qiskit.circuit.quantumcircuit import QuantumCircuit
 from api.services.algorithms.hhl_algorithm import HHLAlgorithm
 from api.services.algorithms.qaoa_algorithm import QAOAAlgorithm
 from api.services.algorithms.vqls_algorithm import VQLSAlgorithm
+from api.services.algorithms.qft_algorithm import QFTAlgorithm
 from api.services.algorithms.pauliParser import PauliParser
 from api.services.helper_service import getCircuitCharacteristics, bad_request
 from api.model.circuit_response import CircuitResponse
@@ -95,6 +96,19 @@ def generate_vqls_circuit(input):
     return CircuitResponse(
         circuit.qasm(),
         "algorithm/vqls",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+    )
+
+
+def generate_qft_circuit(input):
+    n_qubits = input.get("n_qubits")
+
+    circuit = QFTAlgorithm.create_circuit(n_qubits)
+    return CircuitResponse(
+        circuit.qasm(),
+        "algorithm/qft",
         circuit.num_qubits,
         circuit.depth(),
         input,

@@ -6,6 +6,7 @@ from ...model.circuit_response import (
     HHLResponseSchema,
     QAOAResponseSchema,
     VQLSResponseSchema,
+    QFTResponseSchema,
 )
 from ...model.algorithm_request import (
     HHLAlgorithmRequestSchema,
@@ -14,6 +15,8 @@ from ...model.algorithm_request import (
     QAOAAlgorithmRequest,
     VQLSAlgorithmRequestSchema,
     VQLSAlgorithmRequest,
+    QFTAlgorithmRequestSchema,
+    QFTAlgorithmRequest,
 )
 
 
@@ -68,3 +71,16 @@ def encoding(json: QAOAAlgorithmRequest):
 def encoding(json: VQLSAlgorithmRequest):
     if json:
         return algorithm_service.generate_vqls_circuit(json)
+
+
+@blp.route("/qft", methods=["POST"])
+@blp.arguments(
+    QFTAlgorithmRequestSchema,
+    example=dict(
+        n_qubits=4,
+    ),
+)
+@blp.response(200, QFTResponseSchema)
+def encoding(json: QFTAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_qft_circuit(json)
