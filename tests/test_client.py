@@ -403,3 +403,18 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
+
+    def test_qft_algorithm(self):
+        # Test 4 qubit QFT
+        response = self.client.post(
+            "/algorithms/qft",
+            data=json.dumps({"n_qubits": 4}),
+            content_type="application/json",
+        )
+        self.assertEqual(4, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\ncp\(pi/4\) q.*,q.*;\ncp\(pi/8\) q.*,q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\ncp\(pi/4\) q.*,q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\nbarrier q.*,q.*,q.*,q.*;\nswap q.*,q.*;\nswap q.*,q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
