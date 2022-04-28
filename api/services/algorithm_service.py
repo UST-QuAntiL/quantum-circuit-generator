@@ -104,8 +104,10 @@ def generate_vqls_circuit(input):
 
 def generate_qft_circuit(input):
     n_qubits = input.get("n_qubits")
+    inverse = input.get("inverse")
+    barriers = input.get("barriers")
 
-    circuit = QFTAlgorithm.create_circuit(n_qubits)
+    circuit = QFTAlgorithm.create_circuit(n_qubits, inverse, barriers)
     return CircuitResponse(
         circuit.qasm(),
         "algorithm/qft",

@@ -53,9 +53,13 @@ class VQLSAlgorithmRequestSchema(ma.Schema):
 
 
 class QFTAlgorithmRequest:
-    def __init__(self, n_qubits):
+    def __init__(self, n_qubits, inverse, barriers):
         self.n_qubits = n_qubits
+        self.inverse = inverse
+        self.barriers = barriers
 
 
 class QFTAlgorithmRequestSchema(ma.Schema):
     n_qubits = ma.fields.Int()
+    inverse = ma.fields.Bool()
+    barriers = ma.fields.Bool()

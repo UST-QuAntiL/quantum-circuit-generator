@@ -78,6 +78,8 @@ def encoding(json: VQLSAlgorithmRequest):
     QFTAlgorithmRequestSchema,
     example=dict(
         n_qubits=4,
+        inverse=False,
+        barriers=True,
     ),
 )
 @blp.response(200, QFTResponseSchema)

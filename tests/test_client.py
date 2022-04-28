@@ -408,12 +408,40 @@ class FlaskClientTestCase(unittest.TestCase):
         # Test 4 qubit QFT
         response = self.client.post(
             "/algorithms/qft",
-            data=json.dumps({"n_qubits": 4}),
+            data=json.dumps({"n_qubits": 4, "inverse": False, "barriers": True}),
             content_type="application/json",
         )
         self.assertEqual(4, response.get_json().get("n_qubits"))
         match = re.search(
             "\nqreg q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\ncp\(pi/4\) q.*,q.*;\ncp\(pi/8\) q.*,q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\ncp\(pi/4\) q.*,q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\nbarrier q.*,q.*,q.*,q.*;\nswap q.*,q.*;\nswap q.*,q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test 4 qubit inverse QFT
+        response = self.client.post(
+            "/algorithms/qft",
+            data=json.dumps({"n_qubits": 4, "inverse": True, "barriers": True}),
+            content_type="application/json",
+        )
+        self.assertEqual(4, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nswap q.*,q.*;\nswap q.*,q.*;\nbarrier q.*,q.*,q.*,q.*;\nh q.*;\nbarrier q.*,q.*,q.*,q.*;\ncp\(-pi/2\) q.*,q.*;\nh q.*;\nbarrier q.*,q.*,q.*,q.*;\ncp\(-pi/4\) q.*,q.*;\ncp\(-pi/2\) q.*,q.*;\nh q.*;\nbarrier q.*,q.*,q.*,q.*;\ncp\(-pi/8\) q.*,q.*;\ncp\(-pi/4\) q.*,q.*;\ncp\(-pi/2\) q.*,q.*;\nh q.*;\nbarrier q.*,q.*,q.*,q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test 4 qubit QFT without barriers
+        response = self.client.post(
+            "/algorithms/qft",
+            data=json.dumps({"n_qubits": 4, "inverse": False, "barriers": False}),
+            content_type="application/json",
+        )
+        self.assertEqual(4, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\ncp\(pi/4\) q.*,q.*;\ncp\(pi/8\) q.*,q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\ncp\(pi/4\) q.*,q.*;\nh q.*;\ncp\(pi/2\) q.*,q.*;\nh q.*;\nswap q.*,q.*;\nswap q.*,q.*;\n",
             response.get_json().get("circuit"),
         )
         self.assertTrue(match is not None)
