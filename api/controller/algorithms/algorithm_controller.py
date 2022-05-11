@@ -7,6 +7,9 @@ from ...model.circuit_response import (
     QAOAResponseSchema,
     VQLSResponseSchema,
     QFTResponseSchema,
+    QPEResponseSchema,
+    VQEResponseSchema,
+    GroverResponseSchema,
 )
 from ...model.algorithm_request import (
     HHLAlgorithmRequestSchema,
@@ -17,6 +20,12 @@ from ...model.algorithm_request import (
     VQLSAlgorithmRequest,
     QFTAlgorithmRequestSchema,
     QFTAlgorithmRequest,
+    QPEAlgorithmRequestSchema,
+    QPEAlgorithmRequest,
+    VQEAlgorithmRequestSchema,
+    VQEAlgorithmRequest,
+    GroverAlgorithmRequestSchema,
+    GroverAlgorithmRequest,
 )
 
 
@@ -86,3 +95,43 @@ def encoding(json: VQLSAlgorithmRequest):
 def encoding(json: QFTAlgorithmRequest):
     if json:
         return algorithm_service.generate_qft_circuit(json)
+
+
+@blp.route("/qpe", methods=["POST"])
+@blp.arguments(
+    QPEAlgorithmRequestSchema,
+    example=dict(
+        n_eval_qubits=3,
+        unitary='OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\np(pi/2) q[0];\n',
+    ),
+)
+@blp.response(200, QPEResponseSchema)
+def encoding(json: QPEAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_qpe_circuit(json)
+
+
+@blp.route("/vqe", methods=["POST"])
+@blp.arguments(
+    VQEAlgorithmRequestSchema,
+    example=dict(
+        n_qubits=4,
+    ),
+)
+@blp.response(200, VQEResponseSchema)
+def encoding(json: VQEAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_vqe_circuit(json)
+
+
+@blp.route("/grover", methods=["POST"])
+@blp.arguments(
+    GroverAlgorithmRequestSchema,
+    example=dict(
+        n_qubits=4,
+    ),
+)
+@blp.response(200, GroverResponseSchema)
+def encoding(json: GroverAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_grover_circuit(json)

@@ -6,6 +6,9 @@ from .algorithm_request import (
     VQLSAlgorithmRequestSchema,
     QAOAAlgorithmRequestSchema,
     QFTAlgorithmRequestSchema,
+    QPEAlgorithmRequestSchema,
+    VQEAlgorithmRequestSchema,
+    GroverAlgorithmRequestSchema,
 )
 
 
@@ -57,3 +60,15 @@ class VQLSResponseSchema(CircuitResponseSchema):
 
 class QFTResponseSchema(CircuitResponseSchema):
     input = ma.fields.Nested(QFTAlgorithmRequestSchema)
+
+
+class QPEResponseSchema(CircuitResponseSchema):
+    input = ma.fields.Nested(QPEAlgorithmRequestSchema)
+
+
+class VQEResponseSchema(CircuitResponseSchema):
+    input = ma.fields.Nested(VQEAlgorithmRequestSchema)
+
+
+class GroverResponseSchema(CircuitResponseSchema):
+    input = ma.fields.Nested(GroverAlgorithmRequestSchema)

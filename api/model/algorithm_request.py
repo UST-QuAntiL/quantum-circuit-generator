@@ -63,3 +63,32 @@ class QFTAlgorithmRequestSchema(ma.Schema):
     n_qubits = ma.fields.Int()
     inverse = ma.fields.Bool()
     barriers = ma.fields.Bool()
+
+
+class QPEAlgorithmRequest:
+    def __init__(self, n_eval_qubits, unitary):
+        self.n_eval_qubits = n_eval_qubits
+        self.unitary = unitary
+
+
+class QPEAlgorithmRequestSchema(ma.Schema):
+    n_eval_qubits = ma.fields.Int()
+    unitary = ma.fields.String()
+
+
+class VQEAlgorithmRequest:
+    def __init__(self, n_qubits, inverse, barriers):
+        self.n_qubits = n_qubits
+
+
+class VQEAlgorithmRequestSchema(ma.Schema):
+    n_qubits = ma.fields.Int()
+
+
+class GroverAlgorithmRequest:
+    def __init__(self, n_qubits, inverse, barriers):
+        self.n_qubits = n_qubits
+
+
+class GroverAlgorithmRequestSchema(ma.Schema):
+    n_qubits = ma.fields.Int()
