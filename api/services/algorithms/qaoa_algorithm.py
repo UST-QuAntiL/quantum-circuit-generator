@@ -8,9 +8,9 @@ from api.services.encodings.amplitude_encoding import AmplitudeEncoding
 from api.services.algorithms.pauliParser import PauliParser
 
 from qiskit.algorithms import QAOA
-from qiskit.algorithms.optimizers import COBYLA
 from qiskit.quantum_info import Pauli
 from qiskit.opflow import PauliSumOp
+from qiskit.compiler import transpile
 
 
 class QAOAAlgorithm:
@@ -30,18 +30,44 @@ class QAOAAlgorithm:
         """
 
         operator = pauli_op
-        optimizer = COBYLA()
-        qaoa = QAOA(
-            initial_state=initial_state, mixer=mixer, optimizer=optimizer, reps=reps
-        )
+        qaoa = QAOA(initial_state=initial_state, mixer=mixer, reps=reps)
 
-        if betas is not None:
-            # angles in alternating fashion: [gamma1, beta1, gamma2, beta2, ...]
-            angles = [
-                angle for gamma, beta in zip(gammas, betas) for angle in (gamma, beta)
-            ]
-        else:
+        if betas is None:  # case for custom mixer
             angles = gammas
+        else:
+            angles = betas + gammas
+
+        # print(angles)
         qaoa_qc = qaoa.construct_circuit(angles, operator)[0]
+
+        # decompose exp gates
+        qaoa_qc = QAOAAlgorithm.decompose_operator_gates(qaoa_qc)
+
+        return qaoa_qc
+
+    @classmethod
+    def decompose_operator_gates(cls, qaoa_qc):
+        """
+        :param qaoa_qc: quantum circuit of the QAOA instance to decompose
+        :return: decomposed circuit
+        """
+
+        gates = qaoa_qc.data
+
+        for gate in gates:
+            if gate[0].name == "PauliEvolution":
+                # mark PauliEvolution gates for decomposition
+                gate[0].label = "decompose"
+        # decompose marked gates
+        qaoa_qc = qaoa_qc.decompose("decompose")
+
+        gates = qaoa_qc.data
+
+        for gate in gates:
+            if gate[0].name.startswith("exp(it"):
+                # mark PauliEvolution gates for decomposition
+                gate[0].label = "decompose"
+        # decompose marked gates
+        qaoa_qc = qaoa_qc.decompose("decompose")
 
         return qaoa_qc

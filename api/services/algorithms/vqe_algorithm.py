@@ -1,11 +1,13 @@
 import numpy as np
 
+from qiskit import QuantumRegister
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 
 
-class QFTAlgorithm:
+class VQEAlgorithm:
     @classmethod
     def create_circuit(cls, n_qubits, inverse, barriers):
+        # TODO implementation
         """
         :param n_qubits: number of qubits the QFT should act on
         :param inverse: boolean flag, signaling to return the inverse QFT

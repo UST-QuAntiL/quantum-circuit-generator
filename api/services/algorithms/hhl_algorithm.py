@@ -61,9 +61,11 @@ class HHLAlgorithm:
             element[0].name = element[0].name.lower()
         hhl_qc.data[2][0].name = "invx"
 
+        # TODO decompose circuit gates
         return hhl_qc
 
     @classmethod
+    # deprecated with qiskit 0.36
     def qasm_compatible(cls, qasm_str):
         """
         :param qasm_str: qasm string that contains names incompatible with OpenQASM

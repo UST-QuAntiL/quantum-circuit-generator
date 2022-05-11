@@ -6,6 +6,9 @@ from api.services.algorithms.hhl_algorithm import HHLAlgorithm
 from api.services.algorithms.qaoa_algorithm import QAOAAlgorithm
 from api.services.algorithms.vqls_algorithm import VQLSAlgorithm
 from api.services.algorithms.qft_algorithm import QFTAlgorithm
+from api.services.algorithms.qpe_algorithm import QPEAlgorithm
+from api.services.algorithms.vqe_algorithm import VQEAlgorithm
+from api.services.algorithms.grover_algorithm import GroverAlgorithm
 from api.services.algorithms.pauliParser import PauliParser
 from api.services.helper_service import getCircuitCharacteristics, bad_request
 from api.model.circuit_response import CircuitResponse
@@ -32,7 +35,7 @@ def generate_hhl_circuit(input):
 
     circuit = HHLAlgorithm.create_circuit(matrix, vector)
     return CircuitResponse(
-        HHLAlgorithm.qasm_compatible(circuit.qasm()),
+        circuit.qasm(),
         "algorithm/hhl",
         circuit.num_qubits,
         circuit.depth(),
@@ -111,6 +114,53 @@ def generate_qft_circuit(input):
     return CircuitResponse(
         circuit.qasm(),
         "algorithm/qft",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+    )
+
+
+def generate_qpe_circuit(input):
+    n_eval_qubits = input.get("n_eval_qubits")
+    unitary = input.get("unitary")
+
+    # check Unitary operator (qasm string)
+    try:
+        if unitary is not None:
+            unitary = QuantumCircuit.from_qasm_str(unitary)
+    except Exception as err:
+        return bad_request("Invalid unitary (qasm string): " + str(err))
+
+    circuit = QPEAlgorithm.create_circuit(n_eval_qubits, unitary)
+    return CircuitResponse(
+        circuit.qasm(),
+        "algorithm/qpe",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+    )
+
+
+def generate_vqe_circuit(input):
+    n_qubits = input.get("n_qubits")
+
+    circuit = VQEAlgorithm.create_circuit()
+    return CircuitResponse(
+        circuit.qasm(),
+        "algorithm/vqe",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+    )
+
+
+def generate_grover_circuit(input):
+    n_qubits = input.get("n_qubits")
+
+    circuit = GroverAlgorithm.create_circuit()
+    return CircuitResponse(
+        circuit.qasm(),
+        "algorithm/grover",
         circuit.num_qubits,
         circuit.depth(),
         input,
