@@ -223,7 +223,7 @@ class FlaskClientTestCase(unittest.TestCase):
         # Test errors
         # invalid initial state
         # suppress message: Error near line ...
-        with contextlib.redirect_stdout(None): 
+        with contextlib.redirect_stdout(None):
             response = self.client.post(
                 "/algorithms/qaoa",
                 data=json.dumps(
@@ -284,7 +284,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # invalid mixer (qasm String)
         # suppress message: Error near line ...
-        with contextlib.redirect_stdout(None): 
+        with contextlib.redirect_stdout(None):
             response = self.client.post(
                 "/algorithms/qaoa",
                 data=json.dumps(
@@ -528,7 +528,7 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_qpe_algorithm(self):
         # Test invalid qasm string
         # suppress message: Error near line ...
-        with contextlib.redirect_stdout(None): 
+        with contextlib.redirect_stdout(None):
             response = self.client.post(
                 "/algorithms/qpe",
                 data=json.dumps(
@@ -559,6 +559,101 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(4, response.get_json().get("n_qubits"))
         match = re.search(
             "\ngate mcphase\(param0\) q0,q1 { cp\(pi/2\) q0,q1; }\nqreg eval.*;\nqreg q.*;\nh eval.*;\nh eval.*;\nh eval.*;\nmcphase\(pi/2\) eval.*,q.*;\nmcphase\(pi/2\) eval.*,q.*;\nmcphase\(pi/2\) eval.*,q.*;\nmcphase\(pi/2\) eval.*,q.*;\nmcphase\(pi/2\) eval.*,q.*;\nmcphase\(pi/2\) eval.*,q.*;\nmcphase\(pi/2\) eval.*,q.*;\nh eval.*;\ncp\(-pi/2\) eval.*,eval.*;\ncp\(-pi/4\) eval.*,eval.*;\nh eval.*;\ncp\(-pi/2\) eval.*,eval.*;\nh eval.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test 2 qubit QPE with 2 qubit operation
+        response = self.client.post(
+            "/algorithms/qpe",
+            data=json.dumps(
+                {
+                    "n_eval_qubits": 2,
+                    "unitary": 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\ncx q[0], q[1];\n',
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(4, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg eval.*;\nqreg q.*;\nh eval.*;\nh eval.*;\nccx eval.*,q.*,q.*;\nccx eval.*,q.*,q.*;\nccx eval.*,q.*,q.*;\nh eval.*;\ncp\(-pi/2\) eval.*,eval.*;\nh eval.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+    def test_vqe_algorithm(self):
+        # Test ansatz & parameters given
+        response = self.client.post(
+            "/algorithms/vqe",
+            data=json.dumps(
+                {
+                    "ansatz": 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\nry(0.1) q[0];\nry(0.2) q[1];\n',
+                    "parameters": [0.1, 0.2],
+                    "observable": "Z^X",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertTrue(
+            'Custom ansatz and parameters not supported. Remove "parameters" field!'
+            in response.get_json().get("message")
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # Test invalid qasm string
+        # suppress message: Error near line ...
+        with contextlib.redirect_stdout(None):
+            response = self.client.post(
+                "/algorithms/vqe",
+                data=json.dumps(
+                    {
+                        "ansatz": 'OPENQASM 2.0; +++++ \ninclude "qelib1.inc";\nqreg q[2];\nry(0.1) q[0];\nry(0.2) q[1];\n',
+                        "observable": "Z^X",
+                    }
+                ),
+                content_type="application/json",
+            )
+        self.assertTrue(
+            "Invalid ansatz (qasm string): \"Expected an ID, received '+'\""
+            in response.get_json().get("message")
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # Test 2 qubit VQE with custom ansatz
+        response = self.client.post(
+            "/algorithms/vqe",
+            data=json.dumps(
+                {
+                    "ansatz": 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[2];\nry(0.1) q[0];\nry(0.2) q[1];\n',
+                    "observable": "Z^X",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(2, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nry\(0.1\) q.*;\nry\(0.2\) q.*;\nh q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test 2 qubit VQE with RealAmplitudes ansatz
+        response = self.client.post(
+            "/algorithms/vqe",
+            data=json.dumps(
+                {
+                    "parameters": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
+                    "observable": "Z^X",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(2, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nry\(0.1\) q.*;\nry\(0.2\) q.*;\ncx q.*,q.*;\nry\(0.3\) q.*;\nry\(0.4\) q.*;\ncx q.*,q.*;\nry\(0.5\) q.*;\nry\(0.6\) q.*;\ncx q.*,q.*;\nry\(0.7\) q.*;\nh q.*;\nry\(0.8\) q.*;\n",
             response.get_json().get("circuit"),
         )
         self.assertTrue(match is not None)

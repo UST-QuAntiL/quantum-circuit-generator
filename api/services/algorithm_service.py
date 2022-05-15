@@ -142,9 +142,34 @@ def generate_qpe_circuit(input):
 
 
 def generate_vqe_circuit(input):
-    n_qubits = input.get("n_qubits")
+    ansatz = input.get("ansatz")
+    parameters = input.get("parameters")
+    observable = input.get("observable")
 
-    circuit = VQEAlgorithm.create_circuit()
+    # check Unitary operator (qasm string)
+    if ansatz is not None:
+        if parameters is not None:
+            return bad_request(
+                'Custom ansatz and parameters not supported. Remove "parameters" field!'
+            )
+        try:
+            ansatz = QuantumCircuit.from_qasm_str(ansatz)
+        except Exception as err:
+            return bad_request("Invalid ansatz (qasm string): " + str(err))
+    # if custom ansatz is chosen
+    if parameters is None:
+        parameters = []
+    try:
+        observable = PauliParser.parse(observable)
+    except ValueError as err:
+        return bad_request("Invalid observable: " + str(err))
+
+    # check if number of parameters match ansatz
+    try:
+        circuit = VQEAlgorithm.create_circuit(ansatz, parameters, observable)
+    except ValueError as err:
+        return bad_request("Verify correctness of parameters: " + str(err))
+
     return CircuitResponse(
         circuit.qasm(),
         "algorithm/vqe",

@@ -1,6 +1,4 @@
 import numpy as np
-
-from qiskit.circuit.quantumcircuit import QuantumCircuit
 from qiskit.circuit.library import PhaseEstimation
 
 
@@ -23,6 +21,5 @@ class QPEAlgorithm:
         gate_names = gate_names[n_eval_qubits:]  # ignore Hadamard gates
 
         qpe = qpe.decompose(gate_names)
-        # print(qpe)
 
         return qpe

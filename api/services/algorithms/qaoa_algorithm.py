@@ -1,16 +1,5 @@
 import numpy as np
-
-from qiskit import QuantumRegister
-from qiskit.circuit.quantumcircuit import QuantumCircuit
-from qiskit.algorithms.linear_solvers.hhl import HHL
-
-from api.services.encodings.amplitude_encoding import AmplitudeEncoding
-from api.services.algorithms.pauliParser import PauliParser
-
 from qiskit.algorithms import QAOA
-from qiskit.quantum_info import Pauli
-from qiskit.opflow import PauliSumOp
-from qiskit.compiler import transpile
 
 
 class QAOAAlgorithm:

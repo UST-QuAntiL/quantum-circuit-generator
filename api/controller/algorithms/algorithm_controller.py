@@ -115,7 +115,8 @@ def encoding(json: QPEAlgorithmRequest):
 @blp.arguments(
     VQEAlgorithmRequestSchema,
     example=dict(
-        n_qubits=4,
+        parameters=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
+        observable="Z^Y",
     ),
 )
 @blp.response(200, VQEResponseSchema)
