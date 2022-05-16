@@ -1,7 +1,5 @@
-from qiskit import QuantumRegister
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from qiskit.circuit.library import QFT
-import numpy as np
 
 from api.services.encodings.amplitude_encoding import AmplitudeEncoding
 
@@ -26,7 +24,7 @@ class QFTAlgorithm:
         return vector_circuit
 
     @classmethod
-    def create_circuit(cls, vector, is_inverse=False):
+    def create_circuit(cls, num_qubits, approx_degree=0, is_inverse=False):
         """
 
         :param vector: input vector containing floats
@@ -37,13 +35,14 @@ class QFTAlgorithm:
         A preprocession is used for encoding.
         """
 
-        vector_circuit = cls.preprocess(vector)
-        qft_circ = QFT(vector_circuit.num_qubits, inverse=is_inverse, name="QFT" if not is_inverse else "IQFT")
-        vector_circuit.compose(qft_circ, vector_circuit.qubits, inplace=True)
-        print(vector_circuit)
-        return vector_circuit
+        qft_circ = QFT(num_qubits, approximation_degree=approx_degree, inverse=is_inverse, name="qft" if not is_inverse else "iqft")
+        return qft_circ
 
     
 if __name__ == '__main__':
     algorithm = QFTAlgorithm()
-    algorithm.create_circuit([3, 2, 4, 3, 3, 2, 4, 3], True)
+    circ = algorithm.create_circuit(4,2, True)
+    print(circ.qasm())
+    print(circ.get_instructions())
+    qisk = QuantumCircuit.from_qasm_str(circ.qasm())
+    print(qisk)

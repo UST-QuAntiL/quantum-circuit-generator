@@ -43,10 +43,13 @@ def generate_qaoa_circuit(input):
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
     )
 
+
+# TODO
 def generate_qft_circuit(input):
-    vector = input.get("vector")
+    num_qubits = input.get("size")
+    approx_degree = input.get("approximation_degree")
     is_inverse = input.get("inverse")
-    circuit = QFTAlgorithm.create_circuit(vector, is_inverse)
+    circuit = QFTAlgorithm.create_circuit(num_qubits,approx_degree, is_inverse)
     return CircuitResponse(
         circuit.qasm(), "algorithm/qft", circuit.num_qubits, circuit.depth(), input
     )
