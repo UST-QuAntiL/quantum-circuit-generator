@@ -6,7 +6,9 @@ from ...model.algorithm_request import (
     HHLAlgorithmRequestSchema,
     HHLAlgorithmRequest,
     QAOAAlgorithmRequestSchema,
-    QAOAAlgorithmRequest, QFTAlgorithmRequest, QFTAlgorithmRequestSchema,
+    QAOAAlgorithmRequest,
+    QFTAlgorithmRequest,
+    QFTAlgorithmRequestSchema,
 )
 
 

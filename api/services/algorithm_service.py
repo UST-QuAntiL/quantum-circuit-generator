@@ -49,7 +49,7 @@ def generate_qft_circuit(input):
     num_qubits = input.get("size")
     approx_degree = input.get("approximation_degree")
     is_inverse = input.get("inverse")
-    circuit = QFTAlgorithm.create_circuit(num_qubits,approx_degree, is_inverse)
+    circuit = QFTAlgorithm.create_circuit(num_qubits, approx_degree, is_inverse)
     return CircuitResponse(
         circuit.qasm(), "algorithm/qft", circuit.num_qubits, circuit.depth(), input
     )

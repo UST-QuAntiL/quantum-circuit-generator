@@ -38,4 +38,3 @@ class QFTAlgorithmRequestSchema(ma.Schema):
     size = ma.fields.Int()
     approximation_degree = ma.fields.Int()
     inverse = ma.fields.Boolean()
-
