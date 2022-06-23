@@ -48,7 +48,6 @@ def encoding(json: QAOAAlgorithmRequest):
 
 
 @blp.route("/qft", methods=["POST"])
-@blp.etag
 @blp.arguments(
     QFTAlgorithmRequestSchema,
     example=dict(
