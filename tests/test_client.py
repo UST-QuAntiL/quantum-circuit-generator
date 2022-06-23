@@ -2,6 +2,8 @@ import unittest
 import os, sys
 import json
 import re
+from qiskit.providers.aer import QasmSimulator
+import qiskit
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
@@ -210,3 +212,37 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
+
+    def test_qft_algorithm(self):
+        # Test Error
+
+        response = self.client.post(
+            "/algorithms/qft",
+            data=json.dumps({"size": -1, "approximation_degree": 0, "inverse": False}),
+            content_type="application/json",
+        )
+
+        self.assertTrue(
+            "Invalid size! Circuit size must be positive."
+            in response.get_json().get("message")
+        )
+
+        # Test Approximation degree
+
+        response = self.client.post(
+            "/algorithms/qft",
+            data=json.dumps({"size": 20, "approximation_degree": 0, "inverse": False}),
+            content_type="application/json",
+        )
+
+        circ_0 = response.get_json().get("circuit")
+
+        response = self.client.post(
+            "/algorithms/qft",
+            data=json.dumps({"size": 20, "approximation_degree": 7, "inverse": False}),
+            content_type="application/json",
+        )
+
+        circ_1 = response.get_json().get("circuit")
+
+        self.assertGreater(re.findall(";", circ_0), re.findall(";", circ_1))

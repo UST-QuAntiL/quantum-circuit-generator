@@ -7,6 +7,8 @@ from ...model.algorithm_request import (
     HHLAlgorithmRequest,
     QAOAAlgorithmRequestSchema,
     QAOAAlgorithmRequest,
+    QFTAlgorithmRequest,
+    QFTAlgorithmRequestSchema,
 )
 
 
@@ -43,3 +45,18 @@ def encoding(json: HHLAlgorithmRequest):
 def encoding(json: QAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_qaoa_circuit(json)
+
+
+@blp.route("/qft", methods=["POST"])
+@blp.arguments(
+    QFTAlgorithmRequestSchema,
+    example=dict(
+        size=4,
+        approximation_degree=2,
+        inverse=False,
+    ),
+)
+@blp.response(200, CircuitResponseSchema)
+def encoding(json: QFTAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_qft_circuit(json)
