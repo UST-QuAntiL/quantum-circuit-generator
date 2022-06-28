@@ -43,6 +43,7 @@ def generate_qaoa_circuit(input):
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
     )
 
+
 def generate_tsp_qaoa_circuit(input):
     adj_matrix = input.get("adj_matrix")
     p = input.get("p")

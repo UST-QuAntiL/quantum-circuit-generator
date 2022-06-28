@@ -8,7 +8,7 @@ from ...model.algorithm_request import (
     QAOAAlgorithmRequestSchema,
     QAOAAlgorithmRequest,
     TSPQAOAAlgorithmRequest,
-    TSPQAOAAlgorithmRequestSchema
+    TSPQAOAAlgorithmRequestSchema,
 )
 
 
