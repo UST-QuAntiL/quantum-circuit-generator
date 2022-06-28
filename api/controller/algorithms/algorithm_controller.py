@@ -7,6 +7,8 @@ from ...model.algorithm_request import (
     HHLAlgorithmRequest,
     QAOAAlgorithmRequestSchema,
     QAOAAlgorithmRequest,
+    TSPQAOAAlgorithmRequest,
+    TSPQAOAAlgorithmRequestSchema
 )
 
 
@@ -43,3 +45,20 @@ def encoding(json: HHLAlgorithmRequest):
 def encoding(json: QAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_qaoa_circuit(json)
+
+
+@blp.route("/tspqaoa", methods=["POST"])
+@blp.etag
+@blp.arguments(
+    TSPQAOAAlgorithmRequestSchema,
+    example=dict(
+        adj_matrix=[[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
+        p=2,
+        betas=[1.0, 2.0],
+        gammas=[1.0, 3.0],
+    ),
+)
+@blp.response(200, CircuitResponseSchema)
+def encoding(json: TSPQAOAAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_tsp_qaoa_circuit(json)
