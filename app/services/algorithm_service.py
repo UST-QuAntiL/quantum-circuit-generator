@@ -1,6 +1,6 @@
 import numpy as np
 
-from app.services.algorithms.qaoa_algorithm import MaxCutQAOAAlgorithm
+from app.services.algorithms.maxcut_qaoa_algorithm import MaxCutQAOAAlgorithm
 from app.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from app.services.algorithms.hhl_algorithm import HHLAlgorithm
