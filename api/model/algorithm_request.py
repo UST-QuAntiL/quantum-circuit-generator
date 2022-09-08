@@ -14,14 +14,14 @@ class HHLAlgorithmRequestSchema(ma.Schema):
     vector = ma.fields.List(ma.fields.Float())
 
 
-class QAOAAlgorithmRequest:
+class MaxCutQAOAAlgorithmRequest:
     def __init__(self, matrix, beta, gamma):
         self.adj_matrix = matrix
         self.beta = beta
         self.gamma = gamma
 
 
-class QAOAAlgorithmRequestSchema(ma.Schema):
+class MaxCutQAOAAlgorithmRequestSchema(ma.Schema):
     adj_matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
     beta = ma.fields.Float()
     gamma = ma.fields.Float()

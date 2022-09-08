@@ -5,8 +5,8 @@ from ...model.circuit_response import CircuitResponseSchema
 from ...model.algorithm_request import (
     HHLAlgorithmRequestSchema,
     HHLAlgorithmRequest,
-    QAOAAlgorithmRequestSchema,
-    QAOAAlgorithmRequest,
+    MaxCutQAOAAlgorithmRequestSchema,
+    MaxCutQAOAAlgorithmRequest,
     TSPQAOAAlgorithmRequest,
     TSPQAOAAlgorithmRequestSchema,
     QFTAlgorithmRequest,
@@ -33,10 +33,10 @@ def encoding(json: HHLAlgorithmRequest):
         return algorithm_service.generate_hhl_algorithm(json)
 
 
-@blp.route("/qaoa", methods=["POST"])
+@blp.route("/maxcutqaoa", methods=["POST"])
 @blp.etag
 @blp.arguments(
-    QAOAAlgorithmRequestSchema,
+    MaxCutQAOAAlgorithmRequestSchema,
     example=dict(
         adj_matrix=[[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
         beta=1.0,
@@ -44,9 +44,9 @@ def encoding(json: HHLAlgorithmRequest):
     ),
 )
 @blp.response(200, CircuitResponseSchema)
-def encoding(json: QAOAAlgorithmRequest):
+def encoding(json: MaxCutQAOAAlgorithmRequest):
     if json:
-        return algorithm_service.generate_qaoa_circuit(json)
+        return algorithm_service.generate_max_cut_qaoa_circuit(json)
 
 
 @blp.route("/tspqaoa", methods=["POST"])

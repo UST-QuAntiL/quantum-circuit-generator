@@ -12,7 +12,7 @@ from qiskit.quantum_info import Pauli
 from qiskit.opflow import PauliSumOp
 
 
-class QAOAAlgorithm:
+class MaxCutQAOAAlgorithm:
     @classmethod
     def create_operator(cls, weight_matrix):
         """

@@ -2,7 +2,7 @@ import numpy as np
 from flask import jsonify
 
 from api.services.algorithms.hhl_algorithm import HHLAlgorithm
-from api.services.algorithms.qaoa_algorithm import QAOAAlgorithm
+from api.services.algorithms.qaoa_algorithm import MaxCutQAOAAlgorithm
 from api.services.algorithms.qft_algorithm import QFTAlgorithm
 from api.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
 from api.services.helper_service import getCircuitCharacteristics, bad_request
@@ -34,12 +34,11 @@ def generate_hhl_algorithm(input):
     )
 
 
-# TODO
-def generate_qaoa_circuit(input):
+def generate_max_cut_qaoa_circuit(input):
     adj_matrix = input.get("adj_matrix")
     beta = input.get("beta")
     gamma = input.get("gamma")
-    circuit = QAOAAlgorithm.create_circuit(adj_matrix, beta, gamma)
+    circuit = MaxCutQAOAAlgorithm.create_circuit(adj_matrix, beta, gamma)
     return CircuitResponse(
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
     )
@@ -56,7 +55,6 @@ def generate_tsp_qaoa_circuit(input):
     )
 
 
-# TODO
 def generate_qft_circuit(input):
     num_qubits = input.get("size")
     approx_degree = input.get("approximation_degree")
