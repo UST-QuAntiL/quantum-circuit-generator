@@ -120,16 +120,3 @@ class TSPQAOAAlgorithmRequestSchema(ma.Schema):
     p = ma.fields.Integer()
     betas = ma.fields.List(ma.fields.Float())
     gammas = ma.fields.List(ma.fields.Float())
-
-
-class QFTAlgorithmRequest:
-    def __init__(self, size, approximation_degree, inverse):
-        self.size = size
-        self.approximation_degree = approximation_degree
-        self.inverse = inverse
-
-
-class QFTAlgorithmRequestSchema(ma.Schema):
-    size = ma.fields.Int()
-    approximation_degree = ma.fields.Int()
-    inverse = ma.fields.Boolean()

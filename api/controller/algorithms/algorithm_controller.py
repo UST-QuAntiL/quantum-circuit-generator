@@ -28,7 +28,8 @@ from ...model.algorithm_request import (
     VQEAlgorithmRequestSchema,
     VQEAlgorithmRequest,
     GroverAlgorithmRequestSchema,
-    GroverAlgorithmRequest,
+    GroverAlgorithmRequest, TSPQAOAAlgorithmRequest, TSPQAOAAlgorithmRequestSchema, MaxCutQAOAAlgorithmRequestSchema,
+    MaxCutQAOAAlgorithmRequest,
 )
 
 
