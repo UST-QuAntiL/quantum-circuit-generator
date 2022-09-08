@@ -4,7 +4,8 @@ from app.model.circuit_response import (
     SchmidtDecompositionResponseSchema,
     AmplitudeEncodingResponseSchema,
     AngleEncodingResponseSchema,
-    BasisEncodingResponseSchema)
+    BasisEncodingResponseSchema,
+)
 from app.model.encoding_request import (
     BasisEncodingRequestSchema,
     AngleEncodingRequestSchema,

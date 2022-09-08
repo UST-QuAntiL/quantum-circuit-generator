@@ -461,7 +461,12 @@ class FlaskClientTestCase(unittest.TestCase):
             "/algorithms/tspqaoa",
             data=json.dumps(
                 {
-                    "adj_matrix": [[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
+                    "adj_matrix": [
+                        [0, 1, 1, 0],
+                        [1, 0, 1, 1],
+                        [1, 1, 0, 1],
+                        [0, 1, 1, 0],
+                    ],
                     "p": 1,
                     "betas": [1],
                     "gammas": [1],
@@ -473,15 +478,14 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(207, response.get_json().get("depth"))
         self.assertEqual(response.status_code, 200)
 
-
         response = self.client.post(
             "/algorithms/tspqaoa",
             data=json.dumps(
                 {
-                    "adj_matrix": [[1, 2, 1], [3, 0, 1], [ 1, 4, 0]],
+                    "adj_matrix": [[1, 2, 1], [3, 0, 1], [1, 4, 0]],
                     "p": 2,
-                    "betas": [1,3],
-                    "gammas": [1,-1],
+                    "betas": [1, 3],
+                    "gammas": [1, -1],
                 }
             ),
             content_type="application/json",

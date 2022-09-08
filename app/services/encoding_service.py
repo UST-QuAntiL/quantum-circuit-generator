@@ -16,7 +16,9 @@ def generate_basis_encoding(input):
     n_integral_bits = input.get("integral_bits")
     n_fractional_bits = input.get("fractional_bits")
     vector = vector if isinstance(vector, list) else [vector]
-    circuit = BasisEncoding.basis_encode_list_subcircuit(vector, n_integral_bits, n_fractional_bits)
+    circuit = BasisEncoding.basis_encode_list_subcircuit(
+        vector, n_integral_bits, n_fractional_bits
+    )
 
     return CircuitResponse(
         circuit.qasm(), "encoding/basis", circuit.num_qubits, circuit.depth(), input

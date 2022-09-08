@@ -1,7 +1,11 @@
 from datetime import datetime
 import marshmallow as ma
-from app.model.encoding_request import BasisEncodingRequestSchema, AngleEncodingRequestSchema, AmplitudeEncodingRequestSchema, \
-    SchmidtDecompositionRequestSchema
+from app.model.encoding_request import (
+    BasisEncodingRequestSchema,
+    AngleEncodingRequestSchema,
+    AmplitudeEncodingRequestSchema,
+    SchmidtDecompositionRequestSchema,
+)
 from app.model.algorithm_request import (
     HHLAlgorithmRequestSchema,
     VQLSAlgorithmRequestSchema,

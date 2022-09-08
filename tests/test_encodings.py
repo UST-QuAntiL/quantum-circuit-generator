@@ -94,7 +94,6 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200)
 
-
     def test_schmidt_decomposition(self):
         response = self.client.post(
             "/encoding/schmidt",
