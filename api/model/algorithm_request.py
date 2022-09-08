@@ -27,6 +27,21 @@ class QAOAAlgorithmRequestSchema(ma.Schema):
     gamma = ma.fields.Float()
 
 
+class TSPQAOAAlgorithmRequest:
+    def __init__(self, adj_matrix, p, betas, gammas):
+        self.adj_matrix = adj_matrix
+        self.p = p
+        self.betas = betas
+        self.gammas = gammas
+
+
+class TSPQAOAAlgorithmRequestSchema(ma.Schema):
+    adj_matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
+    p = ma.fields.Integer()
+    betas = ma.fields.List(ma.fields.Float())
+    gammas = ma.fields.List(ma.fields.Float())
+
+
 class QFTAlgorithmRequest:
     def __init__(self, size, approximation_degree, inverse):
         self.size = size
