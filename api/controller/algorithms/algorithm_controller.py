@@ -28,7 +28,10 @@ from ...model.algorithm_request import (
     VQEAlgorithmRequestSchema,
     VQEAlgorithmRequest,
     GroverAlgorithmRequestSchema,
-    GroverAlgorithmRequest, TSPQAOAAlgorithmRequest, TSPQAOAAlgorithmRequestSchema, MaxCutQAOAAlgorithmRequestSchema,
+    GroverAlgorithmRequest,
+    TSPQAOAAlgorithmRequest,
+    TSPQAOAAlgorithmRequestSchema,
+    MaxCutQAOAAlgorithmRequestSchema,
     MaxCutQAOAAlgorithmRequest,
 )
 
@@ -140,6 +143,7 @@ def encoding(json: GroverAlgorithmRequest):
     if json:
         return algorithm_service.generate_grover_circuit(json)
 
+
 @blp.route("/tspqaoa", methods=["POST"])
 @blp.etag
 @blp.arguments(
@@ -155,6 +159,7 @@ def encoding(json: GroverAlgorithmRequest):
 def encoding(json: TSPQAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_tsp_qaoa_circuit(json)
+
 
 @blp.route("/maxcutqaoa", methods=["POST"])
 @blp.etag

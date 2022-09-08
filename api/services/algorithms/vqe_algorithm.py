@@ -17,5 +17,4 @@ class VQEAlgorithm:
         Description
         """
 
-
         return None

@@ -173,6 +173,7 @@ def generate_grover_circuit(input):
         input,
     )
 
+
 def generate_max_cut_qaoa_circuit(input):
     adj_matrix = input.get("adj_matrix")
     beta = input.get("beta")
@@ -192,4 +193,3 @@ def generate_tsp_qaoa_circuit(input):
     return CircuitResponse(
         circuit.qasm(), "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input
     )
-

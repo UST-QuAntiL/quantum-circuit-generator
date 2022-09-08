@@ -13,6 +13,7 @@ from qiskit.opflow import PauliSumOp
 from qiskit.compiler import transpile
 from qiskit.algorithms.optimizers import COBYLA
 
+
 class QAOAAlgorithm:
     @classmethod
     def create_circuit(cls, initial_state, pauli_op, mixer, reps, gammas, betas):
@@ -71,7 +72,6 @@ class QAOAAlgorithm:
         qaoa_qc = qaoa_qc.decompose("decompose")
 
         return qaoa_qc
-
 
 
 class MaxCutQAOAAlgorithm:

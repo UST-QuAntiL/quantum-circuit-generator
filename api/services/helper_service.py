@@ -3,6 +3,7 @@ from flask import jsonify
 from qiskit.providers.ibmq import IBMQ
 from qiskit.providers.aer import AerSimulator
 
+
 def getCircuitCharacteristics(circuit, backend=None):
     if not backend:
         provider = IBMQ.get_provider(hub="ibm-q")
