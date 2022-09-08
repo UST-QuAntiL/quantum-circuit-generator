@@ -21,14 +21,13 @@ jobs:
         pip install -r requirements.txt;
     - name: Test with unittest and coverage-report
       run: |
-        coverage run --branch --include 'api/*' -m unittest discover
+        coverage run --branch --include 'app/*' -m unittest discover
         coverage report
         coverage xml
     - name: Upload Coverage to Codecov
       timeout-minutes: 1
       uses: codecov/codecov-action@v2
       with:
-        token: "9c14be86-4bc7-4f29-93e5-3e56297e6325"
         fail_ci_if_error: false
         verbose: true
         files: ./coverage.xml

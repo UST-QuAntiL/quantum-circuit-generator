@@ -3,6 +3,9 @@ import os, sys
 import json
 import re
 import contextlib
+import re
+from qiskit.providers.aer import QasmSimulator
+import qiskit
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
@@ -223,7 +226,7 @@ class FlaskClientTestCase(unittest.TestCase):
         # Test errors
         # invalid initial state
         # suppress message: Error near line ...
-        with contextlib.redirect_stdout(None): 
+        with contextlib.redirect_stdout(None):
             response = self.client.post(
                 "/algorithms/qaoa",
                 data=json.dumps(
@@ -284,7 +287,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # invalid mixer (qasm String)
         # suppress message: Error near line ...
-        with contextlib.redirect_stdout(None): 
+        with contextlib.redirect_stdout(None):
             response = self.client.post(
                 "/algorithms/qaoa",
                 data=json.dumps(
@@ -528,7 +531,7 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_qpe_algorithm(self):
         # Test invalid qasm string
         # suppress message: Error near line ...
-        with contextlib.redirect_stdout(None): 
+        with contextlib.redirect_stdout(None):
             response = self.client.post(
                 "/algorithms/qpe",
                 data=json.dumps(

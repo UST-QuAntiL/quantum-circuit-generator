@@ -40,6 +40,8 @@ class CircuitResponseSchema(ma.Schema):
     n_qubits = ma.fields.Int()
     depth = ma.fields.Int()
     timestamp = ma.fields.String()
+    # TODO change BasisEncodingRequestSchema for algorithms
+    # input = ma.fields.Nested(HHLAlgorithmRequestSchema)
     input = ma.fields.Nested(BasisEncodingRequestSchema)
 
 

@@ -1,6 +1,9 @@
 from flask_smorest import Blueprint
 from flask import request
 from api.services import algorithm_service
+from ...model.circuit_response import CircuitResponseSchema
+
+from api.services import algorithm_service
 from ...model.circuit_response import (
     CircuitResponseSchema,
     HHLResponseSchema,
@@ -135,3 +138,34 @@ def encoding(json: VQEAlgorithmRequest):
 def encoding(json: GroverAlgorithmRequest):
     if json:
         return algorithm_service.generate_grover_circuit(json)
+
+@blp.route("/tspqaoa", methods=["POST"])
+@blp.etag
+@blp.arguments(
+    TSPQAOAAlgorithmRequestSchema,
+    example=dict(
+        adj_matrix=[[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
+        p=2,
+        betas=[1.0, 2.0],
+        gammas=[1.0, 3.0],
+    ),
+)
+@blp.response(200, CircuitResponseSchema)
+def encoding(json: TSPQAOAAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_tsp_qaoa_circuit(json)
+
+@blp.route("/maxcutqaoa", methods=["POST"])
+@blp.etag
+@blp.arguments(
+    MaxCutQAOAAlgorithmRequestSchema,
+    example=dict(
+        adj_matrix=[[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
+        beta=1.0,
+        gamma=1.0,
+    ),
+)
+@blp.response(200, CircuitResponseSchema)
+def encoding(json: MaxCutQAOAAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_max_cut_qaoa_circuit(json)

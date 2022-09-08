@@ -25,7 +25,7 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Build and push latest of quantum circuit generator
+      - name: Build and push latest of quantum-circuit-generator
         if: ${{ steps.vars.outputs.tag == 'main' }}
         uses: docker/build-push-action@v2
         with:

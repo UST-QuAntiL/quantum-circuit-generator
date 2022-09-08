@@ -1,6 +1,13 @@
 import numpy as np
 from flask import jsonify
 
+from api.services.algorithms.hhl_algorithm import HHLAlgorithm
+from api.services.algorithms.qaoa_algorithm import MaxCutQAOAAlgorithm
+from api.services.algorithms.qft_algorithm import QFTAlgorithm
+from api.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
+from api.services.helper_service import getCircuitCharacteristics, bad_request
+from api.model.circuit_response import CircuitResponse
+
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from api.services.algorithms.hhl_algorithm import HHLAlgorithm
 from api.services.algorithms.qaoa_algorithm import QAOAAlgorithm
@@ -165,3 +172,24 @@ def generate_grover_circuit(input):
         circuit.depth(),
         input,
     )
+
+def generate_max_cut_qaoa_circuit(input):
+    adj_matrix = input.get("adj_matrix")
+    beta = input.get("beta")
+    gamma = input.get("gamma")
+    circuit = MaxCutQAOAAlgorithm.create_circuit(adj_matrix, beta, gamma)
+    return CircuitResponse(
+        circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
+    )
+
+
+def generate_tsp_qaoa_circuit(input):
+    adj_matrix = input.get("adj_matrix")
+    p = input.get("p")
+    betas = input.get("betas")
+    gammas = input.get("gammas")
+    circuit = TSPQAOAAlgorithm.create_circuit(np.array(adj_matrix), p, betas, gammas)
+    return CircuitResponse(
+        circuit.qasm(), "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input
+    )
+
