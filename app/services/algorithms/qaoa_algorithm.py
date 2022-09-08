@@ -4,8 +4,8 @@ from qiskit import QuantumRegister
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from qiskit.algorithms.linear_solvers.hhl import HHL
 
-from api.services.encodings.amplitude_encoding import AmplitudeEncoding
-from api.services.algorithms.pauliParser import PauliParser
+from app.services.encodings.amplitude_encoding import AmplitudeEncoding
+from app.services.algorithms.pauliParser import PauliParser
 
 from qiskit.algorithms import QAOA
 from qiskit.quantum_info import Pauli

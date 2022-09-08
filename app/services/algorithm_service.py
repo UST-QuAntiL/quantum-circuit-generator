@@ -1,24 +1,18 @@
 import numpy as np
-from flask import jsonify
 
-from api.services.algorithms.hhl_algorithm import HHLAlgorithm
-from api.services.algorithms.qaoa_algorithm import MaxCutQAOAAlgorithm
-from api.services.algorithms.qft_algorithm import QFTAlgorithm
-from api.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
-from api.services.helper_service import getCircuitCharacteristics, bad_request
-from api.model.circuit_response import CircuitResponse
-
+from app.services.algorithms.qaoa_algorithm import MaxCutQAOAAlgorithm
+from app.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
 from qiskit.circuit.quantumcircuit import QuantumCircuit
-from api.services.algorithms.hhl_algorithm import HHLAlgorithm
-from api.services.algorithms.qaoa_algorithm import QAOAAlgorithm
-from api.services.algorithms.vqls_algorithm import VQLSAlgorithm
-from api.services.algorithms.qft_algorithm import QFTAlgorithm
-from api.services.algorithms.qpe_algorithm import QPEAlgorithm
-from api.services.algorithms.vqe_algorithm import VQEAlgorithm
-from api.services.algorithms.grover_algorithm import GroverAlgorithm
-from api.services.algorithms.pauliParser import PauliParser
-from api.services.helper_service import getCircuitCharacteristics, bad_request
-from api.model.circuit_response import CircuitResponse
+from app.services.algorithms.hhl_algorithm import HHLAlgorithm
+from app.services.algorithms.qaoa_algorithm import QAOAAlgorithm
+from app.services.algorithms.vqls_algorithm import VQLSAlgorithm
+from app.services.algorithms.qft_algorithm import QFTAlgorithm
+from app.services.algorithms.qpe_algorithm import QPEAlgorithm
+from app.services.algorithms.vqe_algorithm import VQEAlgorithm
+from app.services.algorithms.grover_algorithm import GroverAlgorithm
+from app.services.algorithms.pauliParser import PauliParser
+from app.services.helper_service import bad_request
+from app.model.circuit_response import CircuitResponse
 
 
 def generate_hhl_circuit(input):

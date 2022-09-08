@@ -1,11 +1,11 @@
 import os
-from api import create_app
+from app import create_app
 
 app = create_app(os.getenv("FLASK_CONFIG") or "default")
 
 
 # Get coverage with:
-# coverage run --branch --include 'api/*' -m unittest discover
+# coverage run --branch --include 'app/*' -m unittest discover
 # coverage report
 # coverage xml
 @app.cli.command()

@@ -1,4 +1,4 @@
-from api.controller import encoding, algorithms
+from app.controller import encoding, algorithms
 
 MODULES = (encoding, algorithms)
 

@@ -1,29 +1,23 @@
 import numpy as np
-from flask import jsonify
 
-from api.services.encodings.basis_encoding import BasisEncoding
-from api.services.encodings.angle_encoding import AngleEncoding
-from api.services.encodings.amplitude_encoding import AmplitudeEncoding
-from api.services.encodings.schmidt_decomposition import (
+from app.services.encodings.basis_encoding import BasisEncoding
+from app.services.encodings.angle_encoding import AngleEncoding
+from app.services.encodings.amplitude_encoding import AmplitudeEncoding
+from app.services.encodings.schmidt_decomposition import (
     generate_schmidt_decomposition_from_array,
     Measurement,
 )
-from api.services.helper_service import getCircuitCharacteristics, bad_request
-from api.model.circuit_response import CircuitResponse
+from app.services.helper_service import bad_request
+from app.model.circuit_response import CircuitResponse
 
 
 def generate_basis_encoding(input):
     vector = input.get("vector")
     n_integral_bits = input.get("integral_bits")
     n_fractional_bits = input.get("fractional_bits")
-    if isinstance(vector, list):
-        circuit = BasisEncoding.basis_encode_list_subcircuit(
-            vector, n_integral_bits, n_fractional_bits
-        )
-    else:
-        circuit = BasisEncoding.basis_encode_number_subcircuit(
-            vector, n_integral_bits, n_fractional_bits
-        )
+    vector = vector if isinstance(vector, list) else [vector]
+    circuit = BasisEncoding.basis_encode_list_subcircuit(vector, n_integral_bits, n_fractional_bits)
+
     return CircuitResponse(
         circuit.qasm(), "encoding/basis", circuit.num_qubits, circuit.depth(), input
     )
@@ -46,10 +40,6 @@ def generate_amplitude_encoding(input):
     return CircuitResponse(
         circuit.qasm(), "encoding/amplitude", circuit.num_qubits, circuit.depth(), input
     )
-
-
-def generate_quam_encoding(input):
-    return CircuitResponse(None, "encoding/quam", None, None, None)
 
 
 def generate_schmidt_decomposition(input):

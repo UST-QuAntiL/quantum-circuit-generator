@@ -1,7 +1,8 @@
 from datetime import datetime
 import marshmallow as ma
-from .encoding_request import BasisEncodingRequestSchema
-from .algorithm_request import (
+from app.model.encoding_request import BasisEncodingRequestSchema, AngleEncodingRequestSchema, AmplitudeEncodingRequestSchema, \
+    SchmidtDecompositionRequestSchema
+from app.model.algorithm_request import (
     HHLAlgorithmRequestSchema,
     VQLSAlgorithmRequestSchema,
     QAOAAlgorithmRequestSchema,
@@ -40,12 +41,28 @@ class CircuitResponseSchema(ma.Schema):
     n_qubits = ma.fields.Int()
     depth = ma.fields.Int()
     timestamp = ma.fields.String()
-    # TODO change BasisEncodingRequestSchema for algorithms
-    # input = ma.fields.Nested(HHLAlgorithmRequestSchema)
+
+    @property
+    def input(self):
+        raise NotImplementedError
+
+
+class BasisEncodingResponseSchema(CircuitResponseSchema):
     input = ma.fields.Nested(BasisEncodingRequestSchema)
 
 
-# return the correct input by overwriting the appropriate input schema
+class AngleEncodingResponseSchema(CircuitResponseSchema):
+    input = ma.fields.Nested(AngleEncodingRequestSchema)
+
+
+class AmplitudeEncodingResponseSchema(CircuitResponseSchema):
+    input = ma.fields.Nested(AmplitudeEncodingRequestSchema)
+
+
+class SchmidtDecompositionResponseSchema(CircuitResponseSchema):
+    input = ma.fields.Nested(SchmidtDecompositionRequestSchema)
+
+
 class HHLResponseSchema(CircuitResponseSchema):
     input = ma.fields.Nested(HHLAlgorithmRequestSchema)
 

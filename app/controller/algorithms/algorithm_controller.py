@@ -1,10 +1,7 @@
 from flask_smorest import Blueprint
-from flask import request
-from api.services import algorithm_service
-from ...model.circuit_response import CircuitResponseSchema
 
-from api.services import algorithm_service
-from ...model.circuit_response import (
+from app.services import algorithm_service
+from app.model.circuit_response import (
     CircuitResponseSchema,
     HHLResponseSchema,
     QAOAResponseSchema,
@@ -14,7 +11,7 @@ from ...model.circuit_response import (
     VQEResponseSchema,
     GroverResponseSchema,
 )
-from ...model.algorithm_request import (
+from app.model.algorithm_request import (
     HHLAlgorithmRequestSchema,
     HHLAlgorithmRequest,
     QAOAAlgorithmRequestSchema,
