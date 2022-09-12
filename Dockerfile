@@ -1,12 +1,14 @@
-# syntax=docker/dockerfile:1
+FROM python:3.8-slim
 
-FROM python:3.8-slim-buster
+MAINTAINER Martin Beisel "martin.beisel@iaas.uni-stuttgart.de"
 
-WORKDIR /quantum-circuit-generator
+COPY ./requirements.txt /app/requirements.txt
+WORKDIR /app
+RUN apt-get update
+RUN apt-get install -y gcc python3-dev
+RUN pip install -r requirements.txt
+COPY . /app
 
-COPY requirements.txt requirements.txt 
-RUN pip3 install -r requirements.txt 
+ENTRYPOINT [ "python" ]
 
-COPY . .
-
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
+CMD ["app.py" ]
