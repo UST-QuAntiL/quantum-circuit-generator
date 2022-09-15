@@ -20,23 +20,6 @@ class GroverAlgorithm:
         |x1 x2 ... xn > = |qn ... q1 >
         """
 
-        qft = QuantumCircuit(n_qubits)
-        for i in reversed(range(n_qubits)):
-            if barriers:  # Add barrier if specified
-                qft.barrier()
-            qft.h(i)
-            for j in range(i):
-                # control is down 1, 2,...  --> i-(j+1)
-                qft.cp(
-                    2 * np.pi / 2 ** (j + 2), i - (j + 1), i
-                )  # cp(phase, control, target)
-        # swaps
-        if barriers:
-            qft.barrier()
-        for i in range(n_qubits // 2):
-            qft.swap(i, n_qubits - i - 1)
+        grover = QuantumCircuit(n_qubits)
 
-        if inverse:
-            qft = qft.inverse()
-
-        return qft
+        return grover

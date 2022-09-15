@@ -15,7 +15,9 @@ class VQEAlgorithm:
         :param observable: Qubit operator of the Observable given as pauli string
         :return: OpenQASM Circuit of the VQE ansatz
 
-        Description
+        Returns a circuit that consists of ansatz and preparation for measurement with observable.
+        If no custom ansatz is given, RealAmplitudes ansatz is chosen.
+        If a custom ansatz is given, no parameters shall be provided.
         """
 
         vqe = VQE(ansatz=ansatz)
