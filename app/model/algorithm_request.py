@@ -90,12 +90,21 @@ class VQEAlgorithmRequestSchema(ma.Schema):
 
 
 class GroverAlgorithmRequest:
-    def __init__(self, n_qubits, inverse, barriers):
-        self.n_qubits = n_qubits
+    def __init__(self, oracle, iterations, reflection_qubits, initial_state, barriers):
+        self.oracle = n_qubits
+        self.iterations = iterations
+        self.reflection_qubits = reflection_qubits
+        self.initial_state = initial_state
+        self.barriers = barriers
 
 
 class GroverAlgorithmRequestSchema(ma.Schema):
-    n_qubits = ma.fields.Int()
+    oracle = ma.fields.String()
+    iterations = ma.fields.Int()
+    reflection_qubits = ma.fields.List(ma.fields.Int())
+    initial_state = ma.fields.String()
+    barriers = ma.fields.Bool()
+
 
 
 class MaxCutQAOAAlgorithmRequest:

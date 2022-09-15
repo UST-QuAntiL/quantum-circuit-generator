@@ -133,7 +133,11 @@ def encoding(json: VQEAlgorithmRequest):
 @blp.arguments(
     GroverAlgorithmRequestSchema,
     example=dict(
-        n_qubits=4,
+        oracle='OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\nccx q[0],q[1],q[2];\n',
+        initial_state='OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\nx q[0];\ny q[1];\nz q[2];\n',
+        iterations = 2,
+        reflection_qubits = [0, 1],
+        barriers = True,
     ),
 )
 @blp.response(200, GroverResponseSchema)

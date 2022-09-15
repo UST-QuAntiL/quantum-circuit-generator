@@ -1,25 +1,40 @@
-import numpy as np
-
-from qiskit import QuantumRegister
-from qiskit.circuit.quantumcircuit import QuantumCircuit
+from qiskit import QuantumCircuit
+from qiskit.algorithms import AmplificationProblem, Grover
+from qiskit.circuit.library import GroverOperator
 
 
 class GroverAlgorithm:
     @classmethod
-    def create_circuit(cls, n_qubits, inverse, barriers):
-        # TODO implementation
+    def create_circuit(cls, oracle, iterations=1, reflection_qubits=None, initial_state=None, barriers=False):
         """
-        :param n_qubits: number of qubits the QFT should act on
-        :param inverse: boolean flag, signaling to return the inverse QFT
+        :param oracle: QuantumCircuit object (generated from qasm string)
+        :param iterations: how often the amplification is applied
+        :param reflection_qubits: integer list of qubits, where diffuser is applied
+        :param initial_state: QuantumCircuit object (generated from qasm string), by default a layer of H-gates is applied.
+        If reflection_qubits are provided, H-gates are only applied to them and the last qubit is initialized as |0> - |1>.
         :param barriers: boolean flag, wether or not to insert barriers
         :return: OpenQASM Circuit
 
-        Creates the circuit of the quantum fourier transform with n_qubits.
-        Suppose |x> = |x1 x2 ... xn > with x1 being the most significant bit.
-        Since in qiskit, the most significant qubit is qn, we have:
-        |x1 x2 ... xn > = |qn ... q1 >
+        Creates the circuit for Grover search algorithm with the specified parameters.
         """
 
-        grover = QuantumCircuit(n_qubits)
+        grover_op = GroverOperator(oracle, reflection_qubits=reflection_qubits, insert_barriers=barriers)
+
+        # default initial state with H-gate layer and last qubit as H|1>
+        if initial_state is None and reflection_qubits is not None:
+            init = QuantumCircuit(oracle.num_qubits)
+            for i in reflection_qubits:
+                init.h(i)
+            # initialize last qubit with |0> - |1> state
+            init.x(oracle.num_qubits - 1)
+            init.h(oracle.num_qubits - 1)
+        else:
+            init = initial_state
+
+        ap = AmplificationProblem(oracle, state_preparation=init, grover_operator=grover_op)
+
+        grover = Grover(iterations=iterations).construct_circuit(ap)
+        grover = grover.decompose('Q').decompose('Q')
+        print(grover)
 
         return grover

@@ -181,9 +181,30 @@ def generate_vqe_circuit(input):
 
 
 def generate_grover_circuit(input):
-    n_qubits = input.get("n_qubits")
+    oracle = input.get("oracle")
+    iterations = input.get("iterations")
+    reflection_qubits = input.get("reflection_qubits")
+    initial_state = input.get("initial_state")
+    barriers = input.get("barriers")
 
-    circuit = GroverAlgorithm.create_circuit()
+    # check oracle (qasm string)
+    try:
+        if oracle is not None:
+            oracle = QuantumCircuit.from_qasm_str(oracle)
+    except Exception as err:
+        return bad_request("Invalid oracle (qasm string): " + str(err))
+    # check initial_state (qasm string)
+    try:
+        if initial_state is not None:
+            initial_state = QuantumCircuit.from_qasm_str(initial_state)
+    except Exception as err:
+        return bad_request("Invalid initial_state (qasm string): " + str(err))
+
+    # default number of iterations
+    if iterations is None:
+        iterations = 1
+
+    circuit = GroverAlgorithm.create_circuit(oracle, iterations, reflection_qubits, initial_state, barriers)
     return CircuitResponse(
         circuit.qasm(),
         "algorithm/grover",
