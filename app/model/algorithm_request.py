@@ -77,12 +77,16 @@ class QPEAlgorithmRequestSchema(ma.Schema):
 
 
 class VQEAlgorithmRequest:
-    def __init__(self, n_qubits, inverse, barriers):
-        self.n_qubits = n_qubits
+    def __init__(self, ansatz, parameters, observable):
+        self.ansatz = ansatz
+        self.parameters = parameters
+        self.observable = observable
 
 
 class VQEAlgorithmRequestSchema(ma.Schema):
-    n_qubits = ma.fields.Int()
+    ansatz = ma.fields.String()
+    parameters = ma.fields.List(ma.fields.Float())
+    observable = ma.fields.String()
 
 
 class GroverAlgorithmRequest:

@@ -1,4 +1,3 @@
-from qiskit import QuantumRegister
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from qiskit.algorithms.linear_solvers.hhl import HHL
 import numpy as np
