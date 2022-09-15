@@ -106,7 +106,6 @@ class GroverAlgorithmRequestSchema(ma.Schema):
     barriers = ma.fields.Bool()
 
 
-
 class MaxCutQAOAAlgorithmRequest:
     def __init__(self, matrix, beta, gamma):
         self.adj_matrix = matrix

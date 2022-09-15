@@ -5,7 +5,14 @@ from qiskit.circuit.library import GroverOperator
 
 class GroverAlgorithm:
     @classmethod
-    def create_circuit(cls, oracle, iterations=1, reflection_qubits=None, initial_state=None, barriers=False):
+    def create_circuit(
+        cls,
+        oracle,
+        iterations=1,
+        reflection_qubits=None,
+        initial_state=None,
+        barriers=False,
+    ):
         """
         :param oracle: QuantumCircuit object (generated from qasm string)
         :param iterations: how often the amplification is applied
@@ -18,7 +25,9 @@ class GroverAlgorithm:
         Creates the circuit for Grover search algorithm with the specified parameters.
         """
 
-        grover_op = GroverOperator(oracle, reflection_qubits=reflection_qubits, insert_barriers=barriers)
+        grover_op = GroverOperator(
+            oracle, reflection_qubits=reflection_qubits, insert_barriers=barriers
+        )
 
         # default initial state with H-gate layer and last qubit as H|1>
         if initial_state is None and reflection_qubits is not None:
@@ -31,10 +40,11 @@ class GroverAlgorithm:
         else:
             init = initial_state
 
-        ap = AmplificationProblem(oracle, state_preparation=init, grover_operator=grover_op)
+        ap = AmplificationProblem(
+            oracle, state_preparation=init, grover_operator=grover_op
+        )
 
         grover = Grover(iterations=iterations).construct_circuit(ap)
-        grover = grover.decompose('Q').decompose('Q')
-        print(grover)
+        grover = grover.decompose("Q").decompose("Q")
 
         return grover

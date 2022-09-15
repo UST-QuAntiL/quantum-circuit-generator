@@ -204,7 +204,9 @@ def generate_grover_circuit(input):
     if iterations is None:
         iterations = 1
 
-    circuit = GroverAlgorithm.create_circuit(oracle, iterations, reflection_qubits, initial_state, barriers)
+    circuit = GroverAlgorithm.create_circuit(
+        oracle, iterations, reflection_qubits, initial_state, barriers
+    )
     return CircuitResponse(
         circuit.qasm(),
         "algorithm/grover",

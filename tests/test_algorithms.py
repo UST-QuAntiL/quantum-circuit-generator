@@ -550,7 +550,167 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
-    
+
+    def test_grover_algorithm(self):
+        # Test errors
+        # invalid oracle
+        with contextlib.redirect_stdout(None):
+            response = self.client.post(
+                "/algorithms/grover",
+                data=json.dumps(
+                    {
+                        "oracle": 'OPENQASM 2.0; +++++ \ninclude "qelib1.inc";\nqreg q[3];\nccx q[0],q[1],q[2];\n',
+                        "initial_state": 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\nx q[0];\ny q[1];\nz q[2];\n',
+                        "iterations": 2,
+                        "reflection_qubits": [0, 1],
+                        "barriers": True,
+                    }
+                ),
+                content_type="application/json",
+            )
+        self.assertTrue(
+            "Invalid oracle (qasm string): \"Expected an ID, received '+'\""
+            in response.get_json().get("message")
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # Test invalid initial state
+        with contextlib.redirect_stdout(None):
+            response = self.client.post(
+                "/algorithms/grover",
+                data=json.dumps(
+                    {
+                        "oracle": 'OPENQASM 2.0; \ninclude "qelib1.inc";\nqreg q[3];\nccx q[0],q[1],q[2];\n',
+                        "initial_state": 'OPENQASM 2.0; +++++ \ninclude "qelib1.inc";\nqreg q[3];\nx q[0];\ny q[1];\nz q[2];\n',
+                        "iterations": 2,
+                        "reflection_qubits": [0, 1],
+                        "barriers": True,
+                    }
+                ),
+                content_type="application/json",
+            )
+        self.assertTrue(
+            "Invalid initial_state (qasm string): \"Expected an ID, received '+'\""
+            in response.get_json().get("message")
+        )
+        self.assertEqual(response.status_code, 400)
+
+        # Test good cases
+        # simple oracle (basic case)
+        response = self.client.post(
+            "/algorithms/grover",
+            data=json.dumps(
+                {
+                    "oracle": 'OPENQASM 2.0; \ninclude "qelib1.inc";\nqreg q[2];\ncz q[0],q[1];\n',
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(2, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\nh q.*;\ncz q.*,q.*;\nh q.*;\nx q.*;\nh q.*;\nx q.*;\nh q.*;\ncx q.*,q.*;\nx q.*;\nh q.*;\nh q.*;\nx q.*;\nh q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test initial state
+        response = self.client.post(
+            "/algorithms/grover",
+            data=json.dumps(
+                {
+                    "oracle": 'OPENQASM 2.0; \ninclude "qelib1.inc";\nqreg q[2];\ncz q[0],q[1];\n',
+                    "initial_state": 'OPENQASM 2.0; \ninclude "qelib1.inc";\nqreg q[2];\nx q[0];\ny q[1];\n',
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(2, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nx q.*;\ny q.*;\ncz q.*,q.*;\nh q.*;\nx q.*;\nh q.*;\nx q.*;\nh q.*;\ncx q.*,q.*;\nx q.*;\nh q.*;\nh q.*;\nx q.*;\nh q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test iterations
+        response = self.client.post(
+            "/algorithms/grover",
+            data=json.dumps(
+                {
+                    "oracle": 'OPENQASM 2.0; \ninclude "qelib1.inc";\nqreg q[2];\ncz q[0],q[1];\n',
+                    "iterations": 2,
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(2, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\nh q.*;\ncz q.*,q.*;\nh q.*;\nx q.*;\nh q.*;\nx q.*;\nh q.*;\ncx q.*,q.*;\nx q.*;\nh q.*;\nh q.*;\nx q.*;\nh q.*;\ncz q.*,q.*;\nh q.*;\nx q.*;\nh q.*;\nx q.*;\nh q.*;\ncx q.*,q.*;\nx q.*;\nh q.*;\nh q.*;\nx q.*;\nh q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test reflection qubits
+        response = self.client.post(
+            "/algorithms/grover",
+            data=json.dumps(
+                {
+                    "oracle": 'OPENQASM 2.0; \ninclude "qelib1.inc";\nqreg q[3];\nccx q[0],q[1],q[2];\n',
+                    "reflection_qubits": [0, 1],
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(3, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\nh q.*;\nx q.*;\nh q.*;\nccx q.*,q.*,q.*;\nh q.*;\nx q.*;\nh q.*;\nx q.*;\nh q.*;\ncx q.*,q.*;\nx q.*;\nh q.*;\nh q.*;\nx q.*;\nh q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test barriers
+        response = self.client.post(
+            "/algorithms/grover",
+            data=json.dumps(
+                {
+                    "oracle": 'OPENQASM 2.0; \ninclude "qelib1.inc";\nqreg q[2];\nbarrier q[0],q[1];\ncz q[0],q[1];\n',
+                    "barriers": True,
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(2, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nh q.*;\nh q.*;\nbarrier q.*,q.*;\ncz q.*,q.*;\nbarrier q.*,q.*;\nh q.*;\nh q.*;\nbarrier q.*,q.*;\nx q.*;\nx q.*;\nh q.*;\ncx q.*,q.*;\nx q.*;\nh q.*;\nx q.*;\nbarrier q.*,q.*;\nh q.*;\nh q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+        # Test all features
+        response = self.client.post(
+            "/algorithms/grover",
+            data=json.dumps(
+                {
+                    "oracle": 'OPENQASM 2.0; \ninclude "qelib1.inc";\nqreg q[3];\nccx q[0],q[1],q[2];\n',
+                    "initial_state": 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\nx q[0];\ny q[1];\nz q[2];\n',
+                    "iterations": 2,
+                    "reflection_qubits": [0, 1],
+                    "barriers": True,
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(3, response.get_json().get("n_qubits"))
+        match = re.search(
+            "\nqreg q.*;\nx q.*;\ny q.*;\nz q.*;\nccx q.*,q.*,q.*;\nbarrier q.*,q.*,q.*;\nh q.*;\nh q.*;\nbarrier q.*,q.*,q.*;\nx q.*;\nx q.*;\nh q.*;\ncx q.*,q.*;\nx q.*;\nh q.*;\nx q.*;\nbarrier q.*,q.*,q.*;\nh q.*;\nh q.*;\nccx q.*,q.*,q.*;\nbarrier q.*,q.*,q.*;\nh q.*;\nh q.*;\nbarrier q.*,q.*,q.*;\nx q.*;\nx q.*;\nh q.*;\ncx q.*,q.*;\nx q.*;\nh q.*;\nx q.*;\nbarrier q.*,q.*,q.*;\nh q.*;\nh q.*;\n",
+            response.get_json().get("circuit"),
+        )
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
 
     def test_tsp_qaoa(self):
         response = self.client.post(
@@ -566,7 +726,6 @@ class FlaskClientTestCase(unittest.TestCase):
                     "p": 1,
                     "betas": [1],
                     "gammas": [1],
-
                 }
             ),
             content_type="application/json",
