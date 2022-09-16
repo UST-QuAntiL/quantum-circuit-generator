@@ -2,7 +2,7 @@ import numpy as np
 from qiskit.algorithms import QAOA
 from qiskit.quantum_info import Pauli
 from qiskit.opflow import PauliSumOp
-from qiskit.algorithms.optimizers import COBYLA
+from app.services.algorithms.qaoa_algorithm import QAOAAlgorithm
 
 
 class MaxCutQAOAAlgorithm:
@@ -44,8 +44,10 @@ class MaxCutQAOAAlgorithm:
         """
 
         operator = cls.create_operator(adj_matrix)
-        optimizer = COBYLA()
-        qaoa = QAOA(optimizer)
-        qaoa_qc = qaoa.construct_circuit([gamma, beta], operator)[0]
+        qaoa = QAOA()
+        qaoa_qc = qaoa.construct_circuit([beta, gamma], operator)[0]
+        
+        # decompose exp gates
+        qaoa_qc = QAOAAlgorithm.decompose_operator_gates(qaoa_qc)
 
         return qaoa_qc
