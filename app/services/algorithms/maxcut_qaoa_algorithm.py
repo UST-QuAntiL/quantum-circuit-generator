@@ -46,7 +46,7 @@ class MaxCutQAOAAlgorithm:
         operator = cls.create_operator(adj_matrix)
         qaoa = QAOA()
         qaoa_qc = qaoa.construct_circuit([beta, gamma], operator)[0]
-        
+
         # decompose exp gates
         qaoa_qc = QAOAAlgorithm.decompose_operator_gates(qaoa_qc)
 
