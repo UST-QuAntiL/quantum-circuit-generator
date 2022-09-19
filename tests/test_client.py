@@ -2,6 +2,9 @@ import unittest
 import os, sys
 import json
 import re
+import numpy as np
+from qiskit import QuantumCircuit
+from builtins import isinstance
 
 parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(parent_dir)
@@ -210,3 +213,23 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
+
+    def test_tspqaoa(self):
+        # test tspqaoa and openqasm
+        for i in range(25):
+            n = np.random.randint(3, 5)
+            matrix = np.random.rand(n, n)
+            p = np.random.randint(1, 4)
+            betas, gammas = np.random.rand(p), np.random.rand(p)
+            request = {"adj_matrix" : matrix.tolist(),
+                "p":p,
+                "betas":betas.tolist(),
+                "gammas":gammas.tolist()}
+
+            response = self.client.post("algorithms/tspqaoa", data=json.dumps(request), content_type="application/json")
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(n**2, response.get_json().get("n_qubits"))
+
+            openqasm = response.get_json().get("circuit")
+            qc = QuantumCircuit.from_qasm_str(openqasm)
+            self.assertTrue(isinstance(qc, QuantumCircuit))
