@@ -1,18 +1,11 @@
 import numpy as np
-
-from qiskit import QuantumRegister
-from qiskit.circuit.quantumcircuit import QuantumCircuit
-from qiskit.algorithms.linear_solvers.hhl import HHL
-
-from api.services.encodings.amplitude_encoding import AmplitudeEncoding
-
 from qiskit.algorithms import QAOA
-from qiskit.algorithms.optimizers import COBYLA
 from qiskit.quantum_info import Pauli
 from qiskit.opflow import PauliSumOp
+from qiskit.algorithms.optimizers import COBYLA
 
 
-class QAOAAlgorithm:
+class MaxCutQAOAAlgorithm:
     @classmethod
     def create_operator(cls, weight_matrix):
         """
