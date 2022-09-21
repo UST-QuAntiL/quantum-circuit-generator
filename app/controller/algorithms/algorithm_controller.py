@@ -151,6 +151,7 @@ def encoding(json: GroverAlgorithmRequest):
         betas=[1.0, 2.0],
         gammas=[1.0, 3.0],
     ),
+    description="Currently, only 3x3 and 4x4 matrices supported.",
 )
 @blp.response(200, CircuitResponseSchema)
 def encoding(json: TSPQAOAAlgorithmRequest):
