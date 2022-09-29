@@ -5,7 +5,6 @@ from app.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from app.services.algorithms.hhl_algorithm import HHLAlgorithm
 from app.services.algorithms.qaoa_algorithm import QAOAAlgorithm
-from app.services.algorithms.vqls_algorithm import VQLSAlgorithm
 from app.services.algorithms.qft_algorithm import QFTAlgorithm
 from app.services.algorithms.qpe_algorithm import QPEAlgorithm
 from app.services.algorithms.vqe_algorithm import VQEAlgorithm
@@ -88,24 +87,6 @@ def generate_qaoa_circuit(input):
     )
 
 
-def generate_vqls_circuit(input):
-    matrix = input.get("matrix")
-    vector = input.get("vector")
-    alphas = input.get("alphas")
-    l = input.get("l")
-    lp = input.get("lp")
-    ansatz = input.get("ansatz")
-
-    circuit = VQLSAlgorithm.create_circuit(matrix, vector, alphas, l, lp, ansatz)
-    return CircuitResponse(
-        circuit.qasm(),
-        "algorithm/vqls",
-        circuit.num_qubits,
-        circuit.depth(),
-        input,
-    )
-
-
 def generate_qft_circuit(input):
     n_qubits = input.get("n_qubits")
     inverse = input.get("inverse")
@@ -143,9 +124,34 @@ def generate_qpe_circuit(input):
 
 
 def generate_vqe_circuit(input):
-    n_qubits = input.get("n_qubits")
+    ansatz = input.get("ansatz")
+    parameters = input.get("parameters")
+    observable = input.get("observable")
 
-    circuit = VQEAlgorithm.create_circuit()
+    # check Unitary operator (qasm string)
+    if ansatz is not None:
+        if parameters is not None:
+            return bad_request(
+                'Custom ansatz and parameters not supported. Remove "parameters" field!'
+            )
+        try:
+            ansatz = QuantumCircuit.from_qasm_str(ansatz)
+        except Exception as err:
+            return bad_request("Invalid ansatz (qasm string): " + str(err))
+    # if custom ansatz is chosen
+    if parameters is None:
+        parameters = []
+    try:
+        observable = PauliParser.parse(observable)
+    except ValueError as err:
+        return bad_request("Invalid observable: " + str(err))
+
+    # check if number of parameters match ansatz
+    try:
+        circuit = VQEAlgorithm.create_circuit(ansatz, parameters, observable)
+    except ValueError as err:
+        return bad_request("Verify correctness of parameters: " + str(err))
+
     return CircuitResponse(
         circuit.qasm(),
         "algorithm/vqe",
@@ -156,9 +162,32 @@ def generate_vqe_circuit(input):
 
 
 def generate_grover_circuit(input):
-    n_qubits = input.get("n_qubits")
+    oracle = input.get("oracle")
+    iterations = input.get("iterations")
+    reflection_qubits = input.get("reflection_qubits")
+    initial_state = input.get("initial_state")
+    barriers = input.get("barriers")
 
-    circuit = GroverAlgorithm.create_circuit()
+    # check oracle (qasm string)
+    try:
+        if oracle is not None:
+            oracle = QuantumCircuit.from_qasm_str(oracle)
+    except Exception as err:
+        return bad_request("Invalid oracle (qasm string): " + str(err))
+    # check initial_state (qasm string)
+    try:
+        if initial_state is not None:
+            initial_state = QuantumCircuit.from_qasm_str(initial_state)
+    except Exception as err:
+        return bad_request("Invalid initial_state (qasm string): " + str(err))
+
+    # default number of iterations
+    if iterations is None:
+        iterations = 1
+
+    circuit = GroverAlgorithm.create_circuit(
+        oracle, iterations, reflection_qubits, initial_state, barriers
+    )
     return CircuitResponse(
         circuit.qasm(),
         "algorithm/grover",

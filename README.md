@@ -15,6 +15,7 @@ It implements a selection of commonly used encodings, algorithms, and algorithm 
 * Quantum algorithms can solve difficult problems efficiently on a quantum computer. Currently, the following algorithms are supported:
     * [QAOA](https://quantumcomputingpatterns.org/#/patterns/9) for the Maximum Cut (MaxCut) and Traveling Sales Person (TSP) problems
     * [HHL algorithm](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.103.150502) to solve systems of linear equations
+    * [VQE](https://quantumcomputingpatterns.org/#/patterns/7) for approximating the lowest eigenvalue of a matrix
 
 ## Running the Service
 The easiest way to get start is using a pre-built Docker image:

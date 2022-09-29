@@ -140,3 +140,6 @@ dmypy.json
 #temp + coverage folder & files
 /tmp/*
 /htmlcov/*
+
+#Docker
+.dockerignore

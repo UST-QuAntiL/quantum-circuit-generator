@@ -33,25 +33,6 @@ class QAOAAlgorithmRequestSchema(ma.Schema):
     betas = ma.fields.List(ma.fields.Float())
 
 
-class VQLSAlgorithmRequest:
-    def __init__(self, matrix, vector, alphas, l, lp, ansatz):
-        self.matrix = matrix
-        self.vector = vector
-        self.alphas = alphas
-        self.l = l
-        self.lp = lp
-        self.ansatz = ansatz
-
-
-class VQLSAlgorithmRequestSchema(ma.Schema):
-    matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
-    vector = ma.fields.List(ma.fields.Float())
-    alphas = ma.fields.List(ma.fields.Float())
-    l = ma.fields.Int()
-    lp = ma.fields.Int()
-    ansatz = ma.fields.String()
-
-
 class QFTAlgorithmRequest:
     def __init__(self, n_qubits, inverse, barriers):
         self.n_qubits = n_qubits
@@ -77,21 +58,33 @@ class QPEAlgorithmRequestSchema(ma.Schema):
 
 
 class VQEAlgorithmRequest:
-    def __init__(self, n_qubits, inverse, barriers):
-        self.n_qubits = n_qubits
+    def __init__(self, ansatz, parameters, observable):
+        self.ansatz = ansatz
+        self.parameters = parameters
+        self.observable = observable
 
 
 class VQEAlgorithmRequestSchema(ma.Schema):
-    n_qubits = ma.fields.Int()
+    ansatz = ma.fields.String()
+    parameters = ma.fields.List(ma.fields.Float())
+    observable = ma.fields.String()
 
 
 class GroverAlgorithmRequest:
-    def __init__(self, n_qubits, inverse, barriers):
-        self.n_qubits = n_qubits
+    def __init__(self, oracle, iterations, reflection_qubits, initial_state, barriers):
+        self.oracle = n_qubits
+        self.iterations = iterations
+        self.reflection_qubits = reflection_qubits
+        self.initial_state = initial_state
+        self.barriers = barriers
 
 
 class GroverAlgorithmRequestSchema(ma.Schema):
-    n_qubits = ma.fields.Int()
+    oracle = ma.fields.String()
+    iterations = ma.fields.Int()
+    reflection_qubits = ma.fields.List(ma.fields.Int())
+    initial_state = ma.fields.String()
+    barriers = ma.fields.Bool()
 
 
 class MaxCutQAOAAlgorithmRequest:
