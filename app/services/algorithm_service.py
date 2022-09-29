@@ -5,7 +5,6 @@ from app.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from app.services.algorithms.hhl_algorithm import HHLAlgorithm
 from app.services.algorithms.qaoa_algorithm import QAOAAlgorithm
-from app.services.algorithms.vqls_algorithm import VQLSAlgorithm
 from app.services.algorithms.qft_algorithm import QFTAlgorithm
 from app.services.algorithms.qpe_algorithm import QPEAlgorithm
 from app.services.algorithms.vqe_algorithm import VQEAlgorithm
@@ -85,24 +84,6 @@ def generate_qaoa_circuit(input):
     )
     return CircuitResponse(
         circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
-    )
-
-
-def generate_vqls_circuit(input):
-    matrix = input.get("matrix")
-    vector = input.get("vector")
-    alphas = input.get("alphas")
-    l = input.get("l")
-    lp = input.get("lp")
-    ansatz = input.get("ansatz")
-
-    circuit = VQLSAlgorithm.create_circuit(matrix, vector, alphas, l, lp, ansatz)
-    return CircuitResponse(
-        circuit.qasm(),
-        "algorithm/vqls",
-        circuit.num_qubits,
-        circuit.depth(),
-        input,
     )
 
 

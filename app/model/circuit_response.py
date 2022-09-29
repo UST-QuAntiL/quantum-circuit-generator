@@ -8,7 +8,6 @@ from app.model.encoding_request import (
 )
 from app.model.algorithm_request import (
     HHLAlgorithmRequestSchema,
-    VQLSAlgorithmRequestSchema,
     QAOAAlgorithmRequestSchema,
     QFTAlgorithmRequestSchema,
     QPEAlgorithmRequestSchema,
@@ -73,12 +72,6 @@ class HHLResponseSchema(CircuitResponseSchema):
 
 class QAOAResponseSchema(CircuitResponseSchema):
     input = ma.fields.Nested(QAOAAlgorithmRequestSchema)
-
-
-class VQLSResponseSchema(CircuitResponseSchema):
-    # TODO return list of circuits
-    # circuit = ma.fields.List(ma.fields.String())
-    input = ma.fields.Nested(VQLSAlgorithmRequestSchema)
 
 
 class QFTResponseSchema(CircuitResponseSchema):

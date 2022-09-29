@@ -33,25 +33,6 @@ class QAOAAlgorithmRequestSchema(ma.Schema):
     betas = ma.fields.List(ma.fields.Float())
 
 
-class VQLSAlgorithmRequest:
-    def __init__(self, matrix, vector, alphas, l, lp, ansatz):
-        self.matrix = matrix
-        self.vector = vector
-        self.alphas = alphas
-        self.l = l
-        self.lp = lp
-        self.ansatz = ansatz
-
-
-class VQLSAlgorithmRequestSchema(ma.Schema):
-    matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
-    vector = ma.fields.List(ma.fields.Float())
-    alphas = ma.fields.List(ma.fields.Float())
-    l = ma.fields.Int()
-    lp = ma.fields.Int()
-    ansatz = ma.fields.String()
-
-
 class QFTAlgorithmRequest:
     def __init__(self, n_qubits, inverse, barriers):
         self.n_qubits = n_qubits

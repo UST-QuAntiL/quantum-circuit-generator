@@ -5,7 +5,6 @@ from app.model.circuit_response import (
     CircuitResponseSchema,
     HHLResponseSchema,
     QAOAResponseSchema,
-    VQLSResponseSchema,
     QFTResponseSchema,
     QPEResponseSchema,
     VQEResponseSchema,
@@ -16,8 +15,6 @@ from app.model.algorithm_request import (
     HHLAlgorithmRequest,
     QAOAAlgorithmRequestSchema,
     QAOAAlgorithmRequest,
-    VQLSAlgorithmRequestSchema,
-    VQLSAlgorithmRequest,
     QFTAlgorithmRequestSchema,
     QFTAlgorithmRequest,
     QPEAlgorithmRequestSchema,
@@ -66,24 +63,6 @@ def encoding(json: HHLAlgorithmRequest):
 def encoding(json: QAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_qaoa_circuit(json)
-
-
-@blp.route("/vqls", methods=["POST"])
-@blp.arguments(
-    VQLSAlgorithmRequestSchema,
-    example=dict(
-        matrix=[[1.0, 2.0], [2.0, -1.0]],
-        vector=[0, 1],
-        alphas=[1] * 8,
-        l=0,
-        lp=0,
-        ansatz="EfficientSU2",
-    ),
-)
-@blp.response(200, VQLSResponseSchema)
-def encoding(json: VQLSAlgorithmRequest):
-    if json:
-        return algorithm_service.generate_vqls_circuit(json)
 
 
 @blp.route("/qft", methods=["POST"])
