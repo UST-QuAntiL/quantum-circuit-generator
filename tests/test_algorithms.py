@@ -31,9 +31,9 @@ class FlaskClientTestCase(unittest.TestCase):
             ),
             content_type="application/json",
         )
-        self.assertTrue(
-            "Invalid matrix input! Matrix must be square."
-            in response.get_json().get("message")
+        self.assertEqual(
+            "Invalid matrix input! Matrix must be square.",
+            response.get_json().get("message"),
         )
         self.assertEqual(response.status_code, 400)
 
@@ -42,9 +42,9 @@ class FlaskClientTestCase(unittest.TestCase):
             data=json.dumps({"matrix": [[1.5, 0.8], [0.5, 1.5]], "vector": [0, 1]}),
             content_type="application/json",
         )
-        self.assertTrue(
-            "Invalid matrix input! Matrix must be hermitian."
-            in response.get_json().get("message")
+        self.assertEquals(
+            "Invalid matrix input! Matrix must be hermitian.",
+            response.get_json().get("message"),
         )
         self.assertEqual(response.status_code, 400)
 
@@ -402,7 +402,7 @@ class FlaskClientTestCase(unittest.TestCase):
                         [0, 1, 1, 0],
                     ],
                     "p": 2,
-                    "parameterized": "true"
+                    "parameterized": "true",
                 }
             ),
             content_type="application/json",

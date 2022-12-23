@@ -36,7 +36,9 @@ class MaxCutQAOAAlgorithm:
         return PauliSumOp.from_list(pauli_list)
 
     @classmethod
-    def create_circuit(cls, adj_matrix, betas = None, gammas = None, p =1 , parameterized=False):
+    def create_circuit(
+        cls, adj_matrix, betas=None, gammas=None, p=1, parameterized=False
+    ):
         """
         :param adj_matrix: adjacency matrix describing the undirected graph
         :param beta: beta parameter used in qaoa
@@ -50,17 +52,15 @@ class MaxCutQAOAAlgorithm:
         reps = p or len(betas)
         operator = cls.create_operator(adj_matrix)
 
-
         if parameterized:
             gammas = []
             betas = []
             for i in range(p):
-                gammas.append(Parameter('gamma' + str(i)))
-                betas.append(Parameter('beta' + str(i)))
+                gammas.append(Parameter("gamma" + str(i)))
+                betas.append(Parameter("beta" + str(i)))
             angles = betas + gammas
         else:
             angles = betas + gammas
-
 
         qaoa = QAOA(reps=reps)
         qaoa_qc = qaoa.construct_circuit(angles, operator)[0]

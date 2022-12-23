@@ -151,10 +151,12 @@ def encoding(json):
         betas=[1.0],
         gammas=[1.0],
         p=1,
-        parameterized=False
+        parameterized=False,
     ),
 )
 @blp.response(200, CircuitResponseSchema)
 def get_maxcut_circuit(json: dict):
     if json:
-        return algorithm_service.generate_max_cut_qaoa_circuit(MaxCutQAOAAlgorithmRequest(**json))
+        return algorithm_service.generate_max_cut_qaoa_circuit(
+            MaxCutQAOAAlgorithmRequest(**json)
+        )
