@@ -72,7 +72,7 @@ class VQEAlgorithmRequestSchema(ma.Schema):
 
 class GroverAlgorithmRequest:
     def __init__(self, oracle, iterations, reflection_qubits, initial_state, barriers):
-        self.oracle = n_qubits
+        self.oracle = oracle
         self.iterations = iterations
         self.reflection_qubits = reflection_qubits
         self.initial_state = initial_state
@@ -88,16 +88,20 @@ class GroverAlgorithmRequestSchema(ma.Schema):
 
 
 class MaxCutQAOAAlgorithmRequest:
-    def __init__(self, matrix, beta, gamma):
-        self.adj_matrix = matrix
-        self.beta = beta
-        self.gamma = gamma
+    def __init__(self, adj_matrix, betas=None, gammas=None, p=1, parameterized=False):
+        self.adj_matrix = adj_matrix
+        self.betas = betas
+        self.gammas = gammas
+        self.p = p
+        self.parameterized = parameterized
 
 
 class MaxCutQAOAAlgorithmRequestSchema(ma.Schema):
-    adj_matrix = ma.fields.List(ma.fields.List(ma.fields.Float()))
-    beta = ma.fields.Float()
-    gamma = ma.fields.Float()
+    adj_matrix = ma.fields.List(ma.fields.List(ma.fields.Float()), required=True)
+    betas = ma.fields.List(ma.fields.Float())
+    gammas = ma.fields.List(ma.fields.Float())
+    p = ma.fields.Integer(required=False)
+    parameterized = ma.fields.Boolean(required=False)
 
 
 class TSPQAOAAlgorithmRequest:

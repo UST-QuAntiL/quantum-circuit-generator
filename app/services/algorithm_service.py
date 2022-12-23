@@ -1,3 +1,8 @@
+import base64
+import codecs
+import pickle
+
+
 import numpy as np
 
 from app.services.algorithms.maxcut_qaoa_algorithm import MaxCutQAOAAlgorithm
@@ -22,16 +27,16 @@ def generate_hhl_circuit(input):
     matrix_array = np.array(matrix)
     vector_array = np.array(vector)
     if matrix_array.shape[0] != matrix_array.shape[1]:
-        return bad_request("Invalid matrix input! Matrix must be square.")
+        return bad_request("Invalid matrix request! Matrix must be square.")
     hermitian = np.allclose(matrix_array, matrix_array.conj().T)
     if not hermitian:
-        return bad_request("Invalid matrix input! Matrix must be hermitian.")
+        return bad_request("Invalid matrix request! Matrix must be hermitian.")
     if matrix_array.shape[0] != vector_array.shape[0]:
         return bad_request(
-            "Invalid matrix, vector input! Matrix and vector must be of the same dimension."
+            "Invalid matrix, vector request! Matrix and vector must be of the same dimension."
         )
     if np.log2(matrix_array.shape[0]) % 1 != 0:
-        return bad_request("Invalid matrix input! Input matrix dimension must be 2^n.")
+        return bad_request("Invalid matrix request! Input matrix dimension must be 2^n.")
 
     circuit = HHLAlgorithm.create_circuit(matrix, vector)
     return CircuitResponse(
@@ -197,13 +202,12 @@ def generate_grover_circuit(input):
     )
 
 
-def generate_max_cut_qaoa_circuit(input):
-    adj_matrix = input.get("adj_matrix")
-    beta = input.get("beta")
-    gamma = input.get("gamma")
-    circuit = MaxCutQAOAAlgorithm.create_circuit(adj_matrix, beta, gamma)
+def generate_max_cut_qaoa_circuit(request):
+    circuit = MaxCutQAOAAlgorithm.create_circuit(request.adj_matrix, request.betas, request.gammas, request.p, request.parameterized)
+    returnCircuit = circuit.qasm() if not request.parameterized else codecs.encode(pickle.dumps(circuit), "base64").decode()
+    print(returnCircuit)
     return CircuitResponse(
-        circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
+        returnCircuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request
     )
 
 

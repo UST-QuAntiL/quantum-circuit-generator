@@ -126,7 +126,6 @@ def encoding(json: GroverAlgorithmRequest):
 
 
 @blp.route("/tspqaoa", methods=["POST"])
-@blp.etag
 @blp.arguments(
     TSPQAOAAlgorithmRequestSchema,
     example=dict(
@@ -138,7 +137,7 @@ def encoding(json: GroverAlgorithmRequest):
     description="Currently, only 3x3 and 4x4 matrices supported.",
 )
 @blp.response(200, CircuitResponseSchema)
-def encoding(json: TSPQAOAAlgorithmRequest):
+def encoding(json):
     if json:
         return algorithm_service.generate_tsp_qaoa_circuit(json)
 
@@ -149,11 +148,13 @@ def encoding(json: TSPQAOAAlgorithmRequest):
     MaxCutQAOAAlgorithmRequestSchema,
     example=dict(
         adj_matrix=[[0, 1, 1, 0], [1, 0, 1, 1], [1, 1, 0, 1], [0, 1, 1, 0]],
-        beta=1.0,
-        gamma=1.0,
+        betas=[1.0],
+        gammas=[1.0],
+        p=1,
+        parameterized=False
     ),
 )
 @blp.response(200, CircuitResponseSchema)
-def encoding(json: MaxCutQAOAAlgorithmRequest):
+def get_maxcut_circuit(json: dict):
     if json:
-        return algorithm_service.generate_max_cut_qaoa_circuit(json)
+        return algorithm_service.generate_max_cut_qaoa_circuit(MaxCutQAOAAlgorithmRequest(**json))

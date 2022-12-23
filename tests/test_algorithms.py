@@ -375,8 +375,8 @@ class FlaskClientTestCase(unittest.TestCase):
                         [1, 1, 0, 1],
                         [0, 1, 1, 0],
                     ],
-                    "beta": 0.7,
-                    "gamma": 1.2,
+                    "betas": [0.7],
+                    "gammas": [1.2],
                 }
             ),
             content_type="application/json",
@@ -388,6 +388,29 @@ class FlaskClientTestCase(unittest.TestCase):
         )
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
+
+    def test_maxcutqaoa_algorithm_parameterized(self):
+        # test simple 4 node graph
+        response = self.client.post(
+            "/algorithms/maxcutqaoa",
+            data=json.dumps(
+                {
+                    "adj_matrix": [
+                        [0, 1, 1, 0],
+                        [1, 0, 1, 1],
+                        [1, 1, 0, 1],
+                        [0, 1, 1, 0],
+                    ],
+                    "p": 2,
+                    "parameterized": "true"
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(4, response.get_json().get("n_qubits"))
+        self.assertIsNotNone(response.get_json().get("circuit"))
+        self.assertEqual(response.status_code, 200)
+        print(response.get_json().get("circuit"))
 
     def test_qft_algorithm(self):
         # Test 4 qubit QFT
