@@ -67,5 +67,6 @@ class MaxCutQAOAAlgorithm:
 
         # decompose exp gates
         qaoa_qc = QAOAAlgorithm.decompose_operator_gates(qaoa_qc)
+        qaoa_qc.measure_all()
 
         return qaoa_qc
