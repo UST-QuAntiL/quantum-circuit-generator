@@ -382,10 +382,10 @@ class FlaskClientTestCase(unittest.TestCase):
             content_type="application/json",
         )
         self.assertEqual(4, response.get_json().get("n_qubits"))
-        match = re.search(
-            "\nqreg q.*;\nh q.*;\nh q.*;\nrzz\(1.2\) q.*,q.*;\nh q.*;\nrzz\(1.2\) q.*,q.*;\nrx\(1.4\) q.*;\nrzz\(1.2\) q.*,q.*;\nh q.*;\nrzz\(1.2\) q.*,q.*;\nrx\(1.4\) q.*;\nrzz\(1.2\) q.*,q.*;\nrx\(1.4\) q.*;\nrx\(1.4\) q.*;\n",
-            response.get_json().get("circuit"),
+        match = "rzz(1.2) q[0],q[1];\nh q[2];\nrzz(1.2)" in response.get_json().get(
+            "circuit"
         )
+
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
 
@@ -410,7 +410,6 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(4, response.get_json().get("n_qubits"))
         self.assertIsNotNone(response.get_json().get("circuit"))
         self.assertEqual(response.status_code, 200)
-        print(response.get_json().get("circuit"))
 
     def test_qft_algorithm(self):
         # Test 4 qubit QFT
