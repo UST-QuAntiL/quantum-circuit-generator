@@ -88,20 +88,30 @@ class GroverAlgorithmRequestSchema(ma.Schema):
 
 
 class MaxCutQAOAAlgorithmRequest:
-    def __init__(self, adj_matrix, betas=None, gammas=None, p=1, parameterized=False):
+    def __init__(
+        self,
+        adj_matrix,
+        betas=None,
+        gammas=None,
+        p=1,
+        parameterized=False,
+        initial_state=None,
+    ):
         self.adj_matrix = adj_matrix
         self.betas = betas
         self.gammas = gammas
         self.p = p
         self.parameterized = parameterized
+        self.initial_state = initial_state
 
 
 class MaxCutQAOAAlgorithmRequestSchema(ma.Schema):
     adj_matrix = ma.fields.List(ma.fields.List(ma.fields.Float()), required=True)
-    betas = ma.fields.List(ma.fields.Float())
-    gammas = ma.fields.List(ma.fields.Float())
+    betas = ma.fields.List(ma.fields.Float(), required=False)
+    gammas = ma.fields.List(ma.fields.Float(), required=False)
     p = ma.fields.Integer(required=False)
     parameterized = ma.fields.Boolean(required=False)
+    initial_state = ma.fields.String(required=False)
 
 
 class TSPQAOAAlgorithmRequest:

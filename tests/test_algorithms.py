@@ -411,6 +411,60 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertIsNotNone(response.get_json().get("circuit"))
         self.assertEqual(response.status_code, 200)
 
+    def test_maxcutqaoa_algorithm_initialState(self):
+        # test simple 4 node graph
+        response = self.client.post(
+            "/algorithms/maxcutqaoa",
+            data=json.dumps(
+                {
+                    "adj_matrix": [
+                        [0, 1, 1, 0],
+                        [1, 0, 1, 1],
+                        [1, 1, 0, 1],
+                        [0, 1, 1, 0],
+                    ],
+                    "betas": [0.7],
+                    "gammas": [1.2],
+                    "initial_state": "1001",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(4, response.get_json().get("n_qubits"))
+        match = "rzz(1.2) q[0],q[1];\nh q[2];\nrzz(1.2)" in response.get_json().get(
+            "circuit"
+        )
+
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
+    def test_maxcutqaoa_algorithm_initialState_parameterized(self):
+        # test simple 4 node graph
+        response = self.client.post(
+            "/algorithms/maxcutqaoa",
+            data=json.dumps(
+                {
+                    "adj_matrix": [
+                        [0, 1, 1, 0],
+                        [1, 0, 1, 1],
+                        [1, 1, 0, 1],
+                        [0, 1, 1, 0],
+                    ],
+                    "parameterized": True,
+                    "initial_state": "1001",
+                    "p": 2,
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(4, response.get_json().get("n_qubits"))
+        match = "rzz(1.2) q[0],q[1];\nh q[2];\nrzz(1.2)" in response.get_json().get(
+            "circuit"
+        )
+
+        self.assertTrue(match is not None)
+        self.assertEqual(response.status_code, 200)
+
     def test_qft_algorithm(self):
         # Test 4 qubit QFT
         response = self.client.post(

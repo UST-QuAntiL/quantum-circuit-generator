@@ -5,7 +5,11 @@ import pickle
 
 import numpy as np
 
+from app.model.algorithm_request import MaxCutQAOAAlgorithmRequest
 from app.services.algorithms.maxcut_qaoa_algorithm import MaxCutQAOAAlgorithm
+from app.services.algorithms.maxcut_qaoa_warm_start_algorithm import (
+    MaxCutQAOAWarmStartAlgorithm,
+)
 from app.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from app.services.algorithms.hhl_algorithm import HHLAlgorithm
@@ -202,14 +206,33 @@ def generate_grover_circuit(input):
     )
 
 
-def generate_max_cut_qaoa_circuit(request):
-    circuit = MaxCutQAOAAlgorithm.create_circuit(
-        request.adj_matrix,
-        request.betas,
-        request.gammas,
-        request.p,
-        request.parameterized,
-    )
+def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
+    if request.initial_state is not None:
+        if request.parameterized:
+            circuit = MaxCutQAOAWarmStartAlgorithm.genQaoaMaxcutCircuitTemplate(
+                request.adj_matrix, request.initial_state, request.p
+            )
+        else:
+            import itertools
+
+            params = [
+                x
+                for x in itertools.chain.from_iterable(
+                    itertools.zip_longest(request.gammas, request.betas)
+                )
+                if x is not None
+            ]
+            circuit = MaxCutQAOAWarmStartAlgorithm.genQaoaMaxcutCircuit(
+                request.adj_matrix, params, request.initial_state, request.p
+            )
+    else:
+        circuit = MaxCutQAOAAlgorithm.create_circuit(
+            request.adj_matrix,
+            request.betas,
+            request.gammas,
+            request.p,
+            request.parameterized,
+        )
     returnCircuit = (
         circuit.qasm()
         if not request.parameterized
