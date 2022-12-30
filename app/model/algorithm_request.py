@@ -96,6 +96,7 @@ class MaxCutQAOAAlgorithmRequest:
         p=1,
         parameterized=False,
         initial_state=None,
+        epsilon=0.25,
     ):
         self.adj_matrix = adj_matrix
         self.betas = betas
@@ -103,6 +104,7 @@ class MaxCutQAOAAlgorithmRequest:
         self.p = p
         self.parameterized = parameterized
         self.initial_state = initial_state
+        self.epsilon = epsilon
 
 
 class MaxCutQAOAAlgorithmRequestSchema(ma.Schema):
@@ -112,6 +114,7 @@ class MaxCutQAOAAlgorithmRequestSchema(ma.Schema):
     p = ma.fields.Integer(required=False)
     parameterized = ma.fields.Boolean(required=False)
     initial_state = ma.fields.String(required=False)
+    epsilon = ma.fields.Float(required=False)
 
 
 class TSPQAOAAlgorithmRequest:

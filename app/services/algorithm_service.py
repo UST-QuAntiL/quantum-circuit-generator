@@ -210,7 +210,7 @@ def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
     if request.initial_state is not None:
         if request.parameterized:
             circuit = MaxCutQAOAWarmStartAlgorithm.genQaoaMaxcutCircuitTemplate(
-                request.adj_matrix, request.initial_state, request.p
+                request.adj_matrix, request.initial_state, request.p, request.epsilon
             )
         else:
             import itertools
@@ -223,7 +223,11 @@ def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
                 if x is not None
             ]
             circuit = MaxCutQAOAWarmStartAlgorithm.genQaoaMaxcutCircuit(
-                request.adj_matrix, params, request.initial_state, request.p
+                request.adj_matrix,
+                params,
+                request.initial_state,
+                request.p,
+                request.epsilon,
             )
     else:
         circuit = MaxCutQAOAAlgorithm.create_circuit(

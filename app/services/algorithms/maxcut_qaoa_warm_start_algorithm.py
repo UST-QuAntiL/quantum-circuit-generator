@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from qiskit.circuit.parameter import Parameter
 import numpy as np
@@ -7,8 +9,18 @@ from builtins import isinstance
 class MaxCutQAOAWarmStartAlgorithm:
     @classmethod
     def genQaoaMaxcutCircuitTemplate(
-        cls, graph, initial=None, p=1, measure=True, suppressClassicalRegister=False
+        cls,
+        graph,
+        initialString=None,
+        p=1,
+        measure=True,
+        suppressClassicalRegister=False,
+        epsilon=0.25,
     ):
+        initialIntList = [int(i) for i in initialString]
+        initalEpsilonAdjustListed = cls.epsilon_function(
+            initialIntList, epsilon=epsilon
+        )
         # prepare the quantum and classical resisters
         graph = np.asarray(graph)
         n_vertices = graph.shape[0]
@@ -21,10 +33,11 @@ class MaxCutQAOAWarmStartAlgorithm:
         gammas = [Parameter("γ" + str(i + 1)) for i in range(p)]
         betas = [Parameter("β" + str(i + 1)) for i in range(p)]
 
-        if initial:
+        if initalEpsilonAdjustListed:
             for qubits in range(n_vertices):
-                precomputed_value = int(initial[qubits])
-                QAOA.ry(2 * np.arcsin(np.sqrt(precomputed_value)), qubits)
+                QAOA.ry(
+                    2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])), qubits
+                )
         else:
             # apply the layer of Hadamard gates to all qubits
             QAOA.h(range(n_vertices))
@@ -42,18 +55,23 @@ class MaxCutQAOAWarmStartAlgorithm:
             # then apply the single qubit X rotations with angle beta to all qubits
             QAOA.barrier()
 
-            if initial:
+            if initalEpsilonAdjustListed:
                 for qubits in range(n_vertices):
-                    precomputed_value = int(initial[qubits])
                     # adapted egger et al. WS-Mixer
-                    QAOA.ry(2 * np.arcsin(np.sqrt(precomputed_value)), qubits)
+                    QAOA.ry(
+                        2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])),
+                        qubits,
+                    )
                     QAOA.rz(-2 * betas[iter], qubits)
-                    QAOA.ry(-2 * np.arcsin(np.sqrt(precomputed_value)), qubits)
+                    QAOA.ry(
+                        -2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])),
+                        qubits,
+                    )
 
                     # default WS-Mixer
-                    # QAOA.ry(-2 * np.arcsin(np.sqrt(precomputed_value)), qubits)
+                    # QAOA.ry(-2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])), qubits)
                     # QAOA.rz(-2 * betas[iter], qubits)
-                    # QAOA.ry(2 * np.arcsin(np.sqrt(precomputed_value)), qubits)
+                    # QAOA.ry(2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])), qubits)
             else:
                 QAOA.rx(2 * betas[iter], range(n_vertices))
 
@@ -65,9 +83,9 @@ class MaxCutQAOAWarmStartAlgorithm:
         return QAOA
 
     @classmethod
-    def genQaoaMaxcutCircuit(cls, graph, params, initial=None, p=1):
+    def genQaoaMaxcutCircuit(cls, graph, params, initial=None, p=1, epsilon=0.25):
         template = cls.genQaoaMaxcutCircuitTemplate(
-            graph, initial if initial else None, p
+            graph, initial if initial else None, p=p, epsilon=epsilon
         )
         return cls.assignParameters(template, params)
 
@@ -89,3 +107,16 @@ class MaxCutQAOAWarmStartAlgorithm:
                     parameter_dict[parameter] = params[i]
             params = parameter_dict
         return circuit_template.assign_parameters(params)
+
+    @classmethod
+    def epsilon_function(cls, initial, epsilon=0.25):
+        cut = deepcopy(initial)
+        epsilon = 0 if epsilon < 0 else epsilon
+        epsilon = 0.5 if epsilon > 0.5 else epsilon
+        # increase distance of continuous values from exact 0 and 1
+        for i in range(len(cut)):
+            if cut[i] > 1 - epsilon:
+                cut[i] = 1 - epsilon
+            if cut[i] < epsilon:
+                cut[i] = epsilon
+        return cut
