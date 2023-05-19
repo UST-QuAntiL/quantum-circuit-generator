@@ -27,6 +27,8 @@ from app.model.algorithm_request import (
     TSPQAOAAlgorithmRequestSchema,
     MaxCutQAOAAlgorithmRequestSchema,
     MaxCutQAOAAlgorithmRequest,
+    KnapsackQAOAAlgorithmRequest,
+    KnapsackQAOAAlgorithmRequestSchema,
 )
 
 
@@ -160,3 +162,21 @@ def get_maxcut_circuit(json: dict):
         return algorithm_service.generate_max_cut_qaoa_circuit(
             MaxCutQAOAAlgorithmRequest(**json)
         )
+
+
+@blp.route("/knapsackqaoa", methods=["POST"])
+@blp.etag
+@blp.arguments(
+    KnapsackQAOAAlgorithmRequestSchema,
+    example=dict(
+        items=[{"value": 5, "weight": 2}, {"value": 2, "weight": 1}, {"value": 3, "weight": 2}],
+        max_weights=20,
+        p=2,
+        betas=[1.0],
+        gammas=[1.0],
+    ),
+)
+@blp.response(200, CircuitResponseSchema)
+def get_knapsack_circuit(json: KnapsackQAOAAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_knapsack_qaoa_circuit(json)
