@@ -1,5 +1,5 @@
 import qiskit
-from itertools import product, combinations
+from itertools import product
 
 
 class TSPQAOAAlgorithm:
