@@ -29,10 +29,14 @@ class KnapsackQAOAAlgorithm:
         print('Number of required Qubits:', operator.num_qubits)
         print('Offset:', offset)
 
+        if betas is None:  # case for custom mixer
+            angles = gammas
+        else:
+            angles = betas + gammas
+        print('Angles:', angles)
+
         # generate circuit
         qaoa = QAOA(reps=p)
-        print('Operator:', operator)
-        print(operator.parameters)
-        qaoa_qc = qaoa.construct_circuit([], operator)[0]
-        print(qaoa_qc)
+        qaoa_qc = qaoa.construct_circuit(angles, operator)[0]
+        qaoa_qc = qaoa_qc.decompose(reps=100)
         return qaoa_qc
