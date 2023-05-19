@@ -837,7 +837,7 @@ class FlaskClientTestCase(unittest.TestCase):
                 content_type="application/json",
             )
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(n ** 2, response.get_json().get("n_qubits"))
+            self.assertEqual(n**2, response.get_json().get("n_qubits"))
 
             openqasm = response.get_json().get("circuit")
             qc = QuantumCircuit.from_qasm_str(openqasm)

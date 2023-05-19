@@ -10,8 +10,8 @@ class AmplitudeEncoding:
         Fill up with "fill_up_with" to match dimension of n_qubits ** 2
         Normalize data to length |a| ** 2 = 1
         """
-        if fill_up_with is not None and len(vector) < 2 ** n_qubits:
-            filler = [fill_up_with] * (2 ** n_qubits - len(vector))
+        if fill_up_with is not None and len(vector) < 2**n_qubits:
+            filler = [fill_up_with] * (2**n_qubits - len(vector))
             vector = vector + filler
 
         # normalize

@@ -6,7 +6,9 @@ import numpy as np
 from app.model.algorithm_request import MaxCutQAOAAlgorithmRequest
 from app.services.algorithms.knapsack_qaoa_algorithm import KnapsackQAOAAlgorithm
 from app.services.algorithms.maxcut_qaoa_algorithm import MaxCutQAOAAlgorithm
-from app.services.algorithms.maxcut_qaoa_warm_start_algorithm import MaxCutQAOAWarmStartAlgorithm
+from app.services.algorithms.maxcut_qaoa_warm_start_algorithm import (
+    MaxCutQAOAWarmStartAlgorithm,
+)
 from app.services.algorithms.tsp_qaoa_algorithm import TSPQAOAAlgorithm
 from qiskit.circuit.quantumcircuit import QuantumCircuit
 from app.services.algorithms.hhl_algorithm import HHLAlgorithm
@@ -258,13 +260,19 @@ def generate_tsp_qaoa_circuit(input):
 
 def generate_knapsack_qaoa_circuit(input):
     items = input.get("items")
-    values = [d['value'] for d in items]
-    weights = [d['weight'] for d in items]
+    values = [d["value"] for d in items]
+    weights = [d["weight"] for d in items]
     max_weights = input.get("max_weights")
     p = input.get("p")
     betas = input.get("betas")
     gammas = input.get("gammas")
-    circuit = KnapsackQAOAAlgorithm.create_circuit(values, weights, max_weights, p, betas, gammas)
+    circuit = KnapsackQAOAAlgorithm.create_circuit(
+        values, weights, max_weights, p, betas, gammas
+    )
     return CircuitResponse(
-        circuit.qasm(), "algorithm/knapsackqaoa", circuit.num_qubits, circuit.depth(), input
+        circuit.qasm(),
+        "algorithm/knapsackqaoa",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
     )

@@ -142,7 +142,9 @@ class KnapsackQAOAAlgorithmRequest:
 
 
 class KnapsackQAOAAlgorithmRequestSchema(ma.Schema):
-    items = ma.fields.List(ma.fields.Dict(keys=ma.fields.Str(), values=ma.fields.Float()))
+    items = ma.fields.List(
+        ma.fields.Dict(keys=ma.fields.Str(), values=ma.fields.Float())
+    )
     max_weights = ma.fields.Integer()
     p = ma.fields.Integer()
     betas = ma.fields.List(ma.fields.Float())

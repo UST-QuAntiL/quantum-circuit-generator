@@ -169,7 +169,11 @@ def get_maxcut_circuit(json: dict):
 @blp.arguments(
     KnapsackQAOAAlgorithmRequestSchema,
     example=dict(
-        items=[{"value": 5, "weight": 2}, {"value": 2, "weight": 1}, {"value": 3, "weight": 2}],
+        items=[
+            {"value": 5, "weight": 2},
+            {"value": 2, "weight": 1},
+            {"value": 3, "weight": 2},
+        ],
         max_weights=20,
         p=1,
         betas=[1.0],

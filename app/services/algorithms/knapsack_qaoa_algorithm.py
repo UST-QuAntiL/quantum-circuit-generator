@@ -26,14 +26,14 @@ class KnapsackQAOAAlgorithm:
         # convert to ising model
         converter = QuadraticProgramToQubo()
         operator, offset = converter.convert(quadratic_program).to_ising()
-        print('Number of required Qubits:', operator.num_qubits)
-        print('Offset:', offset)
+        print("Number of required Qubits:", operator.num_qubits)
+        print("Offset:", offset)
 
         if betas is None:  # case for custom mixer
             angles = gammas
         else:
             angles = betas + gammas
-        print('Angles:', angles)
+        print("Angles:", angles)
 
         # generate circuit
         qaoa = QAOA(reps=p)
