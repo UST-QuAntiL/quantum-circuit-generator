@@ -171,7 +171,7 @@ def get_maxcut_circuit(json: dict):
     example=dict(
         items=[{"value": 5, "weight": 2}, {"value": 2, "weight": 1}, {"value": 3, "weight": 2}],
         max_weights=20,
-        p=2,
+        p=1,
         betas=[1.0],
         gammas=[1.0],
     ),
