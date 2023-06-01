@@ -30,8 +30,8 @@ class MaxCutQAOAWarmStartAlgorithm:
         QAOA = QuantumCircuit(*registers)
 
         # prepare the parameters
-        gammas = [Parameter("γ" + str(i + 1)) for i in range(p)]
-        betas = [Parameter("β" + str(i + 1)) for i in range(p)]
+        gammas = [Parameter("gamma" + str(i + 1)) for i in range(p)]
+        betas = [Parameter("beta" + str(i + 1)) for i in range(p)]
 
         if initalEpsilonAdjustListed:
             for qubits in range(n_vertices):
@@ -97,12 +97,12 @@ class MaxCutQAOAWarmStartAlgorithm:
             for i in range(len(params)):
                 if i % 2 == 0:
                     # gamma
-                    param_name = "γ" + str((i // 2) + 1)
+                    param_name = "gamma" + str((i // 2) + 1)
                     parameter = ([x for x in parameters if x.name == param_name])[0]
                     parameter_dict[parameter] = params[i]
                 else:
                     # beta
-                    param_name = "β" + str((i // 2) + 1)
+                    param_name = "beta" + str((i // 2) + 1)
                     parameter = ([x for x in parameters if x.name == param_name])[0]
                     parameter_dict[parameter] = params[i]
             params = parameter_dict
