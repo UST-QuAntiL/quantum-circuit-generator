@@ -14,7 +14,7 @@ from app.model.algorithm_request import (
     VQEAlgorithmRequestSchema,
     GroverAlgorithmRequestSchema,
 )
-
+from app.helpermethods import visualizeQasm
 
 class CircuitResponse:
     def __init__(self, circuit, circuit_type, n_qubits, depth, input):
@@ -25,6 +25,7 @@ class CircuitResponse:
         self.depth = depth
         self.input = input
         self.timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        self.visualization = visualizeQasm(circuit, input)
 
     def to_json(self):
         json_circuit_response = {
@@ -34,6 +35,7 @@ class CircuitResponse:
             "depth": self.depth,
             "timestamp": self.timestamp,
             "input": self.input,
+            "visualization": self.visualization,
         }
         return json_circuit_response
 
@@ -44,6 +46,7 @@ class CircuitResponseSchema(ma.Schema):
     n_qubits = ma.fields.Int()
     depth = ma.fields.Int()
     timestamp = ma.fields.String()
+    visualization = ma.fields.String()
 
     @property
     def input(self):

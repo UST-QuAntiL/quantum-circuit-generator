@@ -237,12 +237,32 @@ def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
             request.p,
             request.parameterized,
         )
+
+    # print(circuit)
+    # print(circuit.draw('latex_source'))
+    # print(circuit.draw('latex'))
+    # print("test")
+    #
+    # # latex_circuit = circuit.draw(output='latex', filename="circuit.png")
+    # from io import BytesIO
+    # import base64
+    # latex_circuit = circuit.draw(output='latex')
+    # buffered = BytesIO()
+    # latex_circuit.save(buffered, format="png")
+    # img_str = base64.b64encode(buffered.getvalue())
+    # print(img_str)
+
     returnCircuit = (
         circuit.qasm()
         if not request.parameterized
         else codecs.encode(pickle.dumps(circuit), "base64").decode()
     )
-    print(returnCircuit)
+    # print(returnCircuit)
+    # print(returnCircuit.draw('latex_source'))
+    # print("test")
+    #
+    # latex_circuit = circuit.draw(output='mpl')
+    # print("123")
     return CircuitResponse(
         returnCircuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request
     )
