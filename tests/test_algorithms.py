@@ -817,6 +817,39 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertTrue(match is not None)
         self.assertEqual(response.status_code, 200)
 
+    def test_knapsack_qaoa(self):
+        # test tsp qaoa and openqasm
+        for i in range(25):
+            item_amount = np.random.randint(2, 5)
+            items = []
+            for i in range(item_amount):
+                item = {}
+                item['value'] = np.random.randint(2, 6)
+                item['weight'] = np.random.randint(1, 3)
+                items.append(item)
+            max_weights = 20
+            p = 1
+            betas, gammas = np.random.rand(p), np.random.rand(p)
+            request = {
+                "items": items,
+                "max_weights": max_weights,
+                "p": p,
+                "betas": betas.tolist(),
+                "gammas": gammas.tolist(),
+            }
+
+            response = self.client.post(
+                "algorithms/knapsackqaoa",
+                data=json.dumps(request),
+                content_type="application/json",
+            )
+            self.assertEqual(response.status_code, 200)
+
+            openqasm = response.get_json().get("circuit")
+            qc = QuantumCircuit.from_qasm_str(openqasm)
+            self.assertTrue(isinstance(qc, QuantumCircuit))
+
+
     def test_tsp_qaoa(self):
         # test tsp qaoa and openqasm
         for i in range(25):
