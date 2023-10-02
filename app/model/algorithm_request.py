@@ -130,3 +130,22 @@ class TSPQAOAAlgorithmRequestSchema(ma.Schema):
     p = ma.fields.Integer()
     betas = ma.fields.List(ma.fields.Float())
     gammas = ma.fields.List(ma.fields.Float())
+
+
+class KnapsackQAOAAlgorithmRequest:
+    def __init__(self, items, max_weights, p, betas, gammas):
+        self.items = items
+        self.max_weights = max_weights
+        self.p = p
+        self.betas = betas
+        self.gammas = gammas
+
+
+class KnapsackQAOAAlgorithmRequestSchema(ma.Schema):
+    items = ma.fields.List(
+        ma.fields.Dict(keys=ma.fields.Str(), values=ma.fields.Float())
+    )
+    max_weights = ma.fields.Integer()
+    p = ma.fields.Integer()
+    betas = ma.fields.List(ma.fields.Float())
+    gammas = ma.fields.List(ma.fields.Float())

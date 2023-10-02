@@ -58,7 +58,7 @@ def coeffToBeta(coeff):
     n_huge = int(np.log2(len(coeff)))
     n = int(np.ceil(n_huge / 2))
     m = n_huge - n
-    beta = np.zeros((2 ** n, 2 ** m))
+    beta = np.zeros((2**n, 2**m))
     formatstring = "0" + str(int(np.log2(len(coeff)))) + "b"
     x_labels = []
     for i in range(len(coeff)):

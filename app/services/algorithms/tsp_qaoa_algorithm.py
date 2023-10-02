@@ -1,11 +1,10 @@
 import qiskit
-from itertools import product, combinations
+from itertools import product
 
 
 class TSPQAOAAlgorithm:
     @classmethod
     def create_circuit(cls, adj_matrix, p, beta, gamma):
-
         """
         Creates a parametrized qaoa circuit
 
