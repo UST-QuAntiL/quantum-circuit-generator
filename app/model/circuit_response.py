@@ -16,6 +16,7 @@ from app.model.algorithm_request import (
 )
 from app.helpermethods import visualizeQasm
 
+
 class CircuitResponse:
     def __init__(self, circuit, circuit_type, n_qubits, depth, input):
         super().__init__()
