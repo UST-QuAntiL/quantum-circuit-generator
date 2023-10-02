@@ -824,8 +824,8 @@ class FlaskClientTestCase(unittest.TestCase):
             items = []
             for i in range(item_amount):
                 item = {}
-                item['value'] = np.random.randint(2, 6)
-                item['weight'] = np.random.randint(1, 3)
+                item["value"] = np.random.randint(2, 6)
+                item["weight"] = np.random.randint(1, 3)
                 items.append(item)
             max_weights = 20
             p = 1
@@ -848,7 +848,6 @@ class FlaskClientTestCase(unittest.TestCase):
             openqasm = response.get_json().get("circuit")
             qc = QuantumCircuit.from_qasm_str(openqasm)
             self.assertTrue(isinstance(qc, QuantumCircuit))
-
 
     def test_tsp_qaoa(self):
         # test tsp qaoa and openqasm
