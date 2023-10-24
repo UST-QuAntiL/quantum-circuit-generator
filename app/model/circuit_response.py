@@ -18,7 +18,7 @@ from app.helpermethods import visualizeQasm
 
 
 class CircuitResponse:
-    def __init__(self, circuit, circuit_type, n_qubits, depth, input):
+    def __init__(self, circuit, circuit_type, n_qubits, depth, input, circuit_language):
         super().__init__()
         self.circuit = circuit
         self.circuit_type = circuit_type
@@ -27,6 +27,8 @@ class CircuitResponse:
         self.input = input
         self.timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         self.visualization = visualizeQasm(circuit, input)
+        self.circuit_language = circuit_language
+
 
     def to_json(self):
         json_circuit_response = {
@@ -37,6 +39,7 @@ class CircuitResponse:
             "timestamp": self.timestamp,
             "input": self.input,
             "visualization": self.visualization,
+            "circuit_language": self.circuit_language
         }
         return json_circuit_response
 
@@ -48,6 +51,7 @@ class CircuitResponseSchema(ma.Schema):
     depth = ma.fields.Int()
     timestamp = ma.fields.String()
     visualization = ma.fields.String()
+    circuit_language = ma.fields.String()
 
     @property
     def input(self):

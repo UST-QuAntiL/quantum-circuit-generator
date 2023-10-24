@@ -48,6 +48,7 @@ def generate_hhl_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm"
     )
 
 
@@ -91,7 +92,7 @@ def generate_qaoa_circuit(input):
         initial_state, pauli_op, mixer, reps, gammas, betas
     )
     return CircuitResponse(
-        circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
+        circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input, circuit_language="openqasm"
     )
 
 
@@ -107,6 +108,7 @@ def generate_qft_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm"
     )
 
 
@@ -128,6 +130,7 @@ def generate_qpe_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm"
     )
 
 
@@ -166,6 +169,7 @@ def generate_vqe_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm"
     )
 
 
@@ -202,6 +206,7 @@ def generate_grover_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm"
     )
 
 
@@ -237,34 +242,11 @@ def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
             request.parameterized,
         )
 
-    # print(circuit)
-    # print(circuit.draw('latex_source'))
-    # print(circuit.draw('latex'))
-    # print("test")
-    #
-    # # latex_circuit = circuit.draw(output='latex', filename="circuit.png")
-    # from io import BytesIO
-    # import base64
-    # latex_circuit = circuit.draw(output='latex')
-    # buffered = BytesIO()
-    # latex_circuit.save(buffered, format="png")
-    # img_str = base64.b64encode(buffered.getvalue())
-    # print(img_str)
+    if not request.parameterized:
+        return CircuitResponse(circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request, circuit_language="openqasm")
+    else:
+        return CircuitResponse(codecs.encode(pickle.dumps(circuit), "base64").decode(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request, circuit_language="qiskit")
 
-    returnCircuit = (
-        circuit.qasm()
-        if not request.parameterized
-        else codecs.encode(pickle.dumps(circuit), "base64").decode()
-    )
-    # print(returnCircuit)
-    # print(returnCircuit.draw('latex_source'))
-    # print("test")
-    #
-    # latex_circuit = circuit.draw(output='mpl')
-    # print("123")
-    return CircuitResponse(
-        returnCircuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request
-    )
 
 
 def generate_tsp_qaoa_circuit(input):
@@ -274,7 +256,7 @@ def generate_tsp_qaoa_circuit(input):
     gammas = input.get("gammas")
     circuit = TSPQAOAAlgorithm.create_circuit(np.array(adj_matrix), p, betas, gammas)
     return CircuitResponse(
-        circuit.qasm(), "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input
+        circuit.qasm(), "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input, circuit_language="openqasm"
     )
 
 
@@ -295,4 +277,5 @@ def generate_knapsack_qaoa_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm"
     )
