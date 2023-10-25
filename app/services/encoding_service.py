@@ -21,7 +21,12 @@ def generate_basis_encoding(input):
     )
 
     return CircuitResponse(
-        circuit.qasm(), "encoding/basis", circuit.num_qubits, circuit.depth(), input, circuit_language="openqasm"
+        circuit.qasm(),
+        "encoding/basis",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+        circuit_language="openqasm",
     )
 
 
@@ -31,7 +36,12 @@ def generate_angle_encoding(input):
     circuit = AngleEncoding.angle_encode_vector(vector, rotation_axis)
 
     return CircuitResponse(
-        circuit.qasm(), "encoding/angle", circuit.num_qubits, circuit.depth(), input, circuit_language="openqasm"
+        circuit.qasm(),
+        "encoding/angle",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+        circuit_language="openqasm",
     )
 
 
@@ -39,7 +49,12 @@ def generate_amplitude_encoding(input):
     vector = input.get("vector")
     circuit = AmplitudeEncoding.amplitude_encode_vector(vector)
     return CircuitResponse(
-        circuit.qasm(), "encoding/amplitude", circuit.num_qubits, circuit.depth(), input, circuit_language="openqasm"
+        circuit.qasm(),
+        "encoding/amplitude",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+        circuit_language="openqasm",
     )
 
 
@@ -53,5 +68,10 @@ def generate_schmidt_decomposition(input):
         vector, Measurement.noMeasurement
     )
     return CircuitResponse(
-        circuit.qasm(), "encoding/schmidt", circuit.num_qubits, circuit.depth(), input, circuit_language="openqasm"
+        circuit.qasm(),
+        "encoding/schmidt",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+        circuit_language="openqasm",
     )

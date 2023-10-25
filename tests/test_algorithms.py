@@ -133,10 +133,7 @@ class FlaskClientTestCase(unittest.TestCase):
                 ),
                 content_type="application/json",
             )
-        self.assertTrue(
-            "Invalid initial_state:"
-            in response.get_json().get("message")
-        )
+        self.assertTrue("Invalid initial_state:" in response.get_json().get("message"))
         self.assertEqual(response.status_code, 400)
 
         # invalid Pauli string
@@ -193,10 +190,7 @@ class FlaskClientTestCase(unittest.TestCase):
                 ),
                 content_type="application/json",
             )
-        self.assertTrue(
-            "Invalid mixer:"
-            in response.get_json().get("message")
-        )
+        self.assertTrue("Invalid mixer:" in response.get_json().get("message"))
         self.assertEqual(response.status_code, 400)
 
         # invalid reps
@@ -538,8 +532,7 @@ class FlaskClientTestCase(unittest.TestCase):
                 content_type="application/json",
             )
         self.assertTrue(
-            "Invalid unitary (qasm string):"
-            in response.get_json().get("message")
+            "Invalid unitary (qasm string):" in response.get_json().get("message")
         )
         self.assertEqual(response.status_code, 400)
 
@@ -614,8 +607,7 @@ class FlaskClientTestCase(unittest.TestCase):
                 content_type="application/json",
             )
         self.assertTrue(
-            "Invalid ansatz (qasm string):"
-            in response.get_json().get("message")
+            "Invalid ansatz (qasm string):" in response.get_json().get("message")
         )
         self.assertEqual(response.status_code, 400)
 
@@ -665,8 +657,7 @@ class FlaskClientTestCase(unittest.TestCase):
                 content_type="application/json",
             )
         self.assertTrue(
-            "Invalid oracle (qasm string):"
-            in response.get_json().get("message")
+            "Invalid oracle (qasm string):" in response.get_json().get("message")
         )
         self.assertEqual(response.status_code, 400)
 
@@ -686,8 +677,7 @@ class FlaskClientTestCase(unittest.TestCase):
                 content_type="application/json",
             )
         self.assertTrue(
-            "Invalid initial_state (qasm string):"
-            in response.get_json().get("message")
+            "Invalid initial_state (qasm string):" in response.get_json().get("message")
         )
         self.assertEqual(response.status_code, 400)
 

@@ -29,7 +29,6 @@ class CircuitResponse:
         self.visualization = visualizeQasm(circuit, input)
         self.circuit_language = circuit_language
 
-
     def to_json(self):
         json_circuit_response = {
             "circuit": self.circuit,
@@ -39,7 +38,7 @@ class CircuitResponse:
             "timestamp": self.timestamp,
             "input": self.input,
             "visualization": self.visualization,
-            "circuit_language": self.circuit_language
+            "circuit_language": self.circuit_language,
         }
         return json_circuit_response
 
