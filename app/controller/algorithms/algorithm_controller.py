@@ -1,5 +1,6 @@
 from flask_smorest import Blueprint
 
+from app.helpermethods import visualizeQasm
 from app.services import algorithm_service
 from app.model.circuit_response import (
     CircuitResponseSchema,
@@ -8,7 +9,7 @@ from app.model.circuit_response import (
     QFTResponseSchema,
     QPEResponseSchema,
     VQEResponseSchema,
-    GroverResponseSchema,
+    GroverResponseSchema, CircuitDrawResponseSchema,
 )
 from app.model.algorithm_request import (
     HHLAlgorithmRequestSchema,
@@ -28,7 +29,7 @@ from app.model.algorithm_request import (
     MaxCutQAOAAlgorithmRequestSchema,
     MaxCutQAOAAlgorithmRequest,
     KnapsackQAOAAlgorithmRequest,
-    KnapsackQAOAAlgorithmRequestSchema,
+    KnapsackQAOAAlgorithmRequestSchema, CircuitDrawRequestSchema, CircuitDrawRequest,
 )
 
 
@@ -184,3 +185,18 @@ def get_maxcut_circuit(json: dict):
 def get_knapsack_circuit(json: KnapsackQAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_knapsack_qaoa_circuit(json)
+
+
+
+@blp.route("/drawCircuit", methods=["POST"])
+@blp.arguments(
+    CircuitDrawRequestSchema,
+    example=dict(
+        circuit="123",
+    ),
+    description="QASM 2.0 String.",
+)
+@blp.response(200, CircuitDrawResponseSchema)
+def encoding(json):
+    if json:
+        return visualizeQasm(CircuitDrawRequest(**json).circuit, {})

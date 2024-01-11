@@ -17,6 +17,7 @@ from app.model.algorithm_request import (
 from app.helpermethods import visualizeQasm
 
 
+
 class CircuitResponse:
     def __init__(self, circuit, circuit_type, n_qubits, depth, input, circuit_language):
         super().__init__()
@@ -95,3 +96,20 @@ class VQEResponseSchema(CircuitResponseSchema):
 
 class GroverResponseSchema(CircuitResponseSchema):
     input = ma.fields.Nested(GroverAlgorithmRequestSchema)
+
+
+class CircuitDrawResponse:
+    def __init__(self, visualization):
+        super().__init__()
+        self.visualization = visualization
+
+
+    def to_json(self):
+        json_circuit_response = {
+            "visualization": self.visualization,
+        }
+        return json_circuit_response
+
+
+class CircuitDrawResponseSchema(ma.Schema):
+    visualization = ma.fields.String()

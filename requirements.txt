@@ -3,7 +3,7 @@ coverage==5.5
 Flask==2.0.1
 flask-smorest==0.34.0
 marshmallow==3.13.0
-qiskit==0.44.0
+qiskit==0.44.1
 qiskit-optimization==0.5.0
 requests==2.26.0
 symengine==0.9.2

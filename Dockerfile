@@ -14,6 +14,7 @@ RUN apt-get install tzdata
 
 # install texlive
 RUN apt-get install texlive texlive-latex-extra texlive-luatex texlive-xetex texlive-lang-european -y
+RUN apt-get install -y poppler-utils
 
 COPY ./requirements.txt /app/requirements.txt
 WORKDIR /app
