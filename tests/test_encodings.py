@@ -54,7 +54,7 @@ class FlaskClientTestCase(unittest.TestCase):
         # Test x axis
         response = self.client.post(
             "/encoding/angle",
-            data=json.dumps({"vector": [3.14, 2.25], "rotationaxis": "x"}),
+            data=json.dumps({"vector": [3.14, 2.25], "rotation_axis": "x"}),
             content_type="application/json",
         )
         self.assertEqual(2, response.get_json().get("n_qubits"))
@@ -64,7 +64,7 @@ class FlaskClientTestCase(unittest.TestCase):
         # Test y axis
         response = self.client.post(
             "/encoding/angle",
-            data=json.dumps({"vector": [3.14, 2.25], "rotationaxis": "y"}),
+            data=json.dumps({"vector": [3.14, 2.25], "rotation_axis": "y"}),
             content_type="application/json",
         )
         self.assertEqual(2, response.get_json().get("n_qubits"))
@@ -74,7 +74,7 @@ class FlaskClientTestCase(unittest.TestCase):
         # Test z axis
         response = self.client.post(
             "/encoding/angle",
-            data=json.dumps({"vector": [3.14, 2.25], "rotationaxis": "z"}),
+            data=json.dumps({"vector": [3.14, 2.25], "rotation_axis": "z"}),
             content_type="application/json",
         )
         self.assertEqual(2, response.get_json().get("n_qubits"))

@@ -15,11 +15,21 @@ from app.model.algorithm_request import (
     GroverAlgorithmRequestSchema,
 )
 
+import qiskit.qasm3
+
+def export_circuit(circuit, input):
+    if input.parameterized or input.circuit_format == "openqasm3":
+        return qiskit.qasm3.dumps(circuit)
+    elif input.circuit_format == "openqasm2":
+        return circuit.qasm()
+    else:
+        return 'format unsupported'
+
 
 class CircuitResponse:
     def __init__(self, circuit, circuit_type, n_qubits, depth, input):
         super().__init__()
-        self.circuit = circuit
+        self.circuit = export_circuit(circuit, input)
         self.circuit_type = circuit_type
         self.n_qubits = n_qubits
         self.depth = depth

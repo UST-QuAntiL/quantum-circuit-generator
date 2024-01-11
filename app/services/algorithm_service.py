@@ -1,6 +1,3 @@
-import codecs
-import pickle
-
 import numpy as np
 
 from app.model.algorithm_request import MaxCutQAOAAlgorithmRequest
@@ -43,7 +40,7 @@ def generate_hhl_circuit(input):
 
     circuit = HHLAlgorithm.create_circuit(matrix, vector)
     return CircuitResponse(
-        circuit.qasm(),
+        circuit,
         "algorithm/hhl",
         circuit.num_qubits,
         circuit.depth(),
@@ -91,7 +88,7 @@ def generate_qaoa_circuit(input):
         initial_state, pauli_op, mixer, reps, gammas, betas
     )
     return CircuitResponse(
-        circuit.qasm(), "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
+        circuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
     )
 
 
@@ -102,7 +99,7 @@ def generate_qft_circuit(input):
 
     circuit = QFTAlgorithm.create_circuit(n_qubits, inverse, barriers)
     return CircuitResponse(
-        circuit.qasm(),
+        circuit,
         "algorithm/qft",
         circuit.num_qubits,
         circuit.depth(),
@@ -123,7 +120,7 @@ def generate_qpe_circuit(input):
 
     circuit = QPEAlgorithm.create_circuit(n_eval_qubits, unitary)
     return CircuitResponse(
-        circuit.qasm(),
+        circuit,
         "algorithm/qpe",
         circuit.num_qubits,
         circuit.depth(),
@@ -161,7 +158,7 @@ def generate_vqe_circuit(input):
         return bad_request("Verify correctness of parameters: " + str(err))
 
     return CircuitResponse(
-        circuit.qasm(),
+        circuit,
         "algorithm/vqe",
         circuit.num_qubits,
         circuit.depth(),
@@ -197,7 +194,7 @@ def generate_grover_circuit(input):
         oracle, iterations, reflection_qubits, initial_state, barriers
     )
     return CircuitResponse(
-        circuit.qasm(),
+        circuit,
         "algorithm/grover",
         circuit.num_qubits,
         circuit.depth(),
@@ -236,14 +233,9 @@ def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
             request.p,
             request.parameterized,
         )
-    returnCircuit = (
-        circuit.qasm()
-        if not request.parameterized
-        else codecs.encode(pickle.dumps(circuit), "base64").decode()
-    )
-    print(returnCircuit)
+
     return CircuitResponse(
-        returnCircuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request
+        circuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request
     )
 
 
@@ -254,7 +246,7 @@ def generate_tsp_qaoa_circuit(input):
     gammas = input.get("gammas")
     circuit = TSPQAOAAlgorithm.create_circuit(np.array(adj_matrix), p, betas, gammas)
     return CircuitResponse(
-        circuit.qasm(), "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input
+        circuit, "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input
     )
 
 
@@ -270,7 +262,7 @@ def generate_knapsack_qaoa_circuit(input):
         values, weights, max_weights, p, betas, gammas
     )
     return CircuitResponse(
-        circuit.qasm(),
+        circuit,
         "algorithm/knapsackqaoa",
         circuit.num_qubits,
         circuit.depth(),

@@ -40,7 +40,7 @@ def encoding(json: BasisEncodingRequest):
 @blp.route("/angle", methods=["POST"])
 @blp.etag
 @blp.arguments(
-    AngleEncodingRequestSchema, example=dict(vector=[1.25, 3.14], rotationaxis="x")
+    AngleEncodingRequestSchema, example=dict(vector=[1.25, 3.14], rotation_axis="x")
 )
 @blp.response(200, AngleEncodingResponseSchema)
 def encoding(json: AngleEncodingRequest):

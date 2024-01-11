@@ -21,17 +21,17 @@ def generate_basis_encoding(input):
     )
 
     return CircuitResponse(
-        circuit.qasm(), "encoding/basis", circuit.num_qubits, circuit.depth(), input
+        circuit, "encoding/basis", circuit.num_qubits, circuit.depth(), input
     )
 
 
 def generate_angle_encoding(input):
     vector = input.get("vector")
-    rotation_axis = input.get("rotationaxis")
+    rotation_axis = input.get("rotation_axis")
     circuit = AngleEncoding.angle_encode_vector(vector, rotation_axis)
 
     return CircuitResponse(
-        circuit.qasm(), "encoding/angle", circuit.num_qubits, circuit.depth(), input
+        circuit, "encoding/angle", circuit.num_qubits, circuit.depth(), input
     )
 
 
@@ -40,7 +40,7 @@ def generate_amplitude_encoding(input):
     circuit = AmplitudeEncoding.amplitude_encode_vector(vector)
     # width,depth = getCircuitCharacteristics(circuit) TODO dicuss if this makes more sense
     return CircuitResponse(
-        circuit.qasm(), "encoding/amplitude", circuit.num_qubits, circuit.depth(), input
+        circuit, "encoding/amplitude", circuit.num_qubits, circuit.depth(), input
     )
 
 
@@ -54,5 +54,5 @@ def generate_schmidt_decomposition(input):
         vector, Measurement.noMeasurement
     )
     return CircuitResponse(
-        circuit.qasm(), "encoding/schmidt", circuit.num_qubits, circuit.depth(), input
+        circuit, "encoding/schmidt", circuit.num_qubits, circuit.depth(), input
     )

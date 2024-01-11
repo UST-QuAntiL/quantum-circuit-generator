@@ -1,6 +1,3 @@
-import codecs
-import pickle
-
 import numpy as np
 from qiskit.algorithms import QAOA
 from qiskit.circuit import Parameter
