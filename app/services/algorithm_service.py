@@ -45,6 +45,7 @@ def generate_hhl_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm",
     )
 
 
@@ -88,7 +89,12 @@ def generate_qaoa_circuit(input):
         initial_state, pauli_op, mixer, reps, gammas, betas
     )
     return CircuitResponse(
-        circuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), input
+        circuit,
+        "algorithm/qaoa",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+        circuit_language="openqasm",
     )
 
 
@@ -104,6 +110,7 @@ def generate_qft_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm",
     )
 
 
@@ -125,6 +132,7 @@ def generate_qpe_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm",
     )
 
 
@@ -163,6 +171,7 @@ def generate_vqe_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm",
     )
 
 
@@ -199,6 +208,7 @@ def generate_grover_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm",
     )
 
 
@@ -235,7 +245,7 @@ def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
         )
 
     return CircuitResponse(
-        circuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request
+        circuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request, circuit_language="openqasm",
     )
 
 
@@ -246,7 +256,7 @@ def generate_tsp_qaoa_circuit(input):
     gammas = input.get("gammas")
     circuit = TSPQAOAAlgorithm.create_circuit(np.array(adj_matrix), p, betas, gammas)
     return CircuitResponse(
-        circuit, "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input
+        circuit, "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input,circuit_language="openqasm",
     )
 
 
@@ -267,4 +277,5 @@ def generate_knapsack_qaoa_circuit(input):
         circuit.num_qubits,
         circuit.depth(),
         input,
+        circuit_language="openqasm",
     )
