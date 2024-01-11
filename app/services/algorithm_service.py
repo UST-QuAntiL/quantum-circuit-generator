@@ -18,14 +18,24 @@ from app.services.algorithms.pauliParser import PauliParser
 from app.services.helper_service import bad_request
 from app.model.circuit_response import CircuitResponse
 
+from app.model.algorithm_request import (
+    HHLAlgorithmRequest,
+    QAOAAlgorithmRequest,
+    QFTAlgorithmRequest,
+    QPEAlgorithmRequest,
+    VQEAlgorithmRequest,
+    GroverAlgorithmRequest,
+    TSPQAOAAlgorithmRequest,
+    MaxCutQAOAAlgorithmRequest,
+    KnapsackQAOAAlgorithmRequest,
+    CircuitDrawRequest,
+)
 
-def generate_hhl_circuit(input):
-    matrix = input.get("matrix")
-    vector = input.get("vector")
 
+def generate_hhl_circuit(input: HHLAlgorithmRequest):
     # Check types and dimensions
-    matrix_array = np.array(matrix)
-    vector_array = np.array(vector)
+    matrix_array = np.array(input.matrix)
+    vector_array = np.array(input.vector)
     if matrix_array.shape[0] != matrix_array.shape[1]:
         return bad_request("Invalid matrix input! Matrix must be square.")
     hermitian = np.allclose(matrix_array, matrix_array.conj().T)
@@ -38,7 +48,7 @@ def generate_hhl_circuit(input):
     if np.log2(matrix_array.shape[0]) % 1 != 0:
         return bad_request("Invalid matrix input! Input matrix dimension must be 2^n.")
 
-    circuit = HHLAlgorithm.create_circuit(matrix, vector)
+    circuit = HHLAlgorithm.create_circuit(input.matrix, input.vector)
     return CircuitResponse(
         circuit,
         "algorithm/hhl",
@@ -49,13 +59,13 @@ def generate_hhl_circuit(input):
     )
 
 
-def generate_qaoa_circuit(input):
-    initial_state = input.get("initial_state")
-    pauli_op_string = input.get("pauli_op_string")
-    mixer = input.get("mixer")
-    reps = input.get("reps")
-    gammas = input.get("gammas")
-    betas = input.get("betas")
+def generate_qaoa_circuit(input: QAOAAlgorithmRequest):
+    initial_state = input.initial_state
+    pauli_op_string = input.pauli_op_string
+    mixer = input.mixer
+    reps = input.reps
+    gammas = input.gammas
+    betas = input.betas
 
     # check initial state (qasm string)
     try:
@@ -98,12 +108,8 @@ def generate_qaoa_circuit(input):
     )
 
 
-def generate_qft_circuit(input):
-    n_qubits = input.get("n_qubits")
-    inverse = input.get("inverse")
-    barriers = input.get("barriers")
-
-    circuit = QFTAlgorithm.create_circuit(n_qubits, inverse, barriers)
+def generate_qft_circuit(input: QFTAlgorithmRequest):
+    circuit = QFTAlgorithm.create_circuit(input.n_qubits, input.inverse, input.barriers)
     return CircuitResponse(
         circuit,
         "algorithm/qft",
@@ -114,9 +120,9 @@ def generate_qft_circuit(input):
     )
 
 
-def generate_qpe_circuit(input):
-    n_eval_qubits = input.get("n_eval_qubits")
-    unitary = input.get("unitary")
+def generate_qpe_circuit(input: QPEAlgorithmRequest):
+    n_eval_qubits = input.n_eval_qubits
+    unitary = input.unitary
 
     # check Unitary operator (qasm string)
     try:
@@ -136,10 +142,10 @@ def generate_qpe_circuit(input):
     )
 
 
-def generate_vqe_circuit(input):
-    ansatz = input.get("ansatz")
-    parameters = input.get("parameters")
-    observable = input.get("observable")
+def generate_vqe_circuit(input: VQEAlgorithmRequest):
+    ansatz = input.ansatz
+    parameters = input.parameters
+    observable = input.observable
 
     # check Unitary operator (qasm string)
     if ansatz is not None:
@@ -175,12 +181,12 @@ def generate_vqe_circuit(input):
     )
 
 
-def generate_grover_circuit(input):
-    oracle = input.get("oracle")
-    iterations = input.get("iterations")
-    reflection_qubits = input.get("reflection_qubits")
-    initial_state = input.get("initial_state")
-    barriers = input.get("barriers")
+def generate_grover_circuit(input: GroverAlgorithmRequest):
+    oracle = input.oracle
+    iterations = input.iterations
+    reflection_qubits = input.reflection_qubits
+    initial_state = input.initial_state
+    barriers = input.barriers
 
     # check oracle (qasm string)
     try:
@@ -249,25 +255,25 @@ def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
     )
 
 
-def generate_tsp_qaoa_circuit(input):
-    adj_matrix = input.get("adj_matrix")
-    p = input.get("p")
-    betas = input.get("betas")
-    gammas = input.get("gammas")
+def generate_tsp_qaoa_circuit(input: TSPQAOAAlgorithmRequest):
+    adj_matrix = input.adj_matrix
+    p = input.p
+    betas = input.betas
+    gammas = input.gammas
     circuit = TSPQAOAAlgorithm.create_circuit(np.array(adj_matrix), p, betas, gammas)
     return CircuitResponse(
         circuit, "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input,circuit_language="openqasm",
     )
 
 
-def generate_knapsack_qaoa_circuit(input):
-    items = input.get("items")
+def generate_knapsack_qaoa_circuit(input: KnapsackQAOAAlgorithmRequest):
+    items = input.items
     values = [d["value"] for d in items]
     weights = [d["weight"] for d in items]
-    max_weights = input.get("max_weights")
-    p = input.get("p")
-    betas = input.get("betas")
-    gammas = input.get("gammas")
+    max_weights = input.max_weights
+    p = input.p
+    betas = input.betas
+    gammas = input.gammas
     circuit = KnapsackQAOAAlgorithm.create_circuit(
         values, weights, max_weights, p, betas, gammas
     )

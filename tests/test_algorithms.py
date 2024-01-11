@@ -799,7 +799,6 @@ class FlaskClientTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_knapsack_qaoa(self):
-        # test tsp qaoa and openqasm
         for i in range(25):
             item_amount = np.random.randint(2, 5)
             items = []

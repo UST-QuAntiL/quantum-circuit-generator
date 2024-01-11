@@ -4,17 +4,17 @@ import numpy as np
 
 
 class BasisEncodingRequest:
-    def __init__(self, vector, n_integral_bits, n_fractional_bits, circuit_format="openqasm2"):
+    def __init__(self, vector, integral_bits, fractional_bits, circuit_format="openqasm2"):
         self.vector = vector
-        self.integral_bits = n_integral_bits
-        self.fractional_bits = n_fractional_bits
+        self.integral_bits = integral_bits
+        self.fractional_bits = fractional_bits
         self.circuit_format = circuit_format
 
 
 class BasisEncodingRequestSchema(ma.Schema):
-    vector = ma.fields.List(ma.fields.Float())
-    integral_bits = ma.fields.Int()
-    fractional_bits = ma.fields.Int()
+    vector = ma.fields.List(ma.fields.Float(), required=True)
+    integral_bits = ma.fields.Int(required=True)
+    fractional_bits = ma.fields.Int(required=True)
     circuit_format = ma.fields.String()
 
 

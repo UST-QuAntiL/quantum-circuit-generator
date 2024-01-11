@@ -5,12 +5,7 @@ import pickle
 from qiskit import QuantumCircuit
 
 
-def visualizeQasm(circuit, incomingRequest):
-    circuit = (
-        pickle.loads(codecs.decode(circuit.encode(), "base64"))
-        if hasattr(incomingRequest, "parameterized") and incomingRequest.parameterized
-        else QuantumCircuit.from_qasm_str(circuit)
-    )
+def visualizeQasm(circuit):
     if circuit.depth() < 50:
         try:
             return renderLatex(circuit)

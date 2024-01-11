@@ -17,7 +17,9 @@ class HHLAlgorithmRequestSchema(ma.Schema):
 
 
 class QAOAAlgorithmRequest:
-    def __init__(self, initial_state, pauli_op_string, mixer, reps, gammas, betas, circuit_format="openqasm2"):
+    def __init__(self, pauli_op_string, gammas=None, betas=None, initial_state = None, mixer = None, reps = 1, circuit_format="openqasm2"):
+        if gammas is None:
+            gammas = [1] if reps == None else [1] * reps
         self.initial_state = initial_state
         self.pauli_op_string = pauli_op_string
         self.mixer = mixer
@@ -33,7 +35,7 @@ class QAOAAlgorithmRequestSchema(ma.Schema):
     mixer = ma.fields.String()
     reps = ma.fields.Int()
     gammas = ma.fields.List(ma.fields.Float(required=True))
-    betas = ma.fields.List(ma.fields.Float())
+    betas = ma.fields.List(ma.fields.Float(required=True))
     circuit_format = ma.fields.String()
 
 
@@ -65,7 +67,7 @@ class QPEAlgorithmRequestSchema(ma.Schema):
 
 
 class VQEAlgorithmRequest:
-    def __init__(self, ansatz, parameters, observable, circuit_format="openqasm2"):
+    def __init__(self, observable, ansatz = None, parameters = None, circuit_format="openqasm2"):
         self.ansatz = ansatz
         self.parameters = parameters
         self.observable = observable
@@ -80,7 +82,7 @@ class VQEAlgorithmRequestSchema(ma.Schema):
 
 
 class GroverAlgorithmRequest:
-    def __init__(self, oracle, iterations, reflection_qubits, initial_state, barriers, circuit_format="openqasm2"):
+    def __init__(self, oracle, iterations = None, reflection_qubits = None, initial_state = None, barriers = None, circuit_format="openqasm2"):
         self.oracle = oracle
         self.iterations = iterations
         self.reflection_qubits = reflection_qubits
@@ -90,7 +92,7 @@ class GroverAlgorithmRequest:
 
 
 class GroverAlgorithmRequestSchema(ma.Schema):
-    oracle = ma.fields.String()
+    oracle = ma.fields.String(required=True)
     iterations = ma.fields.Int()
     reflection_qubits = ma.fields.List(ma.fields.Int())
     initial_state = ma.fields.String()

@@ -19,7 +19,7 @@ from app.helpermethods import visualizeQasm
 import qiskit.qasm3
 
 def export_circuit(circuit, input):
-    if input.parameterized or input.circuit_format == "openqasm3":
+    if (hasattr(input, 'parameterized') and input.parameterized) or input.circuit_format == "openqasm3":
         return qiskit.qasm3.dumps(circuit)
     elif input.circuit_format == "openqasm2":
         return circuit.qasm()
@@ -36,7 +36,7 @@ class CircuitResponse:
         self.depth = depth
         self.input = input
         self.timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        self.visualization = visualizeQasm(circuit, input)
+        self.visualization = visualizeQasm(circuit)
         self.circuit_language = circuit_language
 
     def to_json(self):

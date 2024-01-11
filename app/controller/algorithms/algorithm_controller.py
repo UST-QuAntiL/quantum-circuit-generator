@@ -47,12 +47,12 @@ blp = Blueprint(
 @blp.route("/hhl", methods=["POST"])
 @blp.arguments(
     HHLAlgorithmRequestSchema,
-    example=dict(matrix=[[1.5, 0.5], [0.5, 1.5]], vector=[0, 1]),
+    example=dict(matrix=[[1.5, 0.5], [0.5, 1.5]], vector=[0, 1], circuit_format="openqasm2"),
 )
 @blp.response(200, HHLResponseSchema)
 def encoding(json: HHLAlgorithmRequest):
     if json:
-        return algorithm_service.generate_hhl_circuit(json)
+        return algorithm_service.generate_hhl_circuit(HHLAlgorithmRequest(**json))
 
 
 @blp.route("/qaoa", methods=["POST"])
@@ -63,12 +63,13 @@ def encoding(json: HHLAlgorithmRequest):
         reps=2,
         gammas=[1.0, 1.2],
         betas=[0.4, 0.7],
+        circuit_format="openqasm2"
     ),
 )
 @blp.response(200, QAOAResponseSchema)
 def encoding(json: QAOAAlgorithmRequest):
     if json:
-        return algorithm_service.generate_qaoa_circuit(json)
+        return algorithm_service.generate_qaoa_circuit(QAOAAlgorithmRequest(**json))
 
 
 @blp.route("/qft", methods=["POST"])
@@ -78,12 +79,13 @@ def encoding(json: QAOAAlgorithmRequest):
         n_qubits=4,
         inverse=False,
         barriers=True,
+        circuit_format="openqasm2"
     ),
 )
 @blp.response(200, QFTResponseSchema)
 def encoding(json: QFTAlgorithmRequest):
     if json:
-        return algorithm_service.generate_qft_circuit(json)
+        return algorithm_service.generate_qft_circuit(QFTAlgorithmRequest(**json))
 
 
 @blp.route("/qpe", methods=["POST"])
@@ -92,12 +94,13 @@ def encoding(json: QFTAlgorithmRequest):
     example=dict(
         n_eval_qubits=3,
         unitary='OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[1];\np(pi/2) q[0];\n',
+        circuit_format="openqasm2"
     ),
 )
 @blp.response(200, QPEResponseSchema)
 def encoding(json: QPEAlgorithmRequest):
     if json:
-        return algorithm_service.generate_qpe_circuit(json)
+        return algorithm_service.generate_qpe_circuit(QPEAlgorithmRequest(**json))
 
 
 @blp.route("/vqe", methods=["POST"])
@@ -106,12 +109,13 @@ def encoding(json: QPEAlgorithmRequest):
     example=dict(
         parameters=[0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
         observable="Z^Y",
+        circuit_format="openqasm2"
     ),
 )
 @blp.response(200, VQEResponseSchema)
 def encoding(json: VQEAlgorithmRequest):
     if json:
-        return algorithm_service.generate_vqe_circuit(json)
+        return algorithm_service.generate_vqe_circuit(VQEAlgorithmRequest(**json))
 
 
 @blp.route("/grover", methods=["POST"])
@@ -123,12 +127,13 @@ def encoding(json: VQEAlgorithmRequest):
         iterations=2,
         reflection_qubits=[0, 1],
         barriers=True,
+        circuit_format="openqasm2"
     ),
 )
 @blp.response(200, GroverResponseSchema)
 def encoding(json: GroverAlgorithmRequest):
     if json:
-        return algorithm_service.generate_grover_circuit(json)
+        return algorithm_service.generate_grover_circuit(GroverAlgorithmRequest(**json))
 
 
 @blp.route("/tspqaoa", methods=["POST"])
@@ -139,13 +144,14 @@ def encoding(json: GroverAlgorithmRequest):
         p=2,
         betas=[1.0, 2.0],
         gammas=[1.0, 3.0],
+        circuit_format="openqasm2"
     ),
     description="Currently, only 3x3 and 4x4 matrices supported.",
 )
 @blp.response(200, CircuitResponseSchema)
 def encoding(json):
     if json:
-        return algorithm_service.generate_tsp_qaoa_circuit(json)
+        return algorithm_service.generate_tsp_qaoa_circuit(TSPQAOAAlgorithmRequest(**json))
 
 
 @blp.route("/maxcutqaoa", methods=["POST"])
@@ -158,6 +164,7 @@ def encoding(json):
         gammas=[1.0],
         p=1,
         parameterized=False,
+        circuit_format="openqasm2"
     ),
 )
 @blp.response(200, CircuitResponseSchema)
@@ -182,23 +189,24 @@ def get_maxcut_circuit(json: dict):
         p=1,
         betas=[1.0],
         gammas=[1.0],
+        circuit_format="openqasm2"
     ),
 )
 @blp.response(200, CircuitResponseSchema)
 def get_knapsack_circuit(json: KnapsackQAOAAlgorithmRequest):
     if json:
-        return algorithm_service.generate_knapsack_qaoa_circuit(json)
+        return algorithm_service.generate_knapsack_qaoa_circuit(KnapsackQAOAAlgorithmRequest(**json))
 
 
 @blp.route("/drawCircuit", methods=["POST"])
 @blp.arguments(
     CircuitDrawRequestSchema,
     example=dict(
-        circuit="123",
+        circuit="123", circuit_format="openqasm2"
     ),
     description="QASM 2.0 String.",
 )
 @blp.response(200, CircuitDrawResponseSchema)
 def encoding(json):
     if json:
-        return visualizeQasm(CircuitDrawRequest(**json).circuit, {})
+        return visualizeQasm(CircuitDrawRequest(**json).circuit)
