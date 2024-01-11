@@ -4,7 +4,9 @@ import numpy as np
 
 
 class BasisEncodingRequest:
-    def __init__(self, vector, integral_bits, fractional_bits, circuit_format="openqasm2"):
+    def __init__(
+        self, vector, integral_bits, fractional_bits, circuit_format="openqasm2"
+    ):
         self.vector = vector
         self.integral_bits = integral_bits
         self.fractional_bits = fractional_bits

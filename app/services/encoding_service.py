@@ -28,7 +28,12 @@ def generate_basis_encoding(input: BasisEncodingRequest):
     )
 
     return CircuitResponse(
-        circuit, "encoding/basis", circuit.num_qubits, circuit.depth(), input,circuit_language="openqasm"
+        circuit,
+        "encoding/basis",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+        circuit_language="openqasm",
     )
 
 

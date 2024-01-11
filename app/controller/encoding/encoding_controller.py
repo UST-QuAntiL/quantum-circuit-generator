@@ -29,7 +29,12 @@ blp = Blueprint(
 @blp.etag
 @blp.arguments(
     BasisEncodingRequestSchema,
-    example=dict(vector=[1.25, 3.14], integral_bits=3, fractional_bits=3, circuit_format="openqasm2"),
+    example=dict(
+        vector=[1.25, 3.14],
+        integral_bits=3,
+        fractional_bits=3,
+        circuit_format="openqasm2",
+    ),
 )
 @blp.response(200, BasisEncodingResponseSchema)
 def encoding(json: BasisEncodingRequest):
@@ -40,7 +45,8 @@ def encoding(json: BasisEncodingRequest):
 @blp.route("/angle", methods=["POST"])
 @blp.etag
 @blp.arguments(
-    AngleEncodingRequestSchema, example=dict(vector=[1.25, 3.14], rotation_axis="x", circuit_format="openqasm2")
+    AngleEncodingRequestSchema,
+    example=dict(vector=[1.25, 3.14], rotation_axis="x", circuit_format="openqasm2"),
 )
 @blp.response(200, AngleEncodingResponseSchema)
 def encoding(json: AngleEncodingRequest):
@@ -50,21 +56,29 @@ def encoding(json: AngleEncodingRequest):
 
 @blp.route("/amplitude", methods=["POST"])
 @blp.etag
-@blp.arguments(AmplitudeEncodingRequestSchema, example=dict(vector=[1.25, 3.14], circuit_format="openqasm2"))
+@blp.arguments(
+    AmplitudeEncodingRequestSchema,
+    example=dict(vector=[1.25, 3.14], circuit_format="openqasm2"),
+)
 @blp.response(200, AmplitudeEncodingResponseSchema)
 def encoding(json: AmplitudeEncodingRequest):
     if json:
-        return encoding_service.generate_amplitude_encoding(AmplitudeEncodingRequest(**json))
+        return encoding_service.generate_amplitude_encoding(
+            AmplitudeEncodingRequest(**json)
+        )
 
 
 @blp.route("/schmidt", methods=["POST"])
 @blp.arguments(
-    SchmidtDecompositionRequestSchema, example=dict(vector=[1.25, 3.14, 0, 1], circuit_format="openqasm2")
+    SchmidtDecompositionRequestSchema,
+    example=dict(vector=[1.25, 3.14, 0, 1], circuit_format="openqasm2"),
 )
 @blp.response(200, SchmidtDecompositionResponseSchema)
 def encoding(json: SchmidtDecompositionRequest):
     if json:
-        return encoding_service.generate_schmidt_decomposition(SchmidtDecompositionRequest(**json))
+        return encoding_service.generate_schmidt_decomposition(
+            SchmidtDecompositionRequest(**json)
+        )
 
 
 # TODO

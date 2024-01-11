@@ -18,13 +18,16 @@ from app.helpermethods import visualizeQasm
 
 import qiskit.qasm3
 
+
 def export_circuit(circuit, input):
-    if (hasattr(input, 'parameterized') and input.parameterized) or input.circuit_format == "openqasm3":
+    if (
+        hasattr(input, "parameterized") and input.parameterized
+    ) or input.circuit_format == "openqasm3":
         return qiskit.qasm3.dumps(circuit)
     elif input.circuit_format == "openqasm2":
         return circuit.qasm()
     else:
-        return 'format unsupported'
+        return "format unsupported"
 
 
 class CircuitResponse:

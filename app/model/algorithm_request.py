@@ -17,7 +17,16 @@ class HHLAlgorithmRequestSchema(ma.Schema):
 
 
 class QAOAAlgorithmRequest:
-    def __init__(self, pauli_op_string, gammas=None, betas=None, initial_state = None, mixer = None, reps = 1, circuit_format="openqasm2"):
+    def __init__(
+        self,
+        pauli_op_string,
+        gammas=None,
+        betas=None,
+        initial_state=None,
+        mixer=None,
+        reps=1,
+        circuit_format="openqasm2",
+    ):
         if gammas is None:
             gammas = [1] if reps == None else [1] * reps
         self.initial_state = initial_state
@@ -53,6 +62,7 @@ class QFTAlgorithmRequestSchema(ma.Schema):
     barriers = ma.fields.Bool()
     circuit_format = ma.fields.String()
 
+
 class QPEAlgorithmRequest:
     def __init__(self, n_eval_qubits, unitary, circuit_format="openqasm2"):
         self.n_eval_qubits = n_eval_qubits
@@ -67,7 +77,9 @@ class QPEAlgorithmRequestSchema(ma.Schema):
 
 
 class VQEAlgorithmRequest:
-    def __init__(self, observable, ansatz = None, parameters = None, circuit_format="openqasm2"):
+    def __init__(
+        self, observable, ansatz=None, parameters=None, circuit_format="openqasm2"
+    ):
         self.ansatz = ansatz
         self.parameters = parameters
         self.observable = observable
@@ -82,7 +94,15 @@ class VQEAlgorithmRequestSchema(ma.Schema):
 
 
 class GroverAlgorithmRequest:
-    def __init__(self, oracle, iterations = None, reflection_qubits = None, initial_state = None, barriers = None, circuit_format="openqasm2"):
+    def __init__(
+        self,
+        oracle,
+        iterations=None,
+        reflection_qubits=None,
+        initial_state=None,
+        barriers=None,
+        circuit_format="openqasm2",
+    ):
         self.oracle = oracle
         self.iterations = iterations
         self.reflection_qubits = reflection_qubits
@@ -110,7 +130,7 @@ class MaxCutQAOAAlgorithmRequest:
         parameterized=False,
         initial_state=None,
         epsilon=0.25,
-        circuit_format="openqasm2"
+        circuit_format="openqasm2",
     ):
         self.adj_matrix = adj_matrix
         self.betas = betas
@@ -151,7 +171,9 @@ class TSPQAOAAlgorithmRequestSchema(ma.Schema):
 
 
 class KnapsackQAOAAlgorithmRequest:
-    def __init__(self, items, max_weights, p, betas, gammas, circuit_format="openqasm2"):
+    def __init__(
+        self, items, max_weights, p, betas, gammas, circuit_format="openqasm2"
+    ):
         self.items = items
         self.max_weights = max_weights
         self.p = p

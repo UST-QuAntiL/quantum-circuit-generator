@@ -251,7 +251,12 @@ def generate_max_cut_qaoa_circuit(request: MaxCutQAOAAlgorithmRequest):
         )
 
     return CircuitResponse(
-        circuit, "algorithm/qaoa", circuit.num_qubits, circuit.depth(), request, circuit_language="openqasm",
+        circuit,
+        "algorithm/qaoa",
+        circuit.num_qubits,
+        circuit.depth(),
+        request,
+        circuit_language="openqasm",
     )
 
 
@@ -262,7 +267,12 @@ def generate_tsp_qaoa_circuit(input: TSPQAOAAlgorithmRequest):
     gammas = input.gammas
     circuit = TSPQAOAAlgorithm.create_circuit(np.array(adj_matrix), p, betas, gammas)
     return CircuitResponse(
-        circuit, "algorithm/tspqaoa", circuit.num_qubits, circuit.depth(), input,circuit_language="openqasm",
+        circuit,
+        "algorithm/tspqaoa",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+        circuit_language="openqasm",
     )
 
 
