@@ -1,5 +1,6 @@
 from qiskit.circuit.quantumcircuit import QuantumCircuit
-from qiskit.algorithms.linear_solvers.hhl import HHL
+
+# from qiskit.algorithms.linear_solvers.hhl import HHL
 import numpy as np
 
 from app.services.encodings.amplitude_encoding import AmplitudeEncoding
@@ -46,6 +47,7 @@ class HHLAlgorithm:
         Creates HHL circuit from np.array(matrix) and vector.
         Custom AmplitudeEncoding is used for vector preparation.
         """
+        return "HHL was temporarily deprecated by Qiskit"
 
         matrix, vector_circuit = cls.preprocess(matrix=matrix, vector=vector)
         hhl = HHL()

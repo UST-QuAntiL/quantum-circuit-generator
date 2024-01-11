@@ -91,8 +91,8 @@ class MaxCutQAOAAlgorithmRequest:
     def __init__(
         self,
         adj_matrix,
-        betas=None,
-        gammas=None,
+        betas=[1],
+        gammas=[1],
         p=1,
         parameterized=False,
         initial_state=None,
@@ -149,3 +149,12 @@ class KnapsackQAOAAlgorithmRequestSchema(ma.Schema):
     p = ma.fields.Integer()
     betas = ma.fields.List(ma.fields.Float())
     gammas = ma.fields.List(ma.fields.Float())
+
+
+class CircuitDrawRequest:
+    def __init__(self, circuit):
+        self.circuit = circuit
+
+
+class CircuitDrawRequestSchema(ma.Schema):
+    circuit = ma.fields.String()
