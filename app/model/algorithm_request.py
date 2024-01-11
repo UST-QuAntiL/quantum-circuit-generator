@@ -150,9 +150,11 @@ class KnapsackQAOAAlgorithmRequestSchema(ma.Schema):
     betas = ma.fields.List(ma.fields.Float())
     gammas = ma.fields.List(ma.fields.Float())
 
+
 class CircuitDrawRequest:
     def __init__(self, circuit):
         self.circuit = circuit
+
 
 class CircuitDrawRequestSchema(ma.Schema):
     circuit = ma.fields.String()

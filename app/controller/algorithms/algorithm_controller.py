@@ -9,7 +9,8 @@ from app.model.circuit_response import (
     QFTResponseSchema,
     QPEResponseSchema,
     VQEResponseSchema,
-    GroverResponseSchema, CircuitDrawResponseSchema,
+    GroverResponseSchema,
+    CircuitDrawResponseSchema,
 )
 from app.model.algorithm_request import (
     HHLAlgorithmRequestSchema,
@@ -29,7 +30,9 @@ from app.model.algorithm_request import (
     MaxCutQAOAAlgorithmRequestSchema,
     MaxCutQAOAAlgorithmRequest,
     KnapsackQAOAAlgorithmRequest,
-    KnapsackQAOAAlgorithmRequestSchema, CircuitDrawRequestSchema, CircuitDrawRequest,
+    KnapsackQAOAAlgorithmRequestSchema,
+    CircuitDrawRequestSchema,
+    CircuitDrawRequest,
 )
 
 
@@ -185,7 +188,6 @@ def get_maxcut_circuit(json: dict):
 def get_knapsack_circuit(json: KnapsackQAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_knapsack_qaoa_circuit(json)
-
 
 
 @blp.route("/drawCircuit", methods=["POST"])
