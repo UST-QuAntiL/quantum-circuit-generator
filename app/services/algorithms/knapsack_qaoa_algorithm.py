@@ -39,4 +39,5 @@ class KnapsackQAOAAlgorithm:
         qaoa = QAOA(reps=p)
         qaoa_qc = qaoa.construct_circuit(angles, operator)[0]
         qaoa_qc = qaoa_qc.decompose(reps=100)
+        qaoa_qc.measure_all()
         return qaoa_qc

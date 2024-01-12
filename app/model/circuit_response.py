@@ -1,3 +1,7 @@
+import codecs
+import pickle
+
+
 from datetime import datetime
 import marshmallow as ma
 from app.model.encoding_request import (
@@ -20,7 +24,10 @@ import qiskit.qasm3
 
 
 def export_circuit(circuit, input):
-    if (
+    # THIS OPTION MAY LEAD TO INCOMPATIBLE EXPORT WITH DIFFERENT QISKIT VERSIONS AND IS NOT RECOMMENDED
+    if input.circuit_format == "qiskit":
+        codecs.encode(pickle.dumps(circuit), "base64").decode(),
+    elif (
         hasattr(input, "parameterized") and input.parameterized
     ) or input.circuit_format == "openqasm3":
         return qiskit.qasm3.dumps(circuit)
