@@ -15,8 +15,11 @@ from app.services.algorithms.qpe_algorithm import QPEAlgorithm
 from app.services.algorithms.vqe_algorithm import VQEAlgorithm
 from app.services.algorithms.grover_algorithm import GroverAlgorithm
 from app.services.algorithms.pauliParser import PauliParser
+from app.services.algorithms.shor_discrete_log import ShorDiscreteLog
+
 from app.services.helper_service import bad_request
 from app.model.circuit_response import CircuitResponse
+
 
 from app.model.algorithm_request import (
     HHLAlgorithmRequest,
@@ -29,6 +32,7 @@ from app.model.algorithm_request import (
     MaxCutQAOAAlgorithmRequest,
     KnapsackQAOAAlgorithmRequest,
     CircuitDrawRequest,
+    ShorDiscreteLogAlgorithmRequest
 )
 
 
@@ -295,3 +299,16 @@ def generate_knapsack_qaoa_circuit(input: KnapsackQAOAAlgorithmRequest):
         input,
         circuit_language="openqasm",
     )
+
+def generate_shor_discrete_log_circuit(input: ShorDiscreteLogAlgorithmRequest):
+    circuit = ShorDiscreteLog.create_circuit(
+        input.b, input.g, input.p, input.r, input.n)
+    return CircuitResponse(
+        circuit,
+        "algorithm/knapsackqaoa",
+        circuit.num_qubits,
+        circuit.depth(),
+        input,
+        circuit_language="openqasm",
+    )
+
