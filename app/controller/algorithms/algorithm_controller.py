@@ -204,7 +204,7 @@ def get_knapsack_circuit(json: KnapsackQAOAAlgorithmRequest):
 @blp.etag
 @blp.arguments(
     ShorDiscreteLogAlgorithmRequestSchema,
-    example=dict(b=5, g=2, p=3, n=-1),
+    example=dict(b=2, g=5, p=7, n=-1),
     description="""
         b: Finds discrete logarithm of b with respect to generator g and module p
         g: Generator

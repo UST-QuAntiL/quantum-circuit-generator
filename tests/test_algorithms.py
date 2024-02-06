@@ -854,3 +854,22 @@ class FlaskClientTestCase(unittest.TestCase):
             openqasm = response.get_json().get("circuit")
             qc = QuantumCircuit.from_qasm_str(openqasm)
             self.assertTrue(isinstance(qc, QuantumCircuit))
+
+    def test_shor_discreteLog(self):
+        b = 2
+        g = 5
+        p = 7
+
+        request = {"b": b, "g": g, "p": p, "circuit_format": "openqasm2"}
+
+        response = self.client.post(
+            "algorithms/shor/discreteLog",
+            data=json.dumps(request),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(14, response.get_json().get("n_qubits"))
+
+        openqasm = response.get_json().get("circuit")
+        qc = QuantumCircuit.from_qasm_str(openqasm)
+        self.assertTrue(isinstance(qc, QuantumCircuit))

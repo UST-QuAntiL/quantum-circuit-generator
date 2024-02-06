@@ -203,12 +203,10 @@ class ShorDiscreteLogAlgorithmRequest:
 
 
 class ShorDiscreteLogAlgorithmRequestSchema(ma.Schema):
-    max_weights = ma.fields.Integer()
     b = ma.fields.Integer(required=True)
     g = ma.fields.Integer(required=True)
-    p = ma.fields.Integer(required=True)
-    n = ma.fields.Integer(required=True)
-
+    p = ma.fields.Integer(required=False)
+    n = ma.fields.Integer(required=False)
     circuit_format = ma.fields.String()
 
 
