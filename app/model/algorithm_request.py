@@ -194,11 +194,10 @@ class KnapsackQAOAAlgorithmRequestSchema(ma.Schema):
 
 
 class ShorDiscreteLogAlgorithmRequest:
-    def __init__(self, b, g, p, r=-1, n=-1, circuit_format="openqasm2"):
+    def __init__(self, b, g, p, n=-1, circuit_format="openqasm2"):
         self.b = b
         self.g = g
         self.p = p
-        self.r = r
         self.n = n
         self.circuit_format = circuit_format
 
@@ -208,7 +207,6 @@ class ShorDiscreteLogAlgorithmRequestSchema(ma.Schema):
     b = ma.fields.Integer(required=True)
     g = ma.fields.Integer(required=True)
     p = ma.fields.Integer(required=True)
-    r = ma.fields.Integer(required=True)
     n = ma.fields.Integer(required=True)
 
     circuit_format = ma.fields.String()

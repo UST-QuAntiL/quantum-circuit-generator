@@ -204,16 +204,15 @@ def get_knapsack_circuit(json: KnapsackQAOAAlgorithmRequest):
 @blp.etag
 @blp.arguments(
     ShorDiscreteLogAlgorithmRequestSchema,
-    example=dict(b=5, g=2, p=3, r=-1, n=-1),
+    example=dict(b=5, g=2, p=3, n=-1),
     description="""
         b: Finds discrete logarithm of b with respect to generator g and module p
         g: Generator
         p: Prime module
-        r: The order of g if it is known (otherwise it will be calculated)
         n: The size of the top register, if not given it will be inferred from the module p""",
 )
 @blp.response(200, CircuitResponseSchema)
-def get_knapsack_circuit(json: ShorDiscreteLogAlgorithmRequest):
+def get_shor_circuit(json: ShorDiscreteLogAlgorithmRequest):
     if json:
         return algorithm_service.generate_shor_discrete_log_circuit(
             ShorDiscreteLogAlgorithmRequest(**json)

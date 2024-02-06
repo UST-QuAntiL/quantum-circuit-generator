@@ -304,12 +304,10 @@ def generate_knapsack_qaoa_circuit(request: KnapsackQAOAAlgorithmRequest):
 
 
 def generate_shor_discrete_log_circuit(request: ShorDiscreteLogAlgorithmRequest):
-    circuit = ShorDiscreteLog.create_circuit(
-        request.b, request.g, request.p, request.r, request.n
-    )
+    circuit = ShorDiscreteLog.create_circuit(request.b, request.g, request.p, request.n)
     return CircuitResponse(
         circuit,
-        "algorithm/knapsackqaoa",
+        "algorithm/shor",
         circuit.num_qubits,
         circuit.depth(),
         request,
