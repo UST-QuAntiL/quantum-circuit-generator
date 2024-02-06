@@ -38,7 +38,9 @@ def export_circuit(circuit, request):
 
 
 class CircuitResponse:
-    def __init__(self, circuit, circuit_type, n_qubits, depth, request, circuit_language):
+    def __init__(
+        self, circuit, circuit_type, n_qubits, depth, request, circuit_language
+    ):
         super().__init__()
         self.circuit = export_circuit(circuit, request)
         self.circuit_type = circuit_type

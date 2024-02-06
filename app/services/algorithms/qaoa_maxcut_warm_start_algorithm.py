@@ -11,6 +11,7 @@ class MaxCutQAOAWarmStartAlgorithm:
     This QAOA implementation for MaxCut enables the incorporation of a pre-computed bitstring
     describing an approximate solution of the problem instance, which is as the initial state
     """
+
     @classmethod
     def genQaoaMaxcutCircuitTemplate(
         cls,

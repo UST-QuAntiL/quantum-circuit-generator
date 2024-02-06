@@ -32,7 +32,7 @@ from app.model.algorithm_request import (
     MaxCutQAOAAlgorithmRequest,
     KnapsackQAOAAlgorithmRequest,
     CircuitDrawRequest,
-    ShorDiscreteLogAlgorithmRequest
+    ShorDiscreteLogAlgorithmRequest,
 )
 
 
@@ -113,7 +113,9 @@ def generate_qaoa_circuit(request: QAOAAlgorithmRequest):
 
 
 def generate_qft_circuit(request: QFTAlgorithmRequest):
-    circuit = QFTAlgorithm.create_circuit(request.n_qubits, request.inverse, request.barriers)
+    circuit = QFTAlgorithm.create_circuit(
+        request.n_qubits, request.inverse, request.barriers
+    )
     return CircuitResponse(
         circuit,
         "algorithm/qft",
@@ -300,9 +302,11 @@ def generate_knapsack_qaoa_circuit(request: KnapsackQAOAAlgorithmRequest):
         circuit_language="openqasm",
     )
 
+
 def generate_shor_discrete_log_circuit(request: ShorDiscreteLogAlgorithmRequest):
     circuit = ShorDiscreteLog.create_circuit(
-        request.b, request.g, request.p, request.r, request.n)
+        request.b, request.g, request.p, request.r, request.n
+    )
     return CircuitResponse(
         circuit,
         "algorithm/knapsackqaoa",
@@ -311,4 +315,3 @@ def generate_shor_discrete_log_circuit(request: ShorDiscreteLogAlgorithmRequest)
         request,
         circuit_language="openqasm",
     )
-
