@@ -7,6 +7,10 @@ from builtins import isinstance
 
 
 class MaxCutQAOAWarmStartAlgorithm:
+    """
+    This QAOA implementation for MaxCut enables the incorporation of a pre-computed bitstring
+    describing an approximate solution of the problem instance, which is as the initial state
+    """
     @classmethod
     def genQaoaMaxcutCircuitTemplate(
         cls,
@@ -42,14 +46,14 @@ class MaxCutQAOAWarmStartAlgorithm:
             # apply the layer of Hadamard gates to all qubits
             QAOA.h(range(n_vertices))
 
-        for iter in range(p):
+        for iteration in range(p):
             QAOA.barrier()
             # apply the Ising type gates with angle gamma along the edges in E
             for i in range(1, n_vertices):
                 for j in range(n_vertices - 1):
                     if i > j and graph[i, j] != 0:
                         QAOA.cx(i, j)
-                        QAOA.rz(-gammas[iter] * graph[i, j], j)
+                        QAOA.rz(-gammas[iteration] * graph[i, j], j)
                         QAOA.cx(i, j)
 
             # then apply the single qubit X rotations with angle beta to all qubits
@@ -62,7 +66,7 @@ class MaxCutQAOAWarmStartAlgorithm:
                         2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])),
                         qubits,
                     )
-                    QAOA.rz(-2 * betas[iter], qubits)
+                    QAOA.rz(-2 * betas[iteration], qubits)
                     QAOA.ry(
                         -2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])),
                         qubits,
@@ -70,10 +74,10 @@ class MaxCutQAOAWarmStartAlgorithm:
 
                     # default WS-Mixer
                     # QAOA.ry(-2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])), qubits)
-                    # QAOA.rz(-2 * betas[iter], qubits)
+                    # QAOA.rz(-2 * betas[iteration], qubits)
                     # QAOA.ry(2 * np.arcsin(np.sqrt(initalEpsilonAdjustListed[qubits])), qubits)
             else:
-                QAOA.rx(2 * betas[iter], range(n_vertices))
+                QAOA.rx(2 * betas[iteration], range(n_vertices))
 
         if measure:
             # Finally measure the result in the computational basis

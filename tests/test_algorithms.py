@@ -121,7 +121,7 @@ class FlaskClientTestCase(unittest.TestCase):
         # suppress message: Error near line ...
         with contextlib.redirect_stdout(None):
             response = self.client.post(
-                "/algorithms/qaoa",
+                "/algorithms/qaoa/pauliOperator",
                 data=json.dumps(
                     {
                         "initial_state": 'OPENQASM 2.0; +++++ \ninclude "qelib1.inc";\nqreg q[3];\nx q[0];\nx q[1];\nx q[2];',
@@ -138,7 +138,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # invalid Pauli string
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z))",
@@ -157,7 +157,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # invalid mixer (pauli operator String)
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
@@ -179,7 +179,7 @@ class FlaskClientTestCase(unittest.TestCase):
         # suppress message: Error near line ...
         with contextlib.redirect_stdout(None):
             response = self.client.post(
-                "/algorithms/qaoa",
+                "/algorithms/qaoa/pauliOperator",
                 data=json.dumps(
                     {
                         "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
@@ -195,7 +195,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # invalid reps
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
@@ -214,7 +214,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # invalid gammas length
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
@@ -233,7 +233,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # invalid betas length
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
@@ -253,7 +253,7 @@ class FlaskClientTestCase(unittest.TestCase):
         # good response
         # test 4 qbit QAOA with reps = 1
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^I^Z^Z) + (I^Z^I^Z) + (I^Z^Z^I) + (Z^I^Z^I) + (Z^Z^I^I))",
@@ -274,7 +274,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # test 3 qbit QAOA with reps = 2
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
@@ -295,7 +295,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # test 3 qbit QAOA with initial_state
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "initial_state": 'OPENQASM 2.0;\ninclude "qelib1.inc";\nqreg q[3];\nx q[0];\nx q[1];\nx q[2];',
@@ -317,7 +317,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # test 3 qbit QAOA with custom mixer (pauli operator String)
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
@@ -339,7 +339,7 @@ class FlaskClientTestCase(unittest.TestCase):
 
         # test 3 qbit QAOA with custom mixer (qasm String)
         response = self.client.post(
-            "/algorithms/qaoa",
+            "/algorithms/qaoa/pauliOperator",
             data=json.dumps(
                 {
                     "pauli_op_string": "0.5 * ((I^Z^Z) + (Z^I^Z) + (Z^Z^I))",
@@ -361,7 +361,7 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_maxcutqaoa_algorithm(self):
         # test simple 4 node graph
         response = self.client.post(
-            "/algorithms/maxcutqaoa",
+            "/algorithms/qaoa/maxcut",
             data=json.dumps(
                 {
                     "adj_matrix": [
@@ -387,7 +387,7 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_maxcutqaoa_algorithm_parameterized(self):
         # test simple 4 node graph
         response = self.client.post(
-            "/algorithms/maxcutqaoa",
+            "/algorithms/qaoa/maxcut",
             data=json.dumps(
                 {
                     "adj_matrix": [
@@ -409,7 +409,7 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_maxcutqaoa_algorithm_initialState(self):
         # test simple 4 node graph
         response = self.client.post(
-            "/algorithms/maxcutqaoa",
+            "/algorithms/qaoa/maxcut",
             data=json.dumps(
                 {
                     "adj_matrix": [
@@ -436,7 +436,7 @@ class FlaskClientTestCase(unittest.TestCase):
     def test_maxcutqaoa_algorithm_initialState_parameterized(self):
         # test simple 4 node graph
         response = self.client.post(
-            "/algorithms/maxcutqaoa",
+            "/algorithms/qaoa/maxcut",
             data=json.dumps(
                 {
                     "adj_matrix": [
@@ -819,7 +819,7 @@ class FlaskClientTestCase(unittest.TestCase):
             }
 
             response = self.client.post(
-                "algorithms/knapsackqaoa",
+                "algorithms/qaoa/knapsack",
                 data=json.dumps(request),
                 content_type="application/json",
             )
@@ -844,7 +844,7 @@ class FlaskClientTestCase(unittest.TestCase):
             }
 
             response = self.client.post(
-                "algorithms/tspqaoa",
+                "algorithms/qaoa/tsp",
                 data=json.dumps(request),
                 content_type="application/json",
             )

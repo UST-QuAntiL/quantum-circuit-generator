@@ -3,7 +3,7 @@ from qiskit.algorithms import QAOA
 from qiskit.circuit import Parameter
 from qiskit.quantum_info import Pauli
 from qiskit.opflow import PauliSumOp
-from app.services.algorithms.qaoa_algorithm import QAOAAlgorithm
+from app.services.algorithms.qaoa_pauliOperator_algorithm import QAOAAlgorithm
 
 
 class MaxCutQAOAAlgorithm:

@@ -58,7 +58,7 @@ def encoding(json: HHLAlgorithmRequest):
         return algorithm_service.generate_hhl_circuit(HHLAlgorithmRequest(**json))
 
 
-@blp.route("/qaoa", methods=["POST"])
+@blp.route("/qaoa/pauliOperator", methods=["POST"])
 @blp.arguments(
     QAOAAlgorithmRequestSchema,
     example=dict(
@@ -134,7 +134,7 @@ def encoding(json: GroverAlgorithmRequest):
         return algorithm_service.generate_grover_circuit(GroverAlgorithmRequest(**json))
 
 
-@blp.route("/tspqaoa", methods=["POST"])
+@blp.route("/qaoa/tsp", methods=["POST"])
 @blp.arguments(
     TSPQAOAAlgorithmRequestSchema,
     example=dict(
@@ -154,7 +154,7 @@ def encoding(json):
         )
 
 
-@blp.route("/maxcutqaoa", methods=["POST"])
+@blp.route("/qaoa/maxcut", methods=["POST"])
 @blp.etag
 @blp.arguments(
     MaxCutQAOAAlgorithmRequestSchema,
@@ -175,7 +175,7 @@ def get_maxcut_circuit(json: dict):
         )
 
 
-@blp.route("/knapsackqaoa", methods=["POST"])
+@blp.route("/qaoa/knapsack", methods=["POST"])
 @blp.etag
 @blp.arguments(
     KnapsackQAOAAlgorithmRequestSchema,
