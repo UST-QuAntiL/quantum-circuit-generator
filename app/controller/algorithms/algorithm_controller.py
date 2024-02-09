@@ -33,8 +33,9 @@ from app.model.algorithm_request import (
     KnapsackQAOAAlgorithmRequestSchema,
     CircuitDrawRequestSchema,
     CircuitDrawRequest,
+    ShorDiscreteLogAlgorithmRequest,
+    ShorDiscreteLogAlgorithmRequestSchema,
 )
-
 
 blp = Blueprint(
     "algorithms",
@@ -57,7 +58,7 @@ def encoding(json: HHLAlgorithmRequest):
         return algorithm_service.generate_hhl_circuit(HHLAlgorithmRequest(**json))
 
 
-@blp.route("/qaoa", methods=["POST"])
+@blp.route("/qaoa/pauliOperator", methods=["POST"])
 @blp.arguments(
     QAOAAlgorithmRequestSchema,
     example=dict(
@@ -133,7 +134,7 @@ def encoding(json: GroverAlgorithmRequest):
         return algorithm_service.generate_grover_circuit(GroverAlgorithmRequest(**json))
 
 
-@blp.route("/tspqaoa", methods=["POST"])
+@blp.route("/qaoa/tsp", methods=["POST"])
 @blp.arguments(
     TSPQAOAAlgorithmRequestSchema,
     example=dict(
@@ -153,7 +154,7 @@ def encoding(json):
         )
 
 
-@blp.route("/maxcutqaoa", methods=["POST"])
+@blp.route("/qaoa/maxcut", methods=["POST"])
 @blp.etag
 @blp.arguments(
     MaxCutQAOAAlgorithmRequestSchema,
@@ -174,7 +175,7 @@ def get_maxcut_circuit(json: dict):
         )
 
 
-@blp.route("/knapsackqaoa", methods=["POST"])
+@blp.route("/qaoa/knapsack", methods=["POST"])
 @blp.etag
 @blp.arguments(
     KnapsackQAOAAlgorithmRequestSchema,
@@ -196,6 +197,25 @@ def get_knapsack_circuit(json: KnapsackQAOAAlgorithmRequest):
     if json:
         return algorithm_service.generate_knapsack_qaoa_circuit(
             KnapsackQAOAAlgorithmRequest(**json)
+        )
+
+
+@blp.route("/shor/discreteLog", methods=["POST"])
+@blp.etag
+@blp.arguments(
+    ShorDiscreteLogAlgorithmRequestSchema,
+    example=dict(b=2, g=5, p=7),
+    description="""
+        b: Finds discrete logarithm of b with respect to generator g and module p
+        g: Generator
+        p: Prime module
+        n: The size of the top register, if not given it will be inferred from the module p""",
+)
+@blp.response(200, CircuitResponseSchema)
+def get_shor_circuit(json: ShorDiscreteLogAlgorithmRequest):
+    if json:
+        return algorithm_service.generate_shor_discrete_log_circuit(
+            ShorDiscreteLogAlgorithmRequest(**json)
         )
 
 

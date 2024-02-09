@@ -18,10 +18,10 @@ from app.model.encoding_request import (
 )
 
 
-def generate_basis_encoding(input: BasisEncodingRequest):
-    vector = input.vector
-    n_integral_bits = input.integral_bits
-    n_fractional_bits = input.fractional_bits
+def generate_basis_encoding(request: BasisEncodingRequest):
+    vector = request.vector
+    n_integral_bits = request.integral_bits
+    n_fractional_bits = request.fractional_bits
     vector = vector if isinstance(vector, list) else [vector]
     circuit = BasisEncoding.basis_encode_list_subcircuit(
         vector, n_integral_bits, n_fractional_bits
@@ -32,14 +32,14 @@ def generate_basis_encoding(input: BasisEncodingRequest):
         "encoding/basis",
         circuit.num_qubits,
         circuit.depth(),
-        input,
+        request,
         circuit_language="openqasm",
     )
 
 
-def generate_angle_encoding(input: AngleEncodingRequest):
-    vector = input.vector
-    rotation_axis = input.rotation_axis
+def generate_angle_encoding(request: AngleEncodingRequest):
+    vector = request.vector
+    rotation_axis = request.rotation_axis
     circuit = AngleEncoding.angle_encode_vector(vector, rotation_axis)
 
     return CircuitResponse(
@@ -47,26 +47,26 @@ def generate_angle_encoding(input: AngleEncodingRequest):
         "encoding/angle",
         circuit.num_qubits,
         circuit.depth(),
-        input,
+        request,
         circuit_language="openqasm",
     )
 
 
-def generate_amplitude_encoding(input: AmplitudeEncodingRequest):
-    vector = input.vector
+def generate_amplitude_encoding(request: AmplitudeEncodingRequest):
+    vector = request.vector
     circuit = AmplitudeEncoding.amplitude_encode_vector(vector)
     return CircuitResponse(
         circuit,
         "encoding/amplitude",
         circuit.num_qubits,
         circuit.depth(),
-        input,
+        request,
         circuit_language="openqasm",
     )
 
 
-def generate_schmidt_decomposition(input: SchmidtDecompositionRequest):
-    vector = input.vector
+def generate_schmidt_decomposition(request: SchmidtDecompositionRequest):
+    vector = request.vector
 
     if np.log2(len(vector)) % 1 != 0:
         return bad_request("Invalid vector input! Vector must be of length 2^n")
@@ -79,6 +79,6 @@ def generate_schmidt_decomposition(input: SchmidtDecompositionRequest):
         "encoding/schmidt",
         circuit.num_qubits,
         circuit.depth(),
-        input,
+        request,
         circuit_language="openqasm",
     )
