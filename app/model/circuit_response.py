@@ -34,6 +34,7 @@ def export_circuit(circuit, request):
         ### TODO remove once qasm3 import is fixed https://github.com/Qiskit/qiskit-qasm3-import/issues/25 ###
         # remove all prefixes to params
         import re
+
         patternFind = r"\((\d+\.\d+)\*(.+)\)"
         replacementList = re.findall(patternFind, circuit_string)
         for repl in replacementList:
