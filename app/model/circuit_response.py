@@ -30,7 +30,18 @@ def export_circuit(circuit, request):
     elif (
         hasattr(request, "parameterized") and request.parameterized
     ) or request.circuit_format == "openqasm3":
-        return qiskit.qasm3.dumps(circuit)
+        circuit_string = qiskit.qasm3.dumps(circuit)
+        ### TODO remove once qasm3 import is fixed https://github.com/Qiskit/qiskit-qasm3-import/issues/25 ###
+        # remove all prefixes to params
+        import re
+        patternFind = r"\((\d+\.\d+)\*(.+)\)"
+        replacementList = re.findall(patternFind, circuit_string)
+        for repl in replacementList:
+            patternMatch = r"" + re.escape(repl[0] + "*" + repl[1])
+            circuit_string = re.sub(patternMatch, repl[1], circuit_string, 1)
+        patternStdGates = r"\"stdgates.inc\""
+        circuit_string = re.sub(patternStdGates, "'stdgates.inc'", circuit_string)
+        return circuit_string
     elif request.circuit_format == "openqasm2":
         return circuit.qasm()
     else:
