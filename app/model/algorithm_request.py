@@ -211,9 +211,11 @@ class ShorDiscreteLogAlgorithmRequestSchema(ma.Schema):
 
 
 class CircuitDrawRequest:
-    def __init__(self, circuit):
+    def __init__(self, circuit, circuit_format):
         self.circuit = circuit
+        self.circuit_format = circuit_format
 
 
 class CircuitDrawRequestSchema(ma.Schema):
     circuit = ma.fields.String()
+    circuit_format = ma.fields.String()

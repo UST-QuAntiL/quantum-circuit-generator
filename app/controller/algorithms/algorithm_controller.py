@@ -1,4 +1,5 @@
 from flask_smorest import Blueprint
+from qiskit import QuantumCircuit
 
 from app.helpermethods import visualizeQasm
 from app.services import algorithm_service
@@ -10,7 +11,7 @@ from app.model.circuit_response import (
     QPEResponseSchema,
     VQEResponseSchema,
     GroverResponseSchema,
-    CircuitDrawResponseSchema,
+    CircuitDrawResponseSchema, CircuitDrawResponse,
 )
 from app.model.algorithm_request import (
     HHLAlgorithmRequestSchema,
@@ -222,10 +223,10 @@ def get_shor_circuit(json: ShorDiscreteLogAlgorithmRequest):
 @blp.route("/drawCircuit", methods=["POST"])
 @blp.arguments(
     CircuitDrawRequestSchema,
-    example=dict(circuit="123", circuit_format="openqasm2"),
+    example=dict(circuit="OPENQASM 2.0;\ninclude \"qelib1.inc\";\nqreg q[4];\ncreg meas[4];\nh q[0];\nh q[1];\nrzz(1.0) q[0],q[1];\nh q[2];\nrzz(1.0) q[0],q[2];\nrx(2.0) q[0];\nrzz(1.0) q[1],q[2];\nh q[3];\nrzz(1.0) q[1],q[3];\nrx(2.0) q[1];\nrzz(1.0) q[2],q[3];\nrx(2.0) q[2];\nrx(2.0) q[3];\nbarrier q[0],q[1],q[2],q[3];\nmeasure q[0] -> meas[0];\nmeasure q[1] -> meas[1];\nmeasure q[2] -> meas[2];\nmeasure q[3] -> meas[3];\n", circuit_format="openqasm2"),
     description="QASM 2.0 String.",
 )
 @blp.response(200, CircuitDrawResponseSchema)
 def encoding(json):
     if json:
-        return visualizeQasm(CircuitDrawRequest(**json).circuit)
+        return CircuitDrawResponse(visualizeQasm(QuantumCircuit.from_qasm_str(CircuitDrawRequest(**json).circuit)))
